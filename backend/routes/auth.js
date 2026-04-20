@@ -1,17 +1,11 @@
 import { Router } from 'express';
-import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import User from '../models/User.js';
+import { signAccessToken } from '../lib/accessToken.js';
 
 const router = Router();
 
 const SALT_ROUNDS = 10;
-
-function signToken(userId) {
-  const secret = process.env.JWT_SECRET;
-  const expiresIn = process.env.JWT_EXPIRES_IN || '7d';
-  return jwt.sign({ sub: userId }, secret, { expiresIn });
-}
 
 function userPayload(user) {
   return {
@@ -59,7 +53,7 @@ router.post('/signup', async (req, res) => {
       nickname: nicknameNorm,
     });
 
-    const token = signToken(user._id.toString());
+    const token = signAccessToken(user);
     return res.status(201).json({
       token,
       user: userPayload(user),
@@ -113,7 +107,7 @@ router.post('/login', async (req, res) => {
         .json({ message: '이메일 또는 비밀번호가 올바르지 않습니다.' });
     }
 
-    const token = signToken(user._id.toString());
+    const token = signAccessToken(user);
     return res.json({
       token,
       user: userPayload(user),

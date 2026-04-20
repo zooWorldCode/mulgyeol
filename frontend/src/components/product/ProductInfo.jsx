@@ -78,7 +78,7 @@ export default function ProductInfo({ product }) {
           <span className="product-info__label">정가</span>
           <span
             className="product-info__original-price"
-            style={{ textDecoration: 'line-through', color: '#888' }}
+            style={{ textDecoration: 'line-through', color: 'var(--shadow-deep)' }}
           >
             {original.toLocaleString()}원
           </span>

@@ -11,7 +11,11 @@ export default function CartItem({ line, onRemove, onQuantityChange }) {
   return (
     <article
       className="cart-item"
-      style={{ borderBottom: '1px solid #eee', paddingBottom: 16, marginBottom: 16 }}
+      style={{
+        borderBottom: '1px solid var(--shadow-bright)',
+        paddingBottom: 16,
+        marginBottom: 16,
+      }}
     >
       <div
         className="cart-item__layout"
@@ -31,11 +35,10 @@ export default function CartItem({ line, onRemove, onQuantityChange }) {
               style={{
                 width: 80,
                 height: 80,
-                background: '#eee',
+                background: 'var(--shadow-bright)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                fontSize: 12,
               }}
             >
               No Image

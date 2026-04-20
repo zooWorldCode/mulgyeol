@@ -59,7 +59,7 @@ export default function MyPage() {
       <aside
         style={{
           minWidth: 180,
-          borderRight: '1px solid #ccc',
+          borderRight: '1px solid var(--shadow-bright)',
           paddingRight: 16,
         }}
       >
@@ -81,7 +81,7 @@ export default function MyPage() {
                       cursor: 'default',
                       textAlign: 'left',
                       font: 'inherit',
-                      color: '#333',
+                      color: 'var(--color-text)',
                     }}
                   >
                     {item.label}
@@ -116,21 +116,21 @@ export default function MyPage() {
         <h1 style={{ marginTop: 0 }}>마이페이지</h1>
 
         <section style={{ marginBottom: 24 }}>
-          <h2 style={{ fontSize: 16 }}>요약</h2>
+          <h2>요약</h2>
           <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
-            <div style={{ border: '1px solid #ccc', padding: 12, minWidth: 120 }}>
+            <div style={{ border: '1px solid var(--shadow-bright)', padding: 12, minWidth: 120 }}>
               <div>진행 중인 주문</div>
               <div>{DUMMY_SUMMARY.activeOrders}건</div>
             </div>
-            <div style={{ border: '1px solid #ccc', padding: 12, minWidth: 120 }}>
+            <div style={{ border: '1px solid var(--shadow-bright)', padding: 12, minWidth: 120 }}>
               <div>보유 쿠폰</div>
               <div>{DUMMY_SUMMARY.coupons}장</div>
             </div>
-            <div style={{ border: '1px solid #ccc', padding: 12, minWidth: 120 }}>
+            <div style={{ border: '1px solid var(--shadow-bright)', padding: 12, minWidth: 120 }}>
               <div>보유 포인트</div>
               <div>{DUMMY_SUMMARY.points.toLocaleString()}P</div>
             </div>
-            <div style={{ border: '1px solid #ccc', padding: 12, minWidth: 120 }}>
+            <div style={{ border: '1px solid var(--shadow-bright)', padding: 12, minWidth: 120 }}>
               <div>찜한 상품</div>
               <div>{DUMMY_SUMMARY.wishlist}개</div>
             </div>
@@ -138,15 +138,15 @@ export default function MyPage() {
         </section>
 
         <section>
-          <h2 style={{ fontSize: 16 }}>최근 주문 내역</h2>
-          <div style={{ border: '1px solid #ccc' }}>
+          <h2>최근 주문 내역</h2>
+          <div style={{ border: '1px solid var(--shadow-bright)' }}>
             <div
               style={{
                 display: 'grid',
                 gridTemplateColumns: '1fr 1fr 1.2fr 1fr',
                 gap: 8,
                 padding: 8,
-                borderBottom: '1px solid #ccc',
+                borderBottom: '1px solid var(--shadow-bright)',
                 fontWeight: 'bold',
               }}
             >
@@ -163,7 +163,7 @@ export default function MyPage() {
                   gridTemplateColumns: '1fr 1fr 1.2fr 1fr',
                   gap: 8,
                   padding: 8,
-                  borderBottom: '1px solid #eee',
+                  borderBottom: '1px solid var(--shadow-bright)',
                 }}
               >
                 <span>{row.id}</span>

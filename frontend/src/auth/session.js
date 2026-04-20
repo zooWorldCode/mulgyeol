@@ -1,3 +1,26 @@
+/**
+ * JWT payload에서 사용자 표시용 필드만 읽습니다 (서명 검증 없음 — 서버가 준 토큰만 사용).
+ * @param {string} token
+ * @returns {{ id: string, email: string, nickname: string } | null}
+ */
+export function parseUserFromAccessToken(token) {
+  try {
+    const part = token.split('.')[1];
+    if (!part) return null;
+    const b64 = part.replace(/-/g, '+').replace(/_/g, '/');
+    const pad = '='.repeat((4 - (b64.length % 4)) % 4);
+    const json = JSON.parse(atob(b64 + pad));
+    if (!json.sub) return null;
+    return {
+      id: String(json.sub),
+      email: json.email != null ? String(json.email) : '',
+      nickname: json.nickname != null ? String(json.nickname) : '',
+    };
+  } catch {
+    return null;
+  }
+}
+
 const TOKEN_KEY = 'token';
 const USER_KEY = 'authUser';
 const REMEMBER_UNTIL_KEY = 'authRememberUntil';

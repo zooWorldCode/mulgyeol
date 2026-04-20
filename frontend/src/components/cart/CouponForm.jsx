@@ -38,7 +38,7 @@ export default function CouponForm({ appliedCode, onApply }) {
       {appliedCode ? (
         <p className="coupon-form__status">적용됨: {appliedCode}</p>
       ) : (
-        <p className="coupon-form__hint" style={{ fontSize: 13, color: '#666' }}>
+        <p className="coupon-form__hint" style={{ color: 'var(--shadow-deep)' }}>
           예: SAVE10 입력 시 상품 금액의 10% 할인
         </p>
       )}

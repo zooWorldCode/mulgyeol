@@ -28,7 +28,7 @@ export default function Order() {
               최종 {(state.finalAmount ?? 0).toLocaleString()}원
             </strong>
           </p>
-          <p style={{ fontSize: 14, color: '#666' }}>
+          <p style={{ color: 'var(--shadow-deep)' }}>
             결제·배송 입력 폼은 추후 연결 예정입니다.
           </p>
         </div>
@@ -51,7 +51,7 @@ export default function Order() {
             <li>수량: {state.qty}</li>
             <li>합계: {(state.totalPrice ?? 0).toLocaleString()}원</li>
           </ul>
-          <p style={{ fontSize: 14, color: '#666' }}>
+          <p style={{ color: 'var(--shadow-deep)' }}>
             결제·배송 입력 폼은 추후 연결 예정입니다.
           </p>
         </div>

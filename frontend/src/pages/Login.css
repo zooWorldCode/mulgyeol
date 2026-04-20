@@ -1,0 +1,121 @@
+.login-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: end;
+  margin: auto auto 0;
+  height: 90vh;
+  width: 500px;
+  border-top-left-radius: 9999px;
+  border-top-right-radius: 9999px;
+  overflow: hidden;
+  padding: 70px 50px;
+  background-color: var(--color-white);
+
+  img{
+    margin-bottom: 50px;
+  }
+}
+
+.login-page__form {
+  width: 100%;
+}
+
+.login-page__field {
+  margin-bottom: 30px;
+}
+
+.login-page__field--remember {
+  margin-bottom: 20px;
+}
+
+.login-page__label {
+  display: inline-block;
+}
+
+.login-page__input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  margin-top: 10px;
+  border-radius: 6px;
+  border: 1px solid var(--shadow-bright);
+  background: var(--shadow-bright);
+}
+
+.login-page__input:focus {
+  outline: none;
+  border-color: var(--color-point);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-point) 25%, transparent);
+}
+
+.login-page__links {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.login-page__link {
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  color: var(--shadow-deep);
+  cursor: pointer;
+}
+
+.login-page__link:hover {
+  color: var(--color-text);
+}
+
+.login-page__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 50px;
+}
+
+.login-page__error {
+  margin-top: 12px;
+  color: var(--color-point);
+}
+
+.login-page__social {
+  margin-top: 28px;
+  padding-top: 16px;
+  border-top: 1px solid var(--shadow-bright);
+  width: 100%;
+}
+
+.login-page__social-title {
+  margin: 0 0 20px;
+  text-align: center;
+  color: var(--color-text);
+}
+
+.login-page__social-list {
+  display: flex;
+  justify-content: space-between;
+}
+.login-page__social-image-btn {
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.login-page__social-image {
+  display: block;
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  transition: filter 0.2s ease;
+}
+
+.login-page__social-image-btn:hover .login-page__social-image {
+  filter: brightness(0.85);
+}

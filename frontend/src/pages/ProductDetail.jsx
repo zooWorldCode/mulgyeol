@@ -56,7 +56,7 @@ export default function ProductDetail() {
   if (error || !product) {
     return (
       <div className="product-detail product-detail--error">
-        <p role="alert" style={{ color: 'crimson' }}>
+        <p role="alert" style={{ color: 'var(--color-point)' }}>
           {error || '상품을 찾을 수 없습니다.'}
         </p>
         <Link to="/category">카테고리로</Link>
@@ -79,7 +79,6 @@ export default function ProductDetail() {
             display: 'flex',
             flexWrap: 'wrap',
             gap: 8,
-            fontSize: 14,
           }}
         >
           <li className="product-detail__breadcrumb-item">

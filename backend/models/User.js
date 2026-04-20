@@ -20,6 +20,13 @@ const userSchema = new mongoose.Schema(
       unique: true,
       trim: true,
     },
+    /** 소셜 계정 식별 (예: google:123) — 있으면 OAuth로 가입/연동된 사용자 */
+    socialKey: {
+      type: String,
+      unique: true,
+      sparse: true,
+      trim: true,
+    },
   },
   { timestamps: true }
 );

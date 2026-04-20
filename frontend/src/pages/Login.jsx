@@ -1,24 +1,16 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api.js';
-import { persistAuthToken } from '../auth/session.js';
-import {
-  SOCIAL_PROVIDER_IDS,
-  SOCIAL_PROVIDER_LABELS,
-  socialLoginHandlers,
-} from '../auth/socialAuth.js';
+import { parseUserFromAccessToken, persistAuthToken } from '../auth/session.js';
+import { SOCIAL_PROVIDER_IDS, socialLoginHandlers } from '../auth/socialAuth.js';
+import Button from '../components/common/Button.jsx';
+import './Login.css';
 
-const linkStyle = {
-  color: '#06c',
-  textDecoration: 'underline',
-  cursor: 'pointer',
-  background: 'none',
-  border: 'none',
-  padding: 0,
-  font: 'inherit',
+const SOCIAL_IMAGE_NAME = {
+  google: 'G',
+  kakao: 'K',
+  naver: 'N',
 };
-
-const rowGap = { marginBottom: 10 };
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -27,6 +19,25 @@ export default function Login() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const oauthErr = params.get('oauth_error');
+    const token = params.get('token');
+    if (!oauthErr && !token) return;
+
+    if (oauthErr) {
+      setError(decodeURIComponent(oauthErr));
+      navigate('/login', { replace: true });
+      return;
+    }
+
+    if (token) {
+      const user = parseUserFromAccessToken(token);
+      persistAuthToken(token, true, user);
+      navigate('/', { replace: true });
+    }
+  }, [navigate]);
 
   async function handleLogin(e) {
     e.preventDefault();
@@ -48,39 +59,42 @@ export default function Login() {
   }
 
   return (
-    <div style={{ maxWidth: 360 }}>
-      <h1 style={{ marginTop: 0 }}>로그인</h1>
-
-      <form onSubmit={handleLogin}>
-        <div style={rowGap}>
-          <label htmlFor="login-email">이메일</label>
-          <br />
+    <div className="login-page">
+      <img src="/images/social_log/logo_log.png" alt="로그인 로고" width={200} />
+      <form className="login-page__form" onSubmit={handleLogin}>
+        <div className="login-page__field">
+          <label className="login-page__label" htmlFor="login-email">
+            이메일
+          </label>
           <input
             id="login-email"
+            className="login-page__input"
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            placeholder="이메일을 입력하세요"
             autoComplete="email"
             required
-            style={{ width: '100%', boxSizing: 'border-box' }}
           />
         </div>
 
-        <div style={rowGap}>
-          <label htmlFor="login-password">비밀번호</label>
-          <br />
+        <div className="login-page__field">
+          <label className="login-page__label" htmlFor="login-password">
+            비밀번호
+          </label>
           <input
             id="login-password"
+            className="login-page__input"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            placeholder="비밀번호를 입력하세요"
             autoComplete="current-password"
             required
-            style={{ width: '100%', boxSizing: 'border-box' }}
           />
         </div>
 
-        <div style={{ ...rowGap, marginTop: 12 }}>
+        <div className="login-page__field login-page__field--remember">
           <label>
             <input
               type="checkbox"
@@ -89,88 +103,61 @@ export default function Login() {
             />{' '}
             로그인 저장
           </label>
-          <div
-            style={{
-              fontSize: 12,
-              color: '#555',
-              marginTop: 4,
-            }}
-          >
-            체크 시 브라우저에 토큰을 저장하며, 약 30일간 유지됩니다. 미체크 시
-            탭을 닫으면 로그인이 해제됩니다.
-          </div>
         </div>
 
-        <div
-          style={{
-            ...rowGap,
-            display: 'flex',
-            gap: 12,
-            flexWrap: 'wrap',
-            alignItems: 'center',
-          }}
-        >
+        <div className="login-page__links">
           <a
             href="#"
-            style={linkStyle}
+            className="login-page__link"
             onClick={(e) => e.preventDefault()}
           >
             이메일 찾기
           </a>
-          <span aria-hidden="true">|</span>
           <a
             href="#"
-            style={linkStyle}
+            className="login-page__link"
             onClick={(e) => e.preventDefault()}
           >
             비밀번호 찾기
           </a>
         </div>
 
-        <div
-          style={{
-            display: 'flex',
-            gap: 8,
-            flexWrap: 'wrap',
-            marginTop: 16,
-          }}
-        >
-          <button type="submit" disabled={loading}>
+        <div className="login-page__actions">
+          <Button type="submit" disabled={loading}>
             {loading ? '처리 중…' : '로그인'}
-          </button>
-          <button
+          </Button>
+          <Button
             type="button"
-            onClick={() => navigate('/signup')}
             disabled={loading}
+            onClick={() => navigate('/signup')}
           >
             회원가입
-          </button>
+          </Button>
         </div>
       </form>
 
       {error ? (
-        <p role="alert" style={{ color: 'crimson', marginTop: 12 }}>
+        <p className="login-page__error" role="alert">
           {error}
         </p>
       ) : null}
 
-      <section style={{ marginTop: 28, borderTop: '1px solid #ddd', paddingTop: 16 }}>
-        <p style={{ margin: '0 0 12px', fontSize: 14 }}>소셜 로그인으로 가입하기</p>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+      <section className="login-page__social" aria-label="소셜 로그인">
+        <p className="login-page__social-title">소셜 로그인으로 가입하기</p>
+        <div className="login-page__social-list">
           {SOCIAL_PROVIDER_IDS.map((id) => (
             <button
               key={id}
               type="button"
+              className="login-page__social-image-btn"
               onClick={() => socialLoginHandlers[id]?.()}
-              style={{
-                padding: '8px 12px',
-                textAlign: 'left',
-                border: '1px solid #ccc',
-                background: '#fafafa',
-                cursor: 'pointer',
-              }}
+              aria-label={`${id} 로그인`}
             >
-              {SOCIAL_PROVIDER_LABELS[id]} 로그인
+              <img
+                src={`/images/social_log/${SOCIAL_IMAGE_NAME[id]}.png`}
+                alt={`${id} 로그인`}
+                className="login-page__social-image"
+              />
             </button>
           ))}
         </div>

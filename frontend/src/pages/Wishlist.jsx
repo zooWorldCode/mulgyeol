@@ -153,8 +153,8 @@ export default function Wishlist() {
                 setPage(1);
               }}
               style={{
-                border: '1px solid #ccc',
-                background: sort === s.id ? '#ddd' : '#fff',
+                border: '1px solid var(--shadow-bright)',
+                background: sort === s.id ? 'var(--color-key)' : 'var(--color-white)',
                 padding: '4px 8px',
                 cursor: 'pointer',
               }}
@@ -187,7 +187,7 @@ export default function Wishlist() {
                 <div
                   key={p._id}
                   style={{
-                    border: '1px solid #ddd',
+                    border: '1px solid var(--shadow-bright)',
                     display: 'flex',
                     flexDirection: 'row',
                     minWidth: 0,
@@ -207,7 +207,7 @@ export default function Wishlist() {
                     <div
                       style={{
                         aspectRatio: '1',
-                        background: '#f5f5f5',
+                        background: 'var(--shadow-bright)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -226,22 +226,23 @@ export default function Wishlist() {
                           }}
                         />
                       ) : (
-                        <span style={{ fontSize: 12, color: '#888' }}>
+                        <span style={{ color: 'var(--shadow-deep)' }}>
                           No Image
                         </span>
                       )}
                     </div>
-                    <div style={{ fontSize: 14, marginBottom: 4 }}>{p.name}</div>
-                    <div style={{ fontSize: 13, color: '#c00', marginBottom: 2 }}>
+                    <div style={{ marginBottom: 4 }}>{p.name}</div>
+                    <div
+                      style={{ color: 'var(--color-point)', marginBottom: 2 }}
+                    >
                       {pct > 0 ? `${pct}%` : '-'}
                     </div>
-                    <div style={{ fontSize: 15, fontWeight: 'bold' }}>
+                    <div style={{ fontWeight: 'bold' }}>
                       {sale.toLocaleString()}원
                     </div>
                     <div
                       style={{
-                        fontSize: 13,
-                        color: '#888',
+                        color: 'var(--shadow-deep)',
                         textDecoration: 'line-through',
                       }}
                     >
@@ -254,7 +255,7 @@ export default function Wishlist() {
                       flexDirection: 'column',
                       gap: 6,
                       padding: 8,
-                      borderLeft: '1px solid #eee',
+                      borderLeft: '1px solid var(--shadow-bright)',
                       justifyContent: 'center',
                     }}
                   >
@@ -310,7 +311,9 @@ export default function Wishlist() {
                     minWidth: 32,
                     fontWeight: n === effectivePage ? 'bold' : 'normal',
                     border:
-                      n === effectivePage ? '2px solid #333' : '1px solid #ccc',
+                      n === effectivePage
+                        ? '2px solid var(--color-point)'
+                        : '1px solid var(--shadow-bright)',
                   }}
                 >
                   {n}

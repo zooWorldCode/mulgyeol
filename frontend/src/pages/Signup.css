@@ -1,0 +1,88 @@
+.signup-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: end;
+  margin: auto auto 0;
+  height: 90vh;
+  width: 500px;
+  border-top-left-radius: 9999px;
+  border-top-right-radius: 9999px;
+  overflow: hidden;
+  padding: 70px 50px;
+  background-color: var(--color-white);
+}
+
+.signup-page__form {
+  width: 100%;
+}
+
+.signup-page__field {
+  margin-bottom: 30px;
+}
+
+.signup-page__label {
+  display: inline-block;
+  margin-bottom: 4px;
+}
+
+.signup-page__nickname-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+  align-items: center;
+}
+
+.signup-page__input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  margin-top: 4px;
+  border-radius: 6px;
+  border: 1px solid var(--shadow-bright);
+  background: var(--shadow-bright);
+}
+
+.signup-page__input--grow {
+  flex: 1;
+  min-width: 0;
+}
+
+.signup-page__input:focus {
+  outline: none;
+  border-color: var(--color-point);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-point) 25%, transparent);
+}
+
+.signup-page__message {
+  margin: 6px 0 0;
+}
+
+.signup-page__message--ok {
+  color: var(--color-text);
+}
+
+.signup-page__message--error {
+  color: var(--color-point);
+}
+
+.signup-page__terms {
+  margin: 20px 0;
+  border: 1px solid var(--shadow-bright);
+  padding: 12px;
+}
+
+.signup-page__terms-all {
+  margin-bottom: 10px;
+}
+
+.signup-page__terms-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.signup-page__error {
+  color: var(--color-point);
+  margin-top: 12px;
+}

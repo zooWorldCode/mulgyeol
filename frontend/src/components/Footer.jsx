@@ -5,7 +5,7 @@ export default function Footer() {
     <footer
       className="site-footer"
       style={{
-        borderTop: '1px solid #ccc',
+        borderTop: '1px solid var(--shadow-bright)',
         marginTop: 'auto',
       }}
     >
@@ -15,7 +15,6 @@ export default function Footer() {
             display: 'flex',
             gap: 16,
             flexWrap: 'wrap',
-            fontSize: 14,
           }}
         >
           <Link to="/login">로그인</Link>

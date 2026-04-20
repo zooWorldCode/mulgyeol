@@ -3,6 +3,7 @@ import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import authRoutes from './routes/auth.js';
+import oauthRoutes from './routes/oauth.js';
 import { checkNickname } from './routes/checkNickname.js';
 import { listProducts, getProductById } from './routes/products.js';
 
@@ -33,6 +34,7 @@ app.get('/api/health', (_req, res) => {
 
 app.get('/api/auth/check-nickname', checkNickname);
 app.use('/api/auth', authRoutes);
+app.use('/api/auth', oauthRoutes);
 
 app.get('/api/products', listProducts);
 app.get('/api/products/:id', getProductById);

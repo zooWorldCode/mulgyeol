@@ -22,7 +22,7 @@ export default function CartSummary({
     <aside
       className="cart-summary"
       style={{
-        border: '1px solid #ddd',
+        border: '1px solid var(--shadow-bright)',
         padding: 16,
         borderRadius: 4,
       }}

@@ -1,101 +1,96 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-
-const navText = { textDecoration: 'none', color: 'inherit' };
-
-const iconLink = {
-  ...navText,
-  fontSize: 22,
-  lineHeight: 1,
-  display: 'inline-flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  minWidth: 36,
-  minHeight: 36,
-};
+import HeaderDropdown from './HeaderDropdown.jsx';
+import MobileMenu from './MobileMenu.jsx';
+import './Header.css';
 
 export default function Header() {
-  return (
-    <header
-      className="site-header"
-      style={{
-        borderBottom: '1px solid #ccc',
-      }}
-    >
-      <div className="container" style={{ padding: '10px 16px' }}>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            gap: 24,
-            flexWrap: 'wrap',
-          }}
-        >
-          <nav
-            aria-label="주 메뉴"
-            style={{
-              display: 'flex',
-              gap: 20,
-              flexWrap: 'wrap',
-              alignItems: 'center',
-            }}
-          >
-            <Link to="/" style={navText}>
-              홈
-            </Link>
-            <Link to="/category" style={navText}>
-              카테고리
-            </Link>
-            <Link to="/event" style={navText}>
-              이벤트
-            </Link>
-            <Link to="/brand" style={navText}>
-              브랜드
-            </Link>
-            <Link to="/community" style={navText}>
-              커뮤니티
-            </Link>
-          </nav>
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-          <nav
-            aria-label="아이콘 메뉴"
-            style={{
-              display: 'flex',
-              gap: 8,
-              flexWrap: 'wrap',
-              alignItems: 'center',
-            }}
-          >
-            <Link to="/search" style={iconLink} title="검색" aria-label="검색">
-              🔍
-            </Link>
-            <Link
-              to="/cart"
-              style={iconLink}
-              title="장바구니"
-              aria-label="장바구니"
-            >
-              🛒
-            </Link>
-            <Link
-              to="/wishlist"
-              style={iconLink}
-              title="위시리스트"
-              aria-label="위시리스트"
-            >
-              ♡
-            </Link>
-            <Link
-              to="/mypage"
-              style={iconLink}
-              title="마이페이지"
-              aria-label="마이페이지"
-            >
-              👤
-            </Link>
-          </nav>
+  useEffect(() => {
+    if (!mobileMenuOpen) return undefined;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [mobileMenuOpen]);
+
+  return (
+    <div className="header-hover-area">
+      <header className="site-header">
+        <div className="container site-header__inner">
+          <div className="site-header__row">
+            <nav className="site-header__main-nav" aria-label="주 메뉴">
+              <Link to="/" className="site-header__nav-link">
+              <img src="/images/logo/CI_logo.svg" alt="홈" width={70} />
+              </Link>
+              <Link to="/category" className="site-header__nav-link">
+                카테고리
+              </Link>
+              <Link to="/event" className="site-header__nav-link">
+                이벤트
+              </Link>
+              <Link to="/brand" className="site-header__nav-link">
+                브랜드
+              </Link>
+              <Link to="/community" className="site-header__nav-link">
+                커뮤니티
+              </Link>
+            </nav>
+
+            <nav className="site-header__icon-nav" aria-label="아이콘 메뉴">
+              <Link
+                to="/search"
+                className="site-header__icon-link"
+                title="검색"
+                aria-label="검색"
+              >
+                <img src="/images/icon/search.svg" alt="" className="site-header__icon-img" />
+              </Link>
+              <Link
+                to="/cart"
+                className="site-header__icon-link"
+                title="장바구니"
+                aria-label="장바구니"
+              >
+                <img src="/images/icon/cart.svg" alt="" className="site-header__icon-img" />
+              </Link>
+              <Link
+                to="/wishlist"
+                className="site-header__icon-link"
+                title="위시리스트"
+                aria-label="위시리스트"
+              >
+                <img
+                  src="/images/icon/wishlist.svg"
+                  alt=""
+                  className="site-header__icon-img"
+                />
+              </Link>
+              <Link
+                to="/mypage"
+                className="site-header__icon-link"
+                title="마이페이지"
+                aria-label="마이페이지"
+              >
+                <img src="/images/icon/mypage.svg" alt="" className="site-header__icon-img" />
+              </Link>
+              <button
+                type="button"
+                className="site-header__hamburger"
+                aria-label="메뉴 열기"
+                title="메뉴"
+                onClick={() => setMobileMenuOpen(true)}
+              >
+                <img src="/images/icon/hamberger.svg" alt="" className="site-header__icon-img" />
+              </button>
+            </nav>
+          </div>
         </div>
-      </div>
-    </header>
+      </header>
+      <HeaderDropdown />
+      <MobileMenu open={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} />
+    </div>
   );
 }

@@ -132,7 +132,7 @@ export default function Category() {
 
       <div
         style={{
-          border: '1px solid #ccc',
+          border: '1px solid var(--shadow-bright)',
           padding: 16,
           marginBottom: 20,
         }}
@@ -163,11 +163,12 @@ export default function Category() {
                   width: 72,
                   height: 72,
                   borderRadius: '50%',
-                  border: active ? '2px solid #333' : '1px solid #aaa',
-                  background: active ? '#333' : '#f2f2f2',
-                  color: active ? '#fff' : '#111',
+                  border: active
+                    ? '2px solid var(--color-point)'
+                    : '1px solid var(--shadow-deep)',
+                  background: active ? 'var(--color-point)' : 'var(--shadow-bright)',
+                  color: active ? 'var(--color-white)' : 'var(--color-text)',
                   cursor: 'pointer',
-                  fontSize: 12,
                 }}
               >
                 {c.label}
@@ -187,7 +188,7 @@ export default function Category() {
           marginBottom: 8,
         }}
       >
-        <h2 style={{ margin: 0, fontSize: 18 }}>{sectionTitle}</h2>
+        <h2 style={{ margin: 0 }}>{sectionTitle}</h2>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
           {SORT_OPTIONS.map((s) => {
             const active = sort === s.id;
@@ -203,11 +204,10 @@ export default function Category() {
                   })
                 }
                 style={{
-                  border: '1px solid #ccc',
-                  background: active ? '#ddd' : '#fff',
+                  border: '1px solid var(--shadow-bright)',
+                  background: active ? 'var(--color-key)' : 'var(--color-white)',
                   cursor: 'pointer',
                   padding: '4px 8px',
-                  fontSize: 13,
                 }}
               >
                 {s.label}
@@ -223,7 +223,7 @@ export default function Category() {
       </div>
 
       {error ? (
-        <p role="alert" style={{ color: 'crimson' }}>
+        <p role="alert" style={{ color: 'var(--color-point)' }}>
           {error}
         </p>
       ) : null}
@@ -243,7 +243,7 @@ export default function Category() {
             style={{
               textDecoration: 'none',
               color: 'inherit',
-              border: '1px solid #ddd',
+              border: '1px solid var(--shadow-bright)',
               padding: 8,
               display: 'block',
             }}
@@ -251,7 +251,7 @@ export default function Category() {
             <div
               style={{
                 aspectRatio: '1',
-                background: '#f5f5f5',
+                background: 'var(--shadow-bright)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -266,11 +266,13 @@ export default function Category() {
                   style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                 />
               ) : (
-                <span style={{ fontSize: 12, color: '#888' }}>No Image</span>
+                <span style={{ color: 'var(--shadow-deep)' }}>
+                  No Image
+                </span>
               )}
             </div>
-            <div style={{ fontSize: 14, marginBottom: 4 }}>{p.name}</div>
-            <div style={{ fontSize: 14 }}>
+            <div style={{ marginBottom: 4 }}>{p.name}</div>
+            <div>
               {Number(p.price).toLocaleString()}원
             </div>
           </Link>
@@ -302,8 +304,12 @@ export default function Category() {
               style={{
                 minWidth: 32,
                 fontWeight: n === data.page ? 'bold' : 'normal',
-                border: n === data.page ? '2px solid #333' : '1px solid #ccc',
-                background: n === data.page ? '#eee' : '#fff',
+                border:
+                  n === data.page
+                    ? '2px solid var(--color-point)'
+                    : '1px solid var(--shadow-bright)',
+                background:
+                  n === data.page ? 'var(--shadow-bright)' : 'var(--color-white)',
                 cursor: n === data.page ? 'default' : 'pointer',
               }}
             >

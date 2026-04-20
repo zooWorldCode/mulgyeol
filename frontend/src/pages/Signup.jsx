@@ -2,8 +2,8 @@ import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api.js';
 import { persistAuthToken } from '../auth/session.js';
-
-const row = { marginBottom: 12 };
+import Button from '../components/common/Button.jsx';
+import './Signup.css';
 
 const TERMS_META = [
   { key: 'service', required: true, label: '[필수] 이용약관 동의' },
@@ -161,92 +161,104 @@ export default function Signup() {
   }
 
   return (
-    <div style={{ maxWidth: 420 }}>
-      <h1 style={{ marginTop: 0 }}>회원가입</h1>
-
-      <form onSubmit={handleSubmit}>
-        <div style={row}>
-          <label htmlFor="signup-nickname">닉네임</label>
-          <div style={{ display: 'flex', gap: 8, marginTop: 4, alignItems: 'center' }}>
+    <div className="signup-page">
+      <form className="signup-page__form" onSubmit={handleSubmit}>
+        <div className="signup-page__field">
+          <label className="signup-page__label" htmlFor="signup-nickname">
+            닉네임
+          </label>
+          <div className="signup-page__nickname-row">
             <input
               id="signup-nickname"
+              className="signup-page__input signup-page__input--grow"
               type="text"
               value={nickname}
               onChange={onNicknameChange}
+              placeholder="닉네임을 입력하세요"
+              required
               autoComplete="nickname"
-              style={{ flex: 1, minWidth: 0, boxSizing: 'border-box' }}
             />
-            <button
+            <Button
               type="button"
+              className="common-btn--inline"
               onClick={handleCheckNickname}
               disabled={nicknameDup.status === 'checking'}
             >
               {nicknameDup.status === 'checking' ? '확인 중…' : '중복확인'}
-            </button>
+            </Button>
           </div>
           {nicknameDup.message ? (
             <p
               role="status"
-              style={{
-                margin: '6px 0 0',
-                fontSize: 13,
-                color:
-                  nicknameDup.status === 'ok' ? 'green' : 'crimson',
-              }}
+              className={
+                'signup-page__message' +
+                (nicknameDup.status === 'ok'
+                  ? ' signup-page__message--ok'
+                  : ' signup-page__message--error')
+              }
             >
               {nicknameDup.message}
             </p>
           ) : null}
         </div>
 
-        <div style={row}>
-          <label htmlFor="signup-email">이메일</label>
-          <br />
+        <div className="signup-page__field">
+          <label className="signup-page__label" htmlFor="signup-email">
+            이메일
+          </label>
           <input
             id="signup-email"
+            className="signup-page__input"
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            placeholder="이메일을 입력하세요"
+            required
             autoComplete="email"
-            style={{ width: '100%', boxSizing: 'border-box' }}
           />
         </div>
 
-        <div style={row}>
-          <label htmlFor="signup-password">비밀번호 (6자 이상)</label>
-          <br />
+        <div className="signup-page__field">
+          <label className="signup-page__label" htmlFor="signup-password">
+            비밀번호 (6자 이상)
+          </label>
           <input
             id="signup-password"
+            className="signup-page__input"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            placeholder="비밀번호를 입력하세요"
+            required
             autoComplete="new-password"
-            style={{ width: '100%', boxSizing: 'border-box' }}
           />
         </div>
 
-        <div style={row}>
-          <label htmlFor="signup-password2">비밀번호 확인</label>
-          <br />
+        <div className="signup-page__field">
+          <label className="signup-page__label" htmlFor="signup-password2">
+            비밀번호 확인
+          </label>
           <input
             id="signup-password2"
+            className="signup-page__input"
             type="password"
             value={passwordConfirm}
             onChange={(e) => setPasswordConfirm(e.target.value)}
+            placeholder="비밀번호를 확인하세요"
+            required
             autoComplete="new-password"
-            style={{ width: '100%', boxSizing: 'border-box' }}
           />
           {passwordConfirm.length > 0 && password !== passwordConfirm ? (
-            <p style={{ margin: '6px 0 0', fontSize: 13, color: 'crimson' }}>
+            <p className="signup-page__message signup-page__message--error">
               비밀번호가 일치하지 않습니다.
             </p>
           ) : null}
         </div>
 
-        <fieldset style={{ margin: '20px 0', border: '1px solid #ccc', padding: 12 }}>
-          <legend style={{ fontSize: 14 }}>약관 동의</legend>
+        <fieldset className="signup-page__terms">
+          <legend>약관 동의</legend>
 
-          <div style={{ marginBottom: 10 }}>
+          <div className="signup-page__terms-all">
             <label>
               <input
                 type="checkbox"
@@ -257,7 +269,7 @@ export default function Signup() {
             </label>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <div className="signup-page__terms-list">
             {TERMS_META.map(({ key, label }) => (
               <label key={key}>
                 <input
@@ -271,13 +283,13 @@ export default function Signup() {
           </div>
         </fieldset>
 
-        <button type="submit" disabled={loading}>
+        <Button type="submit" disabled={loading}>
           {loading ? '처리 중…' : '회원가입'}
-        </button>
+        </Button>
       </form>
 
       {submitError ? (
-        <p role="alert" style={{ color: 'crimson', marginTop: 12 }}>
+        <p role="alert" className="signup-page__error">
           {submitError}
         </p>
       ) : null}

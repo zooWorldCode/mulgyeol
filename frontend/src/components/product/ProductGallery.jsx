@@ -92,8 +92,10 @@ export default function ProductGallery({ images, productName }) {
                       aria-current={active ? 'true' : undefined}
                       style={{
                         padding: 2,
-                        border: active ? '2px solid #333' : '1px solid #ccc',
-                        background: '#fff',
+                        border: active
+                          ? '2px solid var(--color-point)'
+                          : '1px solid var(--shadow-bright)',
+                        background: 'var(--color-white)',
                         cursor: 'pointer',
                         width: 56,
                         height: 56,
@@ -152,7 +154,7 @@ export default function ProductGallery({ images, productName }) {
             className="product-gallery__main-placeholder"
             style={{
               aspectRatio: '1',
-              background: '#f0f0f0',
+              background: 'var(--shadow-bright)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
