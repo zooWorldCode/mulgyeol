@@ -9,7 +9,7 @@ import {
   removeCartLine,
   updateCartLineQuantity,
 } from '../cart/cartStorage.js';
-import PageWideBand from '../components/PageWideBand.jsx';
+import PageWideBand from '../components/common/PageWideBand.jsx';
 import './Cart.css';
 
 const DUMMY_POINT_BALANCE = 12000;

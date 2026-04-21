@@ -9,7 +9,7 @@
   position: absolute;
   inset: 0;
   border: none;
-  background: rgba(0, 0, 0, 0);
+  background: var(--color-white);
   transition: background-color 0.25s ease;
 }
 
@@ -34,7 +34,7 @@
 }
 
 .mobile-menu--open .mobile-menu__backdrop {
-  background: rgba(0, 0, 0, 0.45);
+  background: var(--color-white);
 }
 
 .mobile-menu--open .mobile-menu__panel {
@@ -49,7 +49,7 @@
 
 .mobile-menu__close {
   border: none;
-  background: transparent;
+  background: var(--color-white);
   cursor: pointer;
   color: var(--shadow-deep);
   font-size: var(--font-size-lg);
@@ -90,7 +90,7 @@
 
 .mobile-menu__submenu-item {
   border: none;
-  background: transparent;
+  background: var(--color-white);
   text-align: left;
   color: var(--shadow-deep);
   font: inherit;
@@ -120,7 +120,7 @@ button.mobile-menu__icon-link {
   width: 100%;
   padding: 0;
   border: none;
-  background: transparent;
+  background: var(--color-white);
   cursor: pointer;
   font: inherit;
   text-align: left;

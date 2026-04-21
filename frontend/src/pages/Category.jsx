@@ -3,8 +3,8 @@ import { useSearchParams } from 'react-router-dom';
 import api from '../api.js';
 import CategoryTitle from '../components/CategoryTitle.jsx';
 import ProductFrame from '../components/product/ProductFrame.jsx';
-import SortBar from '../components/SortBar.jsx';
-import PaginationBar from '../components/PaginationBar.jsx';
+import SortBar from '../components/common/SortBar.jsx';
+import PaginationBar from '../components/common/PaginationBar.jsx';
 import { getPricing, resolveCategoryListImages } from '../utils/productNormalize.js';
 import './Category.css';
 

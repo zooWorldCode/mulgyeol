@@ -1,6 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { addToCart } from '../../cart/cartStorage.js';
+import {
+  addToCart,
+  getCartLines,
+  updateCartLineQuantity,
+} from '../../cart/cartStorage.js';
 import { addToWishlist } from '../../wishlist/wishlistStorage.js';
 import { getDefaultOptions, getPricing } from '../../utils/productNormalize.js';
 import QuantitySelector from './QuantitySelector.jsx';
@@ -47,8 +51,6 @@ export default function ProductInfo({ product }) {
     [product]
   );
 
-  const totalPrice = sale * qty;
-
   const rating = Number(product.rating) || 0;
   const reviewCount = Number(product.reviewCount) || 0;
   const subtitle =
@@ -65,14 +67,22 @@ export default function ProductInfo({ product }) {
     `${(FREE_SHIPPING_THRESHOLD / 10000).toFixed(0)}만원 이상 무료배송 · 그 외 배송비 ${SHIPPING_FEE.toLocaleString('ko-KR')}원`;
 
   function handleBuyNow() {
-    navigate('/order', {
-      state: {
-        product,
-        qty,
-        option: selectedOption,
-        totalPrice,
-      },
-    });
+    const added = addToCart(product, qty, selectedOption);
+    if (!added) {
+      const existing = getCartLines().find(
+        (line) =>
+          line.productId === String(product._id) &&
+          (line.option ?? '') === (selectedOption || '')
+      );
+      if (existing) {
+        updateCartLineQuantity(
+          product._id,
+          selectedOption,
+          Number(existing.quantity) + Number(qty)
+        );
+      }
+    }
+    navigate('/cart');
   }
 
   function handleAddCart() {

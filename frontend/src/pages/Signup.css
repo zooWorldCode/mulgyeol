@@ -1,4 +1,4 @@
-.signup-page {
+﻿.signup-page {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -51,7 +51,7 @@
 .signup-page__input:focus {
   outline: none;
   border-color: var(--color-point);
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-point) 25%, transparent);
+  box-shadow: 0 0 0 2px var(--color-white);
 }
 
 .signup-page__message {

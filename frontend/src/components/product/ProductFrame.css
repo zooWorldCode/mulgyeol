@@ -8,7 +8,7 @@
 
 .product-frame__visual {
   position: relative;
-  background-color: #fff;
+  background-color: var(--color-white);
   aspect-ratio: 1;
   overflow: hidden;
 }
@@ -57,9 +57,9 @@
   align-items: center;
   justify-content: center;
   background-color: var(--color-point);
-  color: #fff;
+  color: var(--color-white);
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(42, 37, 35, 0.12);
+  box-shadow: 0 2px 8px var(--color-white);
   transition: transform 0.15s ease, opacity 0.15s ease;
 }
 
@@ -74,19 +74,19 @@
   height: auto;
   max-height: 24px;
   object-fit: contain;
-  /* SVG 자산은 stroke #2A2523 고정 → FAB 배경 위에서 흰색으로 */
+  /* SVG ?�산?� stroke var(--color-white) 고정 ??FAB 배경 ?�에???�색?�로 */
   filter: brightness(0) invert(1);
   pointer-events: none;
 }
 
 .product-frame__fab-btn--wish-on {
-  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.55);
+  box-shadow: inset 0 0 0 2px var(--color-white);
 }
 
 .product-frame__info {
   display: block;
   padding: 12px 14px 14px;
-  background-color: #fffbf5;
+  background-color: var(--color-white);
   text-decoration: none;
   color: inherit;
   box-sizing: border-box;

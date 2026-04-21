@@ -1,5 +1,9 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import ProductDetailInfoAccordion from './ProductDetailInfoAccordion.jsx';
+import Button from '../common/Button.jsx';
+import PaginationBar from '../common/PaginationBar.jsx';
+import ReviewSummary from './ReviewSummary.jsx';
+import ReviewList from './ReviewList.jsx';
 import './ProductDetailTabs.css';
 
 const TAB_ITEMS = [
@@ -14,7 +18,78 @@ const TAB_ITEMS = [
  */
 export default function ProductDetailTabs({ product }) {
   const [activeTab, setActiveTab] = useState('detail');
+  const [reviewPage, setReviewPage] = useState(1);
   const reviewCount = Number(product.reviewCount ?? 0) || 0;
+  const rating = Number(product.rating || 4.2);
+  const totalReviews = reviewCount || 23;
+
+  const reviewSummary = useMemo(
+    () => ({
+      averageRating: rating,
+      totalReviews,
+      distribution: [
+        { score: 5, count: 17 },
+        { score: 4, count: 12 },
+        { score: 3, count: 2 },
+        { score: 2, count: 0 },
+        { score: 1, count: 1 },
+      ],
+    }),
+    [rating, totalReviews]
+  );
+
+  const dummyReviews = useMemo(
+    () => [
+      {
+        id: 'r1',
+        nickname: '닉네임',
+        date: '2026.02.05',
+        rating: 4,
+        content:
+          '디자인이 정말 깔끔해서 어떤 음식이든 다 잘 어울려요. 화이트 컬러라 플레이팅 하기 좋고, 집들이 선물용으로도 만족스러웠습니다.',
+      },
+      {
+        id: 'r2',
+        nickname: '닉네임',
+        date: '2026.02.20',
+        rating: 4,
+        content:
+          '전자레인지 사용이 가능해 실용성까지 챙긴 제품이에요. 마감도 좋고 무게감도 적당해서 매일 손이 갑니다.',
+      },
+      {
+        id: 'r3',
+        nickname: '닉네임',
+        date: '2026.02.26',
+        rating: 4,
+        content:
+          '생각보다 사이즈가 넉넉해서 파스타나 브런치 담기 좋았습니다. 비슷한 디자인 대비 가격도 합리적인 편이에요.',
+      },
+      {
+        id: 'r4',
+        nickname: '닉네임',
+        date: '2026.03.03',
+        rating: 4,
+        content:
+          '광택이 과하지 않아 고급스럽고, 세척도 편해서 만족합니다. 다음에는 같은 라인으로 컵도 추가 구매하려고 합니다.',
+      },
+      {
+        id: 'r5',
+        nickname: '닉네임',
+        date: '2026.03.12',
+        rating: 3,
+        content:
+          '전체적으로 만족하지만 밝은 색이라 스크래치 관리에는 조금 신경 써야 해요. 그래도 분위기 있는 식탁 연출에는 최고입니다.',
+      },
+    ],
+    []
+  );
+
+  const pageSize = 3;
+  const totalPages = Math.max(1, Math.ceil(dummyReviews.length / pageSize));
+  const pagedReviews = dummyReviews.slice(
+    (reviewPage - 1) * pageSize,
+    reviewPage * pageSize
+  );
 
   return (
     <section className="product-detail-tabs" aria-label="상품 상세 탭">
@@ -77,14 +152,28 @@ export default function ProductDetailTabs({ product }) {
 
         {activeTab === 'reviews' ? (
           <div className="product-detail-tabs__reviews">
-            <h2 className="product-detail-tabs__heading">리뷰</h2>
-            <p className="product-detail-tabs__muted">
-              리뷰 목록은 추후 API 연동 예정입니다.
-            </p>
-            <p className="product-detail-tabs__description">
-              현재 집계: 평균 {Number(product.rating || 0).toFixed(1)}점 · 리뷰{' '}
-              {reviewCount.toLocaleString('ko-KR')}건
-            </p>
+            <ReviewSummary
+              averageRating={reviewSummary.averageRating}
+              totalReviews={reviewSummary.totalReviews}
+              distribution={reviewSummary.distribution}
+            />
+            <ReviewList reviews={pagedReviews} />
+            <div className="product-detail-tabs__review-action">
+              <Button
+                type="button"
+                className="product-detail-tabs__review-button"
+                onClick={() => {}}
+              >
+                리뷰 작성하기 ↗
+              </Button>
+            </div>
+            <PaginationBar
+              page={reviewPage}
+              totalPages={totalPages}
+              onPageChange={setReviewPage}
+              className="product-detail-tabs__pagination"
+              ariaLabel="리뷰 페이지네이션"
+            />
           </div>
         ) : null}
 

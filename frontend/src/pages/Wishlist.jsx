@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom';
 import { getAuthUser } from '../auth/session.js';
 import { addToCart } from '../cart/cartStorage.js';
 import { getWishlist, removeFromWishlist } from '../wishlist/wishlistStorage.js';
-import PageWideBand from '../components/PageWideBand.jsx';
-import SortBar from '../components/SortBar.jsx';
-import PaginationBar from '../components/PaginationBar.jsx';
+import PageWideBand from '../components/common/PageWideBand.jsx';
+import SortBar from '../components/common/SortBar.jsx';
+import PaginationBar from '../components/common/PaginationBar.jsx';
 import { getPricing } from '../utils/productNormalize.js';
 
 const PAGE_SIZE = 8;

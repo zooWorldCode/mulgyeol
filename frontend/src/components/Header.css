@@ -51,7 +51,7 @@
 button.site-header__icon-link {
   padding: 0;
   border: none;
-  background: transparent;
+  background: var(--color-white);
   cursor: pointer;
   font: inherit;
 }
@@ -68,7 +68,7 @@ button.site-header__icon-link {
   min-width: 36px;
   min-height: 36px;
   border: none;
-  background: transparent;
+  background: var(--color-white);
   cursor: pointer;
   color: inherit;
   font: inherit;
@@ -94,7 +94,9 @@ button.site-header__icon-link {
     transform 0.35s ease;
 }
 
-.header-hover-area:hover .header-dropdown-panel {
+.header-hover-area:has(.site-header__main-nav:hover) .header-dropdown-panel,
+.header-hover-area:has(.site-header__main-nav:focus-within) .header-dropdown-panel,
+.header-hover-area:has(.header-dropdown-panel:hover) .header-dropdown-panel {
   max-height: 420px;
   opacity: 1;
   transform: translateY(0);
@@ -140,7 +142,7 @@ button.site-header__icon-link {
 .header-dropdown-row__item-btn {
   color: inherit;
   text-decoration: none;
-  background: transparent;
+  background: var(--color-white);
   border: none;
   padding: 0;
   cursor: pointer;

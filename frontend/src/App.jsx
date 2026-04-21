@@ -1,8 +1,8 @@
 import { Routes, Route } from 'react-router-dom';
 import TopNoticeBar from './components/TopNoticeBar.jsx';
 import Layout from './components/Layout.jsx';
-import AuthShell from './components/AuthShell.jsx';
-import ProtectedRoute from './components/ProtectedRoute.jsx';
+import AuthShell from './components/auth/AuthShell.jsx';
+import ProtectedRoute from './components/auth/ProtectedRoute.jsx';
 import Home from './pages/Home.jsx';
 import Login from './pages/Login.jsx';
 import Signup from './pages/Signup.jsx';

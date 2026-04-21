@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import './ProductGallery.css';
 
 const THUMB_VISIBLE = 5;
@@ -22,14 +22,44 @@ export default function ProductGallery({
   const [thumbOffset, setThumbOffset] = useState(0);
   const [mainSrcOverride, setMainSrcOverride] = useState(null);
 
-  const list = images.length ? images : [];
+  const candidates = useMemo(
+    () =>
+      Array.from(
+        new Set(
+          images.filter((src) => typeof src === 'string' && src.trim())
+        )
+      ),
+    [images]
+  );
+  const [loadedImages, setLoadedImages] = useState([]);
+  const list = loadedImages;
   const hasImages = list.length > 0;
 
   useEffect(() => {
     setMainIndex(0);
     setThumbOffset(0);
     setMainSrcOverride(null);
-  }, [images.join('|')]);
+    setLoadedImages([]);
+
+    if (!candidates.length || typeof Image === 'undefined') return undefined;
+
+    let cancelled = false;
+    const loadedByIndex = Array(candidates.length).fill(null);
+
+    candidates.forEach((src, index) => {
+      const img = new Image();
+      img.onload = () => {
+        if (cancelled) return;
+        loadedByIndex[index] = src;
+        setLoadedImages(loadedByIndex.filter(Boolean));
+      };
+      img.src = src;
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [candidates.join('|')]);
 
   useEffect(() => {
     setMainSrcOverride(null);
@@ -54,6 +84,12 @@ export default function ProductGallery({
   const baseMainSrc = hasImages ? list[mainIndex] : null;
   const mainSrc = mainSrcOverride ?? baseMainSrc;
 
+  function removeBrokenImage(src) {
+    if (!src) return;
+    setLoadedImages((current) => current.filter((item) => item !== src));
+    setMainIndex(0);
+  }
+
   function handleMainImgError() {
     if (
       listImageFallback &&
@@ -62,7 +98,9 @@ export default function ProductGallery({
       baseMainSrc === listImagePrimary
     ) {
       setMainSrcOverride(listImageFallback);
+      return;
     }
+    removeBrokenImage(baseMainSrc);
   }
 
   return (
@@ -98,7 +136,12 @@ export default function ProductGallery({
                       onClick={() => setMainIndex(idx)}
                       aria-current={active ? 'true' : undefined}
                     >
-                      <img src={src} alt="" className="product-gallery__thumb-img" />
+                      <img
+                        src={src}
+                        alt=""
+                        className="product-gallery__thumb-img"
+                        onError={() => removeBrokenImage(src)}
+                      />
                     </button>
                   </li>
                 );

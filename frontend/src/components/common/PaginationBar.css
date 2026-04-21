@@ -1,4 +1,4 @@
-.pagination-bar {
+﻿.pagination-bar {
   margin-top: 24px;
   width: 100%;
   box-sizing: border-box;
@@ -41,7 +41,7 @@
 }
 
 .pagination-bar__nav:hover:not(:disabled) {
-  background-color: color-mix(in srgb, var(--pagination-nav-bg) 82%, var(--pagination-nav-fg));
+  background-color: var(--color-white);
 }
 
 .pagination-bar__nav:disabled {
@@ -61,7 +61,7 @@
   margin: 0;
   padding: 4px 6px;
   border: none;
-  background: transparent;
+  background: var(--color-white);
   font: inherit;
   font-size: var(--font-size-md);
   font-weight: 500;

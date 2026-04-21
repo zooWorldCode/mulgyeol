@@ -19,9 +19,9 @@
   flex: 1 1 auto;
   min-width: 0;
   padding: 12px 14px;
-  border: 1px solid #e0dcd8;
+  border: 1px solid var(--color-white);
   border-radius: 8px;
-  background: #f0ebe6;
+  background: var(--color-white);
   font-size: var(--font-size-sm);
 }
 
@@ -48,7 +48,7 @@
 .coupon-field__status,
 .coupon-field__hint {
   margin: 10px 0 0;
-  font-size: 13px;
+  font-size: var(--font-size-md);
 }
 
 .coupon-field__status {

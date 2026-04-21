@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import EventCard from '../components/event/EventCard.jsx';
-import PaginationBar from '../components/PaginationBar.jsx';
-import SortBar, { EVENT_STATUS_OPTIONS } from '../components/SortBar.jsx';
+import PaginationBar from '../components/common/PaginationBar.jsx';
+import SortBar, { EVENT_STATUS_OPTIONS } from '../components/common/SortBar.jsx';
 import { DUMMY_EVENTS } from '../data/eventsDummy.js';
 
 const PAGE_SIZE = 6;

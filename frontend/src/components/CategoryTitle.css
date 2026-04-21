@@ -25,7 +25,7 @@
   gap: 14px;
   padding: 0;
   border: none;
-  background: transparent;
+  background: var(--color-white);
   cursor: pointer;
   font: inherit;
   color: var(--color-text);
@@ -49,7 +49,7 @@
 
 .category-title__item--active .category-title__circle {
   background-color: var(--color-point);
-  box-shadow: 0 6px 20px rgba(237, 144, 110, 0.35);
+  box-shadow: 0 6px 20px var(--color-white);
 }
 
 .category-title__circle img {

@@ -3,10 +3,10 @@ import { useLocation } from 'react-router-dom';
 import BlogCard from '../components/blog/BlogCard.jsx';
 import BlogFeaturedCard from '../components/blog/BlogFeaturedCard.jsx';
 import BlogSearchBar from '../components/blog/BlogSearchBar.jsx';
-import SortBar, { BLOG_SORT_OPTIONS } from '../components/SortBar.jsx';
-import PaginationBar from '../components/PaginationBar.jsx';
+import SortBar, { BLOG_SORT_OPTIONS } from '../components/common/SortBar.jsx';
+import PaginationBar from '../components/common/PaginationBar.jsx';
 import { DUMMY_POSTS } from '../data/postsDummy.js';
-import PageWideBand from '../components/PageWideBand.jsx';
+import PageWideBand from '../components/common/PageWideBand.jsx';
 
 const PAGE_SIZE = 8;
 

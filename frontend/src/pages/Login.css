@@ -1,4 +1,4 @@
-.login-page {
+﻿.login-page {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -47,7 +47,7 @@
 .login-page__input:focus {
   outline: none;
   border-color: var(--color-point);
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-point) 25%, transparent);
+  box-shadow: 0 0 0 2px var(--color-white);
 }
 
 .login-page__links {
@@ -101,7 +101,7 @@
 }
 .login-page__social-image-btn {
   border: none;
-  background: transparent;
+  background: var(--color-white);
   padding: 0;
   cursor: pointer;
   width: 100%;

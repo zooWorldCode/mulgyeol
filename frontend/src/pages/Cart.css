@@ -52,8 +52,8 @@
   padding: 16px 20px;
   border: none;
   border-radius: 10px;
-  background: var(--color-black);
-  color: #fff;
+  background: var(--color-text);
+  color: var(--color-white);
   font: inherit;
   font-size: var(--font-size-sm);
   font-weight: 700;

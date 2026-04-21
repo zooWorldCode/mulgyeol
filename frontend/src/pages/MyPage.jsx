@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { clearAuthSession, getAuthUser } from '../auth/session.js';
-import PageWideBand from '../components/PageWideBand.jsx';
+import PageWideBand from '../components/common/PageWideBand.jsx';
 import './MyPage.css';
 
 const PLATE_IMG =

@@ -3,6 +3,7 @@
  * (Category.jsx ProductFrame과 동일 규칙)
  */
 const LIST_THUMB_EXT = 'png';
+const MAX_PRODUCT_LIST_GALLERY_IMAGES = 8;
 
 /** @type {Record<string, string | undefined>} */
 export const PRODUCT_LIST_FOLDER = {
@@ -25,6 +26,9 @@ function listThumbIdFromName(nameRaw) {
   const name = String(nameRaw || '').trim();
   const sample = name.match(/(?:접시|그릇|컵)\s*샘플\s*(\d+)/);
   if (sample) return sample[1];
+  if (name === '다기 세트') return '2';
+  if (name === '장식 오브제') return '1';
+  if (name === '장식 트레이') return '2';
   const vase = name.match(/화병\s*([AB])\s*$/i);
   if (vase) return vase[1].toUpperCase() === 'A' ? '1' : '2';
   return null;
@@ -32,12 +36,24 @@ function listThumbIdFromName(nameRaw) {
 
 function listThumbnailPair(folder, id) {
   if (!folder || !id) return null;
-  const primary = `/images/product_list/${folder}/${id}/${id}_1.${LIST_THUMB_EXT}`;
+  const fileId = folder === 'deco' ? '1' : id;
+  const primary = `/images/product_list/${folder}/${id}/${fileId}_1.${LIST_THUMB_EXT}`;
+  const secondary = `/images/product_list/${folder}/${id}/${fileId}_2.${LIST_THUMB_EXT}`;
   const legacy = `/images/product_list/${folder}/${id}/${id} (1).${LIST_THUMB_EXT}`.replace(
     / /g,
     '%20'
   );
-  return { primary, legacy };
+  return { primary, secondary, legacy };
+}
+
+function listGalleryImageCandidates(folder, id) {
+  if (!folder || !id) return [];
+  const fileId = folder === 'deco' ? '1' : id;
+  return Array.from(
+    { length: MAX_PRODUCT_LIST_GALLERY_IMAGES },
+    (_, index) =>
+      `/images/product_list/${folder}/${id}/${fileId}_${index + 1}.${LIST_THUMB_EXT}`
+  );
 }
 
 /**
@@ -69,9 +85,7 @@ export function getGalleryImages(product) {
   const folder = PRODUCT_LIST_FOLDER[product.category];
   const id = listThumbIdFromName(product.name);
   if (folder && id) {
-    const { primary, legacy } = listThumbnailPair(folder, id);
-    urls.push(primary);
-    if (legacy && legacy !== primary) urls.push(legacy);
+    return listGalleryImageCandidates(folder, id);
   }
 
   const arr = Array.isArray(product.images)

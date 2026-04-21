@@ -1,6 +1,6 @@
 .pdi-acc {
   font-family: 'Pretendard', 'Noto Sans KR', 'Apple SD Gothic Neo', system-ui, sans-serif;
-  background: #faf9f7;
+  background: var(--color-white);
   padding: 24px 16px;
   max-width: 720px;
   margin: 0 auto;
@@ -11,16 +11,16 @@
 }
 
 .pdi-acc__card {
-  background: #fff;
-  border: 1px solid #e8e4df;
+  background: var(--color-white);
+  border: 1px solid var(--color-white);
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 1px 4px var(--color-white);
   transition: box-shadow 0.2s ease;
 }
 
 .pdi-acc__card:hover {
-  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 3px 12px var(--color-white);
 }
 
 .pdi-acc__header {
@@ -29,7 +29,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 16px 20px;
-  background: #f4f0ec;
+  background: var(--color-white);
   border: none;
   cursor: pointer;
   text-align: left;
@@ -38,20 +38,20 @@
 }
 
 .pdi-acc__header:focus-visible {
-  outline: 2px solid #c4a882;
+  outline: 2px solid var(--color-white);
   outline-offset: -2px;
 }
 
 .pdi-acc__title {
   font-size: var(--font-size-sm);
   font-weight: 700;
-  color: #3a3530;
+  color: var(--color-white);
   letter-spacing: 0.02em;
 }
 
 .pdi-acc__chevron {
   font-size: var(--font-size-md);
-  color: #9e9189;
+  color: var(--color-white);
   transition: transform 0.25s ease;
   line-height: 1;
 }
@@ -85,25 +85,25 @@
 }
 
 .pdi-acc__row-even {
-  background: transparent;
+  background: var(--color-white);
 }
 
 .pdi-acc__label {
   padding: 9px 12px 9px 0;
   font-size: var(--font-size-sm);
-  color: #7a7068;
+  color: var(--color-white);
   white-space: nowrap;
   width: 130px;
   vertical-align: top;
-  border-bottom: 1px solid #f0ece8;
+  border-bottom: 1px solid var(--color-white);
 }
 
 .pdi-acc__value {
   padding: 9px 0;
   font-size: var(--font-size-sm);
-  color: #3a3530;
+  color: var(--color-white);
   line-height: 1.6;
-  border-bottom: 1px solid #f0ece8;
+  border-bottom: 1px solid var(--color-white);
 }
 
 .pdi-acc__usage {
@@ -129,30 +129,30 @@
 }
 
 .pdi-acc__badge--ok {
-  background: #edf7f0;
-  color: #2e7d4f;
-  border: 1px solid #b8e0c8;
+  background: var(--color-white);
+  color: var(--color-white);
+  border: 1px solid var(--color-white);
 }
 
 .pdi-acc__badge--no {
-  background: #fdf0f0;
-  color: #b94040;
-  border: 1px solid #f0c8c8;
+  background: var(--color-white);
+  color: var(--color-white);
+  border: 1px solid var(--color-white);
 }
 
 .pdi-acc__badge-icon {
   font-weight: 700;
-  font-size: 12px;
+  font-size: var(--font-size-md);
 }
 
 .pdi-acc__notes {
-  border-top: 1px dashed #e0dbd4;
+  border-top: 1px dashed var(--color-white);
   padding-top: 12px;
 }
 
 .pdi-acc__note {
   font-size: var(--font-size-sm);
-  color: #9e9189;
+  color: var(--color-white);
   line-height: 1.7;
   margin: 0 0 4px;
 }

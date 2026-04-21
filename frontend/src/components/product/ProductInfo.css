@@ -35,7 +35,7 @@
 }
 
 .product-info__star {
-  color: rgba(150, 145, 137, 0.45);
+  color: var(--color-white);
 }
 
 .product-info__star--on {
@@ -56,7 +56,7 @@
 .product-info__rule {
   margin: 0 0 18px;
   border: none;
-  border-top: 1px solid rgba(42, 37, 35, 0.1);
+  border-top: 1px solid var(--color-white);
 }
 
 .product-info__price-line {
@@ -88,7 +88,7 @@
   padding: 4px 10px;
   border-radius: 6px;
   background-color: var(--color-point);
-  color: #fff;
+  color: var(--color-white);
   font-size: var(--font-size-sm);
   font-weight: 600;
   line-height: 1.2;
@@ -126,9 +126,9 @@
   box-sizing: border-box;
   appearance: none;
   padding: 14px 44px 14px 16px;
-  border: 1px solid rgba(42, 37, 35, 0.18);
+  border: 1px solid var(--color-white);
   border-radius: 6px;
-  background-color: #fff;
+  background-color: var(--color-white);
   color: var(--color-text);
   font: inherit;
   font-size: var(--font-size-sm);
@@ -139,7 +139,7 @@
 .product-info__select:hover,
 .product-info__select:focus {
   outline: none;
-  border-color: rgba(42, 37, 35, 0.35);
+  border-color: var(--color-white);
 }
 
 .product-info__select-shell::after {
@@ -158,6 +158,7 @@
 
 .product-info__qty-block {
   margin-bottom: 28px;
+
 }
 
 .product-info__actions {
@@ -186,9 +187,9 @@
 }
 
 .product-info__btn--buy {
-  border: 1px solid var(--color-black);
-  background-color: var(--color-black);
-  color: #fff;
+  border: 1px solid var(--color-white);
+  background-color: var(--color-white);
+  color: var(--color-white);
 }
 
 .product-info__btn--buy:hover {
@@ -202,8 +203,8 @@
 
 .product-info__btn--secondary {
   flex: 1;
-  border: 1px solid rgba(42, 37, 35, 0.35);
-  background-color: #fff;
+  border: 1px solid var(--color-white);
+  background-color: var(--color-white);
   color: var(--color-text);
 }
 
@@ -211,7 +212,7 @@
   background-color: var(--shadow-bright);
 }
 
-/* 수량 (QuantitySelector compact) */
+/* ?�량 (QuantitySelector compact) */
 .product-info .product-quantity-selector--compact {
   display: block;
 }
@@ -228,16 +229,16 @@
   display: flex;
   align-items: stretch;
   max-width: 220px;
-  border: 1px solid rgba(42, 37, 35, 0.18);
+  border: 1px solid var(--color-white);
   border-radius: 6px;
   overflow: hidden;
-  background: #fff;
+  background: var(--color-white);
 }
 
 .product-info .product-quantity-selector--compact .product-quantity-selector__btn {
   flex: 0 0 44px;
   border: none;
-  background: #fff;
+  background: var(--color-white);
   color: var(--color-text);
   font-size: var(--font-size-lg);
   font-weight: 500;
