@@ -20,9 +20,16 @@ export function getWishlist() {
   }
 }
 
+function emitWishlistUpdated() {
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new Event('shopmall-wishlist-updated'));
+  }
+}
+
 /** @param {object[]} items */
 export function setWishlist(items) {
   localStorage.setItem(storageKey(), JSON.stringify(items));
+  emitWishlistUpdated();
 }
 
 /** @param {object} product API 상품 문서 형태 @returns {boolean} 새로 추가했으면 true */

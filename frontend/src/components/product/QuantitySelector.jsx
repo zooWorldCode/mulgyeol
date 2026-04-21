@@ -1,18 +1,30 @@
 /**
- * @param {{ value: number; onChange: (n: number) => void; min?: number; className?: string }} props
+ * @param {{
+ *   value: number;
+ *   onChange: (n: number) => void;
+ *   min?: number;
+ *   className?: string;
+ *   showLabel?: boolean;
+ * } & import('react').HTMLAttributes<HTMLDivElement>} props
  */
 export default function QuantitySelector({
   value,
   onChange,
   min = 1,
   className = '',
+  showLabel = true,
+  ...rest
 }) {
   const dec = () => onChange(Math.max(min, value - 1));
   const inc = () => onChange(value + 1);
 
   return (
-    <div className={`product-quantity-selector ${className}`.trim()}>
-      <span className="product-quantity-selector__label">수량</span>{' '}
+    <div className={`product-quantity-selector ${className}`.trim()} {...rest}>
+      {showLabel ? (
+        <>
+          <span className="product-quantity-selector__label">수량</span>{' '}
+        </>
+      ) : null}
       <div className="product-quantity-selector__controls">
         <button
           type="button"

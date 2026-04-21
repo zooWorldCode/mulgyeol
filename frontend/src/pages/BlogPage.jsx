@@ -3,9 +3,10 @@ import { useLocation } from 'react-router-dom';
 import BlogCard from '../components/blog/BlogCard.jsx';
 import BlogFeaturedCard from '../components/blog/BlogFeaturedCard.jsx';
 import BlogSearchBar from '../components/blog/BlogSearchBar.jsx';
-import BlogSortMenu from '../components/blog/BlogSortMenu.jsx';
-import Pagination from '../components/blog/Pagination.jsx';
+import SortBar, { BLOG_SORT_OPTIONS } from '../components/SortBar.jsx';
+import PaginationBar from '../components/PaginationBar.jsx';
 import { DUMMY_POSTS } from '../data/postsDummy.js';
+import PageWideBand from '../components/PageWideBand.jsx';
 
 const PAGE_SIZE = 8;
 
@@ -79,6 +80,7 @@ export default function BlogPage() {
 
   return (
     <div className="blog-page">
+      <PageWideBand text="블로그" />
       <h1 className="blog-page__title" style={{ marginTop: 0 }}>
         블로그 in 도예
       </h1>
@@ -95,7 +97,12 @@ export default function BlogPage() {
         }}
       >
         <BlogSearchBar value={search} onChange={setSearch} />
-        <BlogSortMenu active={sort} onChange={setSort} />
+        <SortBar
+          options={BLOG_SORT_OPTIONS}
+          value={sort}
+          onChange={setSort}
+          ariaLabel="글 정렬"
+        />
       </div>
 
       {sorted.length === 0 ? (
@@ -125,10 +132,11 @@ export default function BlogPage() {
                     <BlogCard key={post.id} post={post} basePath={basePath} />
                   ))}
                 </div>
-                <Pagination
+                <PaginationBar
                   page={effectivePage}
                   totalPages={totalPages}
                   onPageChange={setPage}
+                  ariaLabel="글 목록 페이지"
                 />
               </>
             )}

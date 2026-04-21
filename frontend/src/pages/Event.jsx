@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import EventCard from '../components/event/EventCard.jsx';
-import EventFilter from '../components/event/EventFilter.jsx';
-import EventPagination from '../components/event/EventPagination.jsx';
+import PaginationBar from '../components/PaginationBar.jsx';
+import SortBar, { EVENT_STATUS_OPTIONS } from '../components/SortBar.jsx';
 import { DUMMY_EVENTS } from '../data/eventsDummy.js';
 
 const PAGE_SIZE = 6;
@@ -37,7 +37,7 @@ export default function Event() {
         className="event-page__hero"
         style={{
           background: 'var(--color-key)',
-          padding: '48px 16px',
+          padding: '48px 0',
           marginBottom: 24,
           textAlign: 'center',
         }}
@@ -55,7 +55,12 @@ export default function Event() {
         </p>
       </section>
 
-      <EventFilter active={statusFilter} onChange={setStatusFilter} />
+      <SortBar
+        options={EVENT_STATUS_OPTIONS}
+        value={statusFilter}
+        onChange={setStatusFilter}
+        ariaLabel="이벤트 상태"
+      />
 
       <section className="event-page__list" style={{ marginTop: 24 }}>
         {filtered.length === 0 ? (
@@ -74,10 +79,11 @@ export default function Event() {
                 <EventCard key={event.id} event={event} />
               ))}
             </div>
-            <EventPagination
+            <PaginationBar
               page={effectivePage}
               totalPages={totalPages}
               onPageChange={setPage}
+              ariaLabel="이벤트 페이지"
             />
           </>
         )}

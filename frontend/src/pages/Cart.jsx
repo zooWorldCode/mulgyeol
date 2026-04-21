@@ -1,18 +1,20 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import CartItem from '../components/cart/CartItem.jsx';
-import CartSummary from '../components/cart/CartSummary.jsx';
-import CouponForm from '../components/cart/CouponForm.jsx';
+import CartList from '../components/cart/CartList.jsx';
+import OrderSummary from '../components/cart/OrderSummary.jsx';
+import CouponField from '../components/cart/CouponField.jsx';
 import PointToggle from '../components/cart/PointToggle.jsx';
 import {
   getCartLines,
   removeCartLine,
   updateCartLineQuantity,
 } from '../cart/cartStorage.js';
+import PageWideBand from '../components/PageWideBand.jsx';
+import './Cart.css';
 
 const DUMMY_POINT_BALANCE = 12000;
 const SHIPPING_FEE = 3000;
-const FREE_SHIPPING_THRESHOLD = 50000;
+const FREE_SHIPPING_THRESHOLD = 30000;
 
 function computeSubtotal(lines) {
   return lines.reduce(
@@ -33,6 +35,12 @@ export default function Cart() {
   }, [tick]);
 
   const refresh = () => setTick((t) => t + 1);
+
+  useEffect(() => {
+    const onCartUpdated = () => setTick((t) => t + 1);
+    window.addEventListener('shopmall-cart-updated', onCartUpdated);
+    return () => window.removeEventListener('shopmall-cart-updated', onCartUpdated);
+  }, []);
 
   const subtotal = useMemo(() => computeSubtotal(lines), [lines]);
 
@@ -77,7 +85,11 @@ export default function Cart() {
   }
 
   function handleQty(line, nextQty) {
-    updateCartLineQuantity(line.productId, line.option, nextQty);
+    updateCartLineQuantity(
+      line.productId,
+      line.option,
+      Math.max(1, Number(nextQty) || 1)
+    );
     refresh();
   }
 
@@ -101,73 +113,46 @@ export default function Cart() {
 
   return (
     <div className="cart-page">
-      <h1 className="cart-page__title">장바구니</h1>
+      <PageWideBand text="장바구니" />
 
       {empty ? (
         <p className="cart-page__empty">장바구니에 담긴 상품이 없습니다.</p>
       ) : (
-        <div
-          className="cart-page__grid"
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-            gap: 24,
-            alignItems: 'flex-start',
-          }}
-        >
-          <section className="cart-page__col cart-page__col--list">
-            <div className="cart-page__list">
-              {lines.map((line) => (
-                <CartItem
-                  key={`${line.productId}::${line.option ?? ''}`}
-                  line={line}
-                  onRemove={() => handleRemove(line)}
-                  onQuantityChange={(q) =>
-                    handleQty(line, Math.max(1, q))
-                  }
-                />
-              ))}
-            </div>
+        <div className="cart-page__layout">
+          <section className="cart-page__main" aria-label="장바구니 상품">
+            <CartList
+              lines={lines}
+              onRemove={handleRemove}
+              onQuantityChange={handleQty}
+            />
           </section>
 
-          <section className="cart-page__col cart-page__col--side">
-            <CartSummary
+          <aside className="cart-page__aside" aria-label="주문 요약">
+            <OrderSummary
               subtotal={subtotal}
               couponDiscount={couponDiscount}
               pointDiscount={pointDiscount}
               shipping={shipping}
               finalAmount={finalAmount}
             />
-
-            <div style={{ marginTop: 20 }}>
-              <CouponForm
-                appliedCode={appliedCouponCode}
-                onApply={handleApplyCoupon}
-              />
-            </div>
-
-            <div style={{ marginTop: 20 }}>
-              <PointToggle
-                balance={DUMMY_POINT_BALANCE}
-                enabled={pointEnabled}
-                onChange={setPointEnabled}
-              />
-            </div>
-
-            <div
-              className="cart-page__checkout-wrap"
-              style={{ marginTop: 24, textAlign: 'right' }}
+            <CouponField
+              appliedCode={appliedCouponCode}
+              onApply={handleApplyCoupon}
+            />
+            <PointToggle
+              balance={DUMMY_POINT_BALANCE}
+              enabled={pointEnabled}
+              onChange={setPointEnabled}
+            />
+            <button
+              type="button"
+              className="cart-page__checkout"
+              onClick={handleOrder}
+              disabled={empty}
             >
-              <button
-                type="button"
-                className="cart-page__checkout-btn"
-                onClick={handleOrder}
-                disabled={empty}
-              >
-                주문결제
-              </button>
-            </div>
-          </section>
+              주문 결제
+            </button>
+          </aside>
         </div>
       )}
     </div>

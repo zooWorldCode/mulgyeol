@@ -48,6 +48,14 @@
   min-height: 36px;
 }
 
+button.site-header__icon-link {
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+}
+
 .site-header__icon-img {
   width: 24px;
   height: 24px;
@@ -147,7 +155,19 @@
 
 @media (max-width: 940px) {
   .site-header__main-nav {
+    display: flex;
+    gap: 0;
+    min-width: 0;
+  }
+
+  .site-header__main-nav .site-header__nav-link:not(.site-header__logo) {
     display: none;
+  }
+
+  .site-header__logo img {
+    display: block;
+    max-width: min(70px, 100%);
+    height: auto;
   }
 
   .site-header__hamburger {
@@ -156,9 +176,10 @@
     justify-content: center;
   }
 
-  .site-header__row{
-    justify-content: end;
+  .site-header__row {
+    justify-content: space-between;
   }
+
   .header-dropdown-panel {
     display: none;
   }

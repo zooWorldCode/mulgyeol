@@ -1,3 +1,7 @@
+import { useMemo } from 'react';
+import { getPricing } from '../../utils/productNormalize.js';
+import './CartItem.css';
+
 /**
  * @param {{
  *   line: { productId: string; name: string; price: number; image: string; quantity: number; option?: string };
@@ -6,94 +10,77 @@
  * }} props
  */
 export default function CartItem({ line, onRemove, onQuantityChange }) {
-  const lineTotal = Number(line.price) * Number(line.quantity);
+  const qty = Number(line.quantity) || 1;
+  const { sale, original, discountRate } = useMemo(
+    () => getPricing({ price: line.price }),
+    [line.price]
+  );
+
+  const unitOriginal = original != null ? original : sale;
+  const lineOriginal = unitOriginal * qty;
+  const lineSale = sale * qty;
 
   return (
-    <article
-      className="cart-item"
-      style={{
-        borderBottom: '1px solid var(--shadow-bright)',
-        paddingBottom: 16,
-        marginBottom: 16,
-      }}
-    >
-      <div
-        className="cart-item__layout"
-        style={{ display: 'flex', gap: 16, alignItems: 'flex-start' }}
-      >
-        <div className="cart-item__image-wrap">
+    <article className="cart-item">
+      <div className="cart-item__grid">
+        <div className="cart-item__thumb">
           {line.image ? (
-            <img
-              src={line.image}
-              alt=""
-              className="cart-item__image"
-              style={{ width: 80, height: 80, objectFit: 'cover' }}
-            />
+            <img src={line.image} alt="" className="cart-item__thumb-img" />
           ) : (
-            <div
-              className="cart-item__image-placeholder"
-              style={{
-                width: 80,
-                height: 80,
-                background: 'var(--shadow-bright)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              No Image
-            </div>
+            <div className="cart-item__thumb-placeholder">No Image</div>
           )}
         </div>
-        <div className="cart-item__body">
+
+        <div className="cart-item__info">
           <h3 className="cart-item__name">{line.name}</h3>
           {line.option ? (
-            <p className="cart-item__option">옵션: {line.option}</p>
+            <p className="cart-item__option">{line.option}</p>
           ) : null}
-          <p className="cart-item__unit-price">
-            단가 {Number(line.price).toLocaleString()}원
+        </div>
+
+        <div className="cart-item__price-block">
+          {unitOriginal > sale ? (
+            <p className="cart-item__original">
+              {lineOriginal.toLocaleString('ko-KR')}원
+            </p>
+          ) : null}
+          <p className="cart-item__sale">
+            {lineSale.toLocaleString('ko-KR')}원
           </p>
-          <p className="cart-item__line-total">
-            소계 {lineTotal.toLocaleString()}원
-          </p>
-          <div
-            className="cart-item__controls"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              marginTop: 8,
-            }}
-          >
-            <div className="cart-item__qty" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <button
-                type="button"
-                className="cart-item__qty-btn cart-item__qty-btn--dec"
-                onClick={() => onQuantityChange(line.quantity - 1)}
-                disabled={line.quantity <= 1}
-                aria-label="수량 감소"
-              >
-                −
-              </button>
-              <span className="cart-item__qty-value">{line.quantity}</span>
-              <button
-                type="button"
-                className="cart-item__qty-btn cart-item__qty-btn--inc"
-                onClick={() => onQuantityChange(line.quantity + 1)}
-                aria-label="수량 증가"
-              >
-                +
-              </button>
-            </div>
+          {discountRate > 0 ? (
+            <span className="cart-item__badge">{discountRate}% 할인</span>
+          ) : null}
+        </div>
+
+        <div className="cart-item__footer">
+          <div className="cart-item__qty">
             <button
               type="button"
-              className="cart-item__remove"
-              onClick={onRemove}
-              aria-label="삭제"
+              className="cart-item__qty-btn"
+              onClick={() => onQuantityChange(qty - 1)}
+              disabled={qty <= 1}
+              aria-label="수량 감소"
             >
-              ✕
+              −
+            </button>
+            <span className="cart-item__qty-value">{qty}</span>
+            <button
+              type="button"
+              className="cart-item__qty-btn"
+              onClick={() => onQuantityChange(qty + 1)}
+              aria-label="수량 증가"
+            >
+              +
             </button>
           </div>
+          <button
+            type="button"
+            className="cart-item__remove"
+            onClick={onRemove}
+            aria-label="삭제"
+          >
+            ✕
+          </button>
         </div>
       </div>
     </article>

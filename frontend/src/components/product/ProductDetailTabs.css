@@ -1,0 +1,121 @@
+.product-detail-tabs {
+  margin-top: 48px;
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.product-detail-tabs__nav {
+  display: flex;
+  width: 100%;
+  border-top: 1px solid rgba(42, 37, 35, 0.12);
+  border-bottom: 1px solid rgba(42, 37, 35, 0.12);
+  box-sizing: border-box;
+}
+
+.product-detail-tabs__tab {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 96px;
+  padding: 12px 8px;
+  box-sizing: border-box;
+  border: none;
+  border-bottom: 3px solid transparent;
+  margin: 0;
+  background: transparent;
+  color: var(--color-text);
+  font: inherit;
+  font-size: var(--font-size-lg);
+  font-weight: 500;
+  line-height: 1.3;
+  text-align: center;
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.product-detail-tabs__tab:hover {
+  color: var(--color-black);
+}
+
+.product-detail-tabs__tab--active {
+  border-bottom-color: var(--color-black);
+  font-weight: 600;
+}
+
+.product-detail-tabs__panel {
+  padding: 32px 0 24px;
+  box-sizing: border-box;
+}
+
+.product-detail-tabs__heading {
+  margin: 0 0 16px;
+  font-size: var(--font-size-md);
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.product-detail-tabs__subheading {
+  margin: 24px 0 12px;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.product-detail-tabs__description {
+  margin: 0 0 16px;
+  font-size: var(--font-size-sm);
+  line-height: 1.65;
+  color: var(--color-text);
+}
+
+.product-detail-tabs__description--lead {
+  margin-bottom: 24px;
+}
+
+.product-detail-tabs__spec-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.product-detail-tabs__spec-item {
+  margin: 0 0 8px;
+  font-size: var(--font-size-sm);
+  line-height: 1.5;
+  color: var(--color-text);
+}
+
+.product-detail-tabs__spec-label {
+  font-weight: 600;
+}
+
+.product-detail-tabs__bullet-list {
+  margin: 0;
+  padding-left: 1.2em;
+  font-size: var(--font-size-sm);
+  line-height: 1.65;
+  color: var(--color-text);
+}
+
+.product-detail-tabs__bullet-list li {
+  margin-bottom: 8px;
+}
+
+.product-detail-tabs__muted {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  line-height: 1.65;
+  color: var(--shadow-deep);
+}
+
+@media (max-width: 640px) {
+  .product-detail-tabs__tab {
+    min-height: 88px;
+    font-size: var(--font-size-md);
+    padding: 8px 4px;
+  }
+}

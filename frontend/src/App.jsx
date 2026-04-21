@@ -1,4 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
+import TopNoticeBar from './components/TopNoticeBar.jsx';
 import Layout from './components/Layout.jsx';
 import AuthShell from './components/AuthShell.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
@@ -21,7 +22,9 @@ import Order from './pages/Order.jsx';
 
 export default function App() {
   return (
-    <Routes>
+    <>
+      <TopNoticeBar />
+      <Routes>
       <Route element={<AuthShell />}>
         <Route path="login" element={<Login />} />
         <Route path="signup" element={<Signup />} />
@@ -59,5 +62,6 @@ export default function App() {
         />
       </Route>
     </Routes>
+    </>
   );
 }

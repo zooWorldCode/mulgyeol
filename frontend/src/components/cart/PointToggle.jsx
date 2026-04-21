@@ -1,3 +1,5 @@
+import './PointToggle.css';
+
 /**
  * @param {{
  *   balance: number;
@@ -8,25 +10,24 @@
 export default function PointToggle({ balance, enabled, onChange }) {
   return (
     <div className="point-toggle">
-      <h3 className="point-toggle__title">포인트 사용</h3>
-      <div className="point-toggle__row">
-        <label className="point-toggle__label">
-          <input
-            type="checkbox"
-            className="point-toggle__checkbox"
-            checked={enabled}
-            onChange={(e) => onChange(e.target.checked)}
-            role="switch"
-            aria-checked={enabled}
-          />
-          <span className="point-toggle__switch-text">
-            포인트로 결제 금액에서 차감
-          </span>
-        </label>
+      <div className="point-toggle__copy">
+        <h3 className="point-toggle__title">포인트 사용</h3>
+        <p className="point-toggle__balance">
+          보유 포인트 {Number(balance).toLocaleString('ko-KR')} P
+        </p>
       </div>
-      <p className="point-toggle__balance">
-        보유 포인트 {Number(balance).toLocaleString()}P
-      </p>
+      <label className="point-toggle__switch">
+        <input
+          type="checkbox"
+          className="point-toggle__input"
+          checked={enabled}
+          onChange={(e) => onChange(e.target.checked)}
+          role="switch"
+          aria-checked={enabled}
+          aria-label="포인트 사용"
+        />
+        <span className="point-toggle__track" aria-hidden />
+      </label>
     </div>
   );
 }

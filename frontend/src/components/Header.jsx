@@ -2,19 +2,21 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import HeaderDropdown from './HeaderDropdown.jsx';
 import MobileMenu from './MobileMenu.jsx';
+import SearchModal from './SearchModal.jsx';
 import './Header.css';
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
 
   useEffect(() => {
-    if (!mobileMenuOpen) return undefined;
+    if (!mobileMenuOpen && !searchOpen) return undefined;
     const prev = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
     return () => {
       document.body.style.overflow = prev;
     };
-  }, [mobileMenuOpen]);
+  }, [mobileMenuOpen, searchOpen]);
 
   return (
     <div className="header-hover-area">
@@ -22,8 +24,8 @@ export default function Header() {
         <div className="container site-header__inner">
           <div className="site-header__row">
             <nav className="site-header__main-nav" aria-label="주 메뉴">
-              <Link to="/" className="site-header__nav-link">
-              <img src="/images/logo/CI_logo.svg" alt="홈" width={70} />
+              <Link to="/" className="site-header__nav-link site-header__logo">
+                <img src="/images/logo/CI_logo.svg" alt="홈" width={70} />
               </Link>
               <Link to="/category" className="site-header__nav-link">
                 카테고리
@@ -40,14 +42,15 @@ export default function Header() {
             </nav>
 
             <nav className="site-header__icon-nav" aria-label="아이콘 메뉴">
-              <Link
-                to="/search"
+              <button
+                type="button"
                 className="site-header__icon-link"
                 title="검색"
                 aria-label="검색"
+                onClick={() => setSearchOpen(true)}
               >
                 <img src="/images/icon/search.svg" alt="" className="site-header__icon-img" />
-              </Link>
+              </button>
               <Link
                 to="/cart"
                 className="site-header__icon-link"
@@ -90,7 +93,15 @@ export default function Header() {
         </div>
       </header>
       <HeaderDropdown />
-      <MobileMenu open={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} />
+      <MobileMenu
+        open={mobileMenuOpen}
+        onClose={() => setMobileMenuOpen(false)}
+        onSearchOpen={() => {
+          setMobileMenuOpen(false);
+          setSearchOpen(true);
+        }}
+      />
+      <SearchModal open={searchOpen} onClose={() => setSearchOpen(false)} />
     </div>
   );
 }

@@ -60,7 +60,7 @@ export default function Login() {
 
   return (
     <div className="login-page">
-      <img src="/images/social_log/logo_log.png" alt="로그인 로고" width={200} />
+      <img src="/images/social_log/logo_log.png" alt="로그인 로고"/>
       <form className="login-page__form" onSubmit={handleLogin}>
         <div className="login-page__field">
           <label className="login-page__label" htmlFor="login-email">

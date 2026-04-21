@@ -1,0 +1,61 @@
+.coupon-field {
+  padding: 4px 0 0;
+}
+
+.coupon-field__title {
+  margin: 0 0 10px;
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.coupon-field__form {
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+}
+
+.coupon-field__input {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 12px 14px;
+  border: 1px solid #e0dcd8;
+  border-radius: 8px;
+  background: #f0ebe6;
+  font-size: var(--font-size-sm);
+}
+
+.coupon-field__input::placeholder {
+  color: var(--shadow-deep);
+}
+
+.coupon-field__apply {
+  flex: 0 0 auto;
+  padding: 12px 18px;
+  border: 1px solid var(--color-text);
+  border-radius: 8px;
+  background: var(--color-white);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.coupon-field__apply:hover {
+  background: var(--shadow-bright);
+}
+
+.coupon-field__status,
+.coupon-field__hint {
+  margin: 10px 0 0;
+  font-size: 13px;
+}
+
+.coupon-field__status {
+  color: var(--color-text);
+  font-weight: 500;
+}
+
+.coupon-field__hint {
+  color: var(--shadow-deep);
+}

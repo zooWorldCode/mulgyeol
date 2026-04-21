@@ -1,0 +1,127 @@
+.product-frame {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.product-frame__visual {
+  position: relative;
+  background-color: #fff;
+  aspect-ratio: 1;
+  overflow: hidden;
+}
+
+.product-frame__media-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  text-decoration: none;
+  color: inherit;
+}
+
+.product-frame__img {
+  max-width: 88%;
+  max-height: 88%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.product-frame__placeholder {
+  color: var(--shadow-deep);
+  font-size: var(--font-size-sm);
+}
+
+.product-frame__fab {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 1;
+}
+
+.product-frame__fab-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: none;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-point);
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(42, 37, 35, 0.12);
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.product-frame__fab-btn:hover {
+  opacity: 0.92;
+  transform: scale(1.04);
+}
+
+.product-frame__fab-icon {
+  display: block;
+  width: 22px;
+  height: auto;
+  max-height: 24px;
+  object-fit: contain;
+  /* SVG 자산은 stroke #2A2523 고정 → FAB 배경 위에서 흰색으로 */
+  filter: brightness(0) invert(1);
+  pointer-events: none;
+}
+
+.product-frame__fab-btn--wish-on {
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.55);
+}
+
+.product-frame__info {
+  display: block;
+  padding: 12px 14px 14px;
+  background-color: #fffbf5;
+  text-decoration: none;
+  color: inherit;
+  box-sizing: border-box;
+}
+
+.product-frame__name {
+  margin: 0 0 8px;
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--color-text);
+  line-height: 1.35;
+}
+
+.product-frame__price-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 10px;
+}
+
+.product-frame__discount {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-point);
+}
+
+.product-frame__price-current {
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  color: var(--color-text);
+  font-variant-numeric: tabular-nums;
+}
+
+.product-frame__price-original {
+  font-size: var(--font-size-sm);
+  color: var(--shadow-deep);
+  font-variant-numeric: tabular-nums;
+}

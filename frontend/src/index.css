@@ -85,7 +85,7 @@
 }
 
 html {
-  font-size: 18px;
+  font-size: var(--font-size-md);
 }
 
 body {
@@ -103,7 +103,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-size: 18px;
+  font-size: var(--font-size-md);
   font-weight: 400;
 }
 

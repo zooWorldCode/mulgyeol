@@ -35,6 +35,7 @@ export const MOBILE_ICON_MENUS = [
 export default function MobileMenu({
   open,
   onClose,
+  onSearchOpen,
   mainMenus = MOBILE_MAIN_MENUS,
   iconMenus = MOBILE_ICON_MENUS,
 }) {
@@ -85,12 +86,27 @@ export default function MobileMenu({
         </nav>
 
         <nav className="mobile-menu__icon-nav" aria-label="모바일 아이콘 메뉴">
-          {iconMenus.map((menu) => (
-            <Link key={menu.label} to={menu.to} className="mobile-menu__icon-link" onClick={onClose}>
-              <img src={menu.iconPath} alt="" className="mobile-menu__icon" aria-hidden />
-              <span>{menu.label}</span>
-            </Link>
-          ))}
+          {iconMenus.map((menu) =>
+            menu.label === '검색' && onSearchOpen ? (
+              <button
+                key={menu.label}
+                type="button"
+                className="mobile-menu__icon-link"
+                onClick={() => {
+                  onClose();
+                  onSearchOpen();
+                }}
+              >
+                <img src={menu.iconPath} alt="" className="mobile-menu__icon" aria-hidden />
+                <span>{menu.label}</span>
+              </button>
+            ) : (
+              <Link key={menu.label} to={menu.to} className="mobile-menu__icon-link" onClick={onClose}>
+                <img src={menu.iconPath} alt="" className="mobile-menu__icon" aria-hidden />
+                <span>{menu.label}</span>
+              </Link>
+            ),
+          )}
         </nav>
 
         <div className="mobile-menu__auth">

@@ -1,29 +1,18 @@
-import { useEffect, useMemo, useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import api from '../api.js';
-
-const CATEGORIES = [
-  { id: 'all', label: '전체' },
-  { id: 'plate', label: '접시' },
-  { id: 'bowl', label: '그릇' },
-  { id: 'cup_teaware', label: '컵/다기' },
-  { id: 'vase', label: '화병' },
-  { id: 'decor', label: '장식' },
-];
-
-const SORT_OPTIONS = [
-  { id: 'all', label: '전체' },
-  { id: 'popular', label: '인기순' },
-  { id: 'latest', label: '최신순' },
-  { id: 'price_desc', label: '가격 높은 순' },
-  { id: 'price_asc', label: '가격 낮은 순' },
-];
+import CategoryTitle from '../components/CategoryTitle.jsx';
+import ProductFrame from '../components/product/ProductFrame.jsx';
+import SortBar from '../components/SortBar.jsx';
+import PaginationBar from '../components/PaginationBar.jsx';
+import { getPricing, resolveCategoryListImages } from '../utils/productNormalize.js';
+import './Category.css';
 
 const CATEGORY_TITLE = {
   all: '전체',
-  plate: '접시',
+  plate: '접시 / 찬기',
   bowl: '그릇',
-  cup_teaware: '컵/다기',
+  cup_teaware: '컵 / 다기',
   vase: '화병',
   decor: '장식',
 };
@@ -113,11 +102,6 @@ export default function Category() {
 
   const sectionTitle = CATEGORY_TITLE[category] || category;
 
-  const pageNumbers = useMemo(() => {
-    const tp = data.totalPages || 1;
-    return Array.from({ length: tp }, (_, i) => i + 1);
-  }, [data.totalPages]);
-
   function goPage(p) {
     setSearchParams({
       category,
@@ -128,55 +112,16 @@ export default function Category() {
 
   return (
     <div>
-      <h1 style={{ marginTop: 0 }}>카테고리</h1>
-
-      <div
-        style={{
-          border: '1px solid var(--shadow-bright)',
-          padding: 16,
-          marginBottom: 20,
-        }}
-      >
-        <div
-          style={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            gap: 12,
-            alignItems: 'center',
-            justifyContent: 'flex-start',
-          }}
-        >
-          {CATEGORIES.map((c) => {
-            const active = category === c.id;
-            return (
-              <button
-                key={c.id}
-                type="button"
-                onClick={() =>
-                  setSearchParams({
-                    category: c.id,
-                    sort,
-                    page: '1',
-                  })
-                }
-                style={{
-                  width: 72,
-                  height: 72,
-                  borderRadius: '50%',
-                  border: active
-                    ? '2px solid var(--color-point)'
-                    : '1px solid var(--shadow-deep)',
-                  background: active ? 'var(--color-point)' : 'var(--shadow-bright)',
-                  color: active ? 'var(--color-white)' : 'var(--color-text)',
-                  cursor: 'pointer',
-                }}
-              >
-                {c.label}
-              </button>
-            );
-          })}
-        </div>
-      </div>
+      <CategoryTitle
+        activeId={category}
+        onSelect={(id) =>
+          setSearchParams({
+            category: id,
+            sort,
+            page: '1',
+          })
+        }
+      />
 
       <div
         style={{
@@ -189,32 +134,16 @@ export default function Category() {
         }}
       >
         <h2 style={{ margin: 0 }}>{sectionTitle}</h2>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-          {SORT_OPTIONS.map((s) => {
-            const active = sort === s.id;
-            return (
-              <button
-                key={s.id}
-                type="button"
-                onClick={() =>
-                  setSearchParams({
-                    category,
-                    sort: s.id,
-                    page: '1',
-                  })
-                }
-                style={{
-                  border: '1px solid var(--shadow-bright)',
-                  background: active ? 'var(--color-key)' : 'var(--color-white)',
-                  cursor: 'pointer',
-                  padding: '4px 8px',
-                }}
-              >
-                {s.label}
-              </button>
-            );
-          })}
-        </div>
+        <SortBar
+          value={sort}
+          onChange={(id) =>
+            setSearchParams({
+              category,
+              sort: id,
+              page: '1',
+            })
+          }
+        />
       </div>
 
       <div style={{ marginBottom: 12 }}>
@@ -228,109 +157,34 @@ export default function Category() {
         </p>
       ) : null}
 
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(4, minmax(0, 1fr))',
-          gap: 12,
-          marginBottom: 24,
-        }}
-      >
-        {data.products.map((p) => (
-          <Link
-            key={p._id}
-            to={`/product/${p._id}`}
-            style={{
-              textDecoration: 'none',
-              color: 'inherit',
-              border: '1px solid var(--shadow-bright)',
-              padding: 8,
-              display: 'block',
-            }}
-          >
-            <div
-              style={{
-                aspectRatio: '1',
-                background: 'var(--shadow-bright)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginBottom: 8,
-                overflow: 'hidden',
-              }}
-            >
-              {p.image ? (
-                <img
-                  src={p.image}
-                  alt=""
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                />
-              ) : (
-                <span style={{ color: 'var(--shadow-deep)' }}>
-                  No Image
-                </span>
-              )}
-            </div>
-            <div style={{ marginBottom: 4 }}>{p.name}</div>
-            <div>
-              {Number(p.price).toLocaleString()}원
-            </div>
-          </Link>
-        ))}
+      <div className="category-page__grid">
+        {data.products.map((p) => {
+          const { sale, original, discountRate } = getPricing(p);
+          const { imageSrc, imageSrcFallback } = resolveCategoryListImages(category, p);
+          return (
+            <ProductFrame
+              key={p._id}
+              product={p}
+              to={`/product/${p._id}`}
+              imageSrc={imageSrc}
+              imageSrcFallback={imageSrcFallback}
+              thumbSrc={imageSrc}
+              productName={p.name}
+              currentPrice={sale}
+              originalPrice={original}
+              discountPercent={discountRate}
+            />
+          );
+        })}
       </div>
 
       {data.totalPages > 1 ? (
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
-          <button
-            type="button"
-            disabled={data.page <= 1}
-            onClick={() => goPage(1)}
-          >
-            &lt;&lt;
-          </button>
-          <button
-            type="button"
-            disabled={data.page <= 1}
-            onClick={() => goPage(data.page - 1)}
-          >
-            &lt;
-          </button>
-          {pageNumbers.map((n) => (
-            <button
-              key={n}
-              type="button"
-              onClick={() => goPage(n)}
-              disabled={n === data.page}
-              style={{
-                minWidth: 32,
-                fontWeight: n === data.page ? 'bold' : 'normal',
-                border:
-                  n === data.page
-                    ? '2px solid var(--color-point)'
-                    : '1px solid var(--shadow-bright)',
-                background:
-                  n === data.page ? 'var(--shadow-bright)' : 'var(--color-white)',
-                cursor: n === data.page ? 'default' : 'pointer',
-              }}
-            >
-              {n}
-            </button>
-          ))}
-          <button
-            type="button"
-            disabled={data.page >= data.totalPages}
-            onClick={() => goPage(data.page + 1)}
-          >
-            &gt;
-          </button>
-          <button
-            type="button"
-            disabled={data.page >= data.totalPages}
-            onClick={() => goPage(data.totalPages)}
-          >
-            &gt;&gt;
-          </button>
-        </div>
+        <PaginationBar
+          page={data.page}
+          totalPages={data.totalPages}
+          onPageChange={goPage}
+          ariaLabel="상품 목록 페이지"
+        />
       ) : null}
     </div>
   );

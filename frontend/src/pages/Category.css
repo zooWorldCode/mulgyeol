@@ -1,0 +1,11 @@
+.category-page__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 100px;
+  width: 100%;
+}
+
+.category-page__grid > * {
+  min-width: 0;
+}

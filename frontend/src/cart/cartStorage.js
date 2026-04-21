@@ -30,9 +30,16 @@ export function getCartLines() {
   }
 }
 
+function emitCartUpdated() {
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new Event('shopmall-cart-updated'));
+  }
+}
+
 /** @param {CartLine[]} lines */
 export function setCartLines(lines) {
   localStorage.setItem(storageKey(), JSON.stringify(lines));
+  emitCartUpdated();
 }
 
 export function removeCartLine(productId, option = '') {

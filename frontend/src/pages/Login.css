@@ -12,11 +12,12 @@
   padding: 70px 50px;
   background-color: var(--color-white);
 
-  img{
-    margin-bottom: 50px;
-  }
+  
 }
-
+.login-page>img{
+  margin-bottom: 50px;
+  width: 150px;
+}
 .login-page__form {
   width: 100%;
 }

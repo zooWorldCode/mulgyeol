@@ -1,0 +1,45 @@
+.top-marquee-bar {
+  height: 80px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  background-color: var(--color-key);
+  color: var(--color-point);
+  font-size: var(--font-size-md);
+  line-height: 1.3;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.top-marquee-bar__viewport {
+  width: 100%;
+  overflow: hidden;
+}
+
+.top-marquee-bar__track {
+  display: flex;
+  width: max-content;
+  animation: top-marquee-bar-scroll 200s linear infinite;
+  will-change: transform;
+}
+
+.top-marquee-bar__segment {
+  flex-shrink: 0;
+  white-space: nowrap;
+  padding-right: 2.5rem;
+}
+
+@keyframes top-marquee-bar-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .top-marquee-bar__track {
+    animation-duration: 720s;
+  }
+}

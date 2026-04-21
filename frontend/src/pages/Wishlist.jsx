@@ -3,14 +3,10 @@ import { Link } from 'react-router-dom';
 import { getAuthUser } from '../auth/session.js';
 import { addToCart } from '../cart/cartStorage.js';
 import { getWishlist, removeFromWishlist } from '../wishlist/wishlistStorage.js';
-
-const SORT_OPTIONS = [
-  { id: 'all', label: '전체' },
-  { id: 'popular', label: '인기순' },
-  { id: 'latest', label: '최신순' },
-  { id: 'price_desc', label: '가격 높은 순' },
-  { id: 'price_asc', label: '가격 낮은 순' },
-];
+import PageWideBand from '../components/PageWideBand.jsx';
+import SortBar from '../components/SortBar.jsx';
+import PaginationBar from '../components/PaginationBar.jsx';
+import { getPricing } from '../utils/productNormalize.js';
 
 const PAGE_SIZE = 8;
 
@@ -40,21 +36,6 @@ function sortList(list, sortId) {
   }
 }
 
-function getPricing(p) {
-  const sale = Number(p.price) || 0;
-  const original =
-    p.originalPrice != null && Number(p.originalPrice) > sale
-      ? Number(p.originalPrice)
-      : sale > 0
-        ? Math.ceil(sale * 1.2)
-        : 1000;
-  const pct =
-    original > sale
-      ? Math.round(((original - sale) / original) * 100)
-      : 0;
-  return { sale, original, pct };
-}
-
 export default function Wishlist() {
   const user = getAuthUser();
   const [reload, setReload] = useState(0);
@@ -80,6 +61,13 @@ export default function Wishlist() {
   useEffect(() => {
     setPage((p) => Math.min(Math.max(1, p), totalPages));
   }, [totalPages]);
+
+  useEffect(() => {
+    const onWishlistUpdated = () => setReload((n) => n + 1);
+    window.addEventListener('shopmall-wishlist-updated', onWishlistUpdated);
+    return () =>
+      window.removeEventListener('shopmall-wishlist-updated', onWishlistUpdated);
+  }, []);
 
   const effectivePage = Math.min(page, totalPages);
 
@@ -115,6 +103,7 @@ export default function Wishlist() {
 
   return (
     <div>
+      <PageWideBand text="위시리스트" />
       <div
         style={{
           display: 'flex',
@@ -143,26 +132,13 @@ export default function Wishlist() {
             />
           </div>
         </div>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-          {SORT_OPTIONS.map((s) => (
-            <button
-              key={s.id}
-              type="button"
-              onClick={() => {
-                setSort(s.id);
-                setPage(1);
-              }}
-              style={{
-                border: '1px solid var(--shadow-bright)',
-                background: sort === s.id ? 'var(--color-key)' : 'var(--color-white)',
-                padding: '4px 8px',
-                cursor: 'pointer',
-              }}
-            >
-              {s.label}
-            </button>
-          ))}
-        </div>
+        <SortBar
+          value={sort}
+          onChange={(id) => {
+            setSort(id);
+            setPage(1);
+          }}
+        />
       </div>
 
       {sorted.length === 0 ? (
@@ -182,7 +158,8 @@ export default function Wishlist() {
             }}
           >
             {pageItems.map((p) => {
-              const { sale, original, pct } = getPricing(p);
+              const { sale, original, discountRate } = getPricing(p);
+              const pct = discountRate;
               return (
                 <div
                   key={p._id}
@@ -240,14 +217,16 @@ export default function Wishlist() {
                     <div style={{ fontWeight: 'bold' }}>
                       {sale.toLocaleString()}원
                     </div>
-                    <div
-                      style={{
-                        color: 'var(--shadow-deep)',
-                        textDecoration: 'line-through',
-                      }}
-                    >
-                      {original.toLocaleString()}원
-                    </div>
+                    {original != null && original > sale ? (
+                      <div
+                        style={{
+                          color: 'var(--shadow-deep)',
+                          textDecoration: 'line-through',
+                        }}
+                      >
+                        {original.toLocaleString()}원
+                      </div>
+                    ) : null}
                   </Link>
                   <div
                     style={{
@@ -279,61 +258,12 @@ export default function Wishlist() {
           </div>
 
           {totalPages > 1 ? (
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 8,
-                flexWrap: 'wrap',
-              }}
-            >
-              <button
-                type="button"
-                disabled={effectivePage <= 1}
-                onClick={() => goPage(1)}
-              >
-                &lt;&lt;
-              </button>
-              <button
-                type="button"
-                disabled={effectivePage <= 1}
-                onClick={() => goPage(effectivePage - 1)}
-              >
-                &lt;
-              </button>
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
-                <button
-                  key={n}
-                  type="button"
-                  onClick={() => goPage(n)}
-                  disabled={n === effectivePage}
-                  style={{
-                    minWidth: 32,
-                    fontWeight: n === effectivePage ? 'bold' : 'normal',
-                    border:
-                      n === effectivePage
-                        ? '2px solid var(--color-point)'
-                        : '1px solid var(--shadow-bright)',
-                  }}
-                >
-                  {n}
-                </button>
-              ))}
-              <button
-                type="button"
-                disabled={effectivePage >= totalPages}
-                onClick={() => goPage(effectivePage + 1)}
-              >
-                &gt;
-              </button>
-              <button
-                type="button"
-                disabled={effectivePage >= totalPages}
-                onClick={() => goPage(totalPages)}
-              >
-                &gt;&gt;
-              </button>
-            </div>
+            <PaginationBar
+              page={effectivePage}
+              totalPages={totalPages}
+              onPageChange={goPage}
+              ariaLabel="위시리스트 페이지"
+            />
           ) : null}
         </>
       )}

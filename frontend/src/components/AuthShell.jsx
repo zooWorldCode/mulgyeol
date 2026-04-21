@@ -8,7 +8,7 @@ export default function AuthShell() {
         minHeight: '100vh',
         display: 'flex',
         flexDirection: 'column',
-        padding: '16px 16px 0',
+        padding: 0,
         boxSizing: 'border-box',
         background: 'var(--color-point)',
       }}

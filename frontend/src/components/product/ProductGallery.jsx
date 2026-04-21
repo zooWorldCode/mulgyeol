@@ -1,13 +1,26 @@
 import { useEffect, useState } from 'react';
+import './ProductGallery.css';
 
 const THUMB_VISIBLE = 5;
 
 /**
- * @param {{ images: string[]; productName: string }} props
+ * @param {{
+ *   images: string[];
+ *   productName: string;
+ *   listImagePrimary?: string | null;
+ *   listImageFallback?: string | null;
+ * }} props
+ * listImage*: 카테고리 목록과 동일한 product_list URL — 대표 이미지 404 시 fallback으로 교체
  */
-export default function ProductGallery({ images, productName }) {
+export default function ProductGallery({
+  images,
+  productName,
+  listImagePrimary = null,
+  listImageFallback = null,
+}) {
   const [mainIndex, setMainIndex] = useState(0);
   const [thumbOffset, setThumbOffset] = useState(0);
+  const [mainSrcOverride, setMainSrcOverride] = useState(null);
 
   const list = images.length ? images : [];
   const hasImages = list.length > 0;
@@ -15,7 +28,12 @@ export default function ProductGallery({ images, productName }) {
   useEffect(() => {
     setMainIndex(0);
     setThumbOffset(0);
+    setMainSrcOverride(null);
   }, [images.join('|')]);
+
+  useEffect(() => {
+    setMainSrcOverride(null);
+  }, [mainIndex]);
 
   useEffect(() => {
     if (mainIndex < thumbOffset) {
@@ -33,28 +51,25 @@ export default function ProductGallery({ images, productName }) {
   const canUp = thumbOffset > 0;
   const canDown = hasImages && thumbOffset < maxThumbOffset;
 
-  const mainSrc = hasImages ? list[mainIndex] : null;
+  const baseMainSrc = hasImages ? list[mainIndex] : null;
+  const mainSrc = mainSrcOverride ?? baseMainSrc;
+
+  function handleMainImgError() {
+    if (
+      listImageFallback &&
+      listImagePrimary &&
+      !mainSrcOverride &&
+      baseMainSrc === listImagePrimary
+    ) {
+      setMainSrcOverride(listImageFallback);
+    }
+  }
 
   return (
     <div className="product-gallery">
       {hasImages ? (
-        <div
-          className="product-gallery__layout"
-          style={{
-            display: 'flex',
-            gap: 16,
-            alignItems: 'flex-start',
-          }}
-        >
-          <div
-            className="product-gallery__thumbs-col"
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: 6,
-            }}
-          >
+        <div className="product-gallery__layout">
+          <div className="product-gallery__thumbs-col">
             <button
               type="button"
               className="product-gallery__scroll-btn product-gallery__scroll-btn--up"
@@ -68,14 +83,6 @@ export default function ProductGallery({ images, productName }) {
               className="product-gallery__thumbs-list"
               role="listbox"
               aria-label="상품 썸네일"
-              style={{
-                listStyle: 'none',
-                margin: 0,
-                padding: 0,
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 6,
-              }}
             >
               {visibleThumbs.map((src, i) => {
                 const idx = thumbOffset + i;
@@ -90,28 +97,8 @@ export default function ProductGallery({ images, productName }) {
                       }
                       onClick={() => setMainIndex(idx)}
                       aria-current={active ? 'true' : undefined}
-                      style={{
-                        padding: 2,
-                        border: active
-                          ? '2px solid var(--color-point)'
-                          : '1px solid var(--shadow-bright)',
-                        background: 'var(--color-white)',
-                        cursor: 'pointer',
-                        width: 56,
-                        height: 56,
-                      }}
                     >
-                      <img
-                        src={src}
-                        alt=""
-                        className="product-gallery__thumb-img"
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          objectFit: 'cover',
-                          display: 'block',
-                        }}
-                      />
+                      <img src={src} alt="" className="product-gallery__thumb-img" />
                     </button>
                   </li>
                 );
@@ -120,25 +107,20 @@ export default function ProductGallery({ images, productName }) {
             <button
               type="button"
               className="product-gallery__scroll-btn product-gallery__scroll-btn--down"
-              onClick={() =>
-                setThumbOffset((o) => Math.min(maxThumbOffset, o + 1))
-              }
+              onClick={() => setThumbOffset((o) => Math.min(maxThumbOffset, o + 1))}
               disabled={!canDown}
               aria-label="썸네일 아래로"
             >
               ↓
             </button>
           </div>
-          <div
-            className="product-gallery__main"
-            style={{ flex: 1, minWidth: 0 }}
-          >
+          <div className="product-gallery__main">
             {mainSrc ? (
               <img
                 src={mainSrc}
                 alt={productName}
                 className="product-gallery__main-img"
-                style={{ width: '100%', maxHeight: 480, objectFit: 'contain' }}
+                onError={handleMainImgError}
               />
             ) : (
               <div className="product-gallery__main-placeholder">No Image</div>
@@ -146,22 +128,8 @@ export default function ProductGallery({ images, productName }) {
           </div>
         </div>
       ) : (
-        <div
-          className="product-gallery__main product-gallery__main--solo"
-          style={{ maxWidth: 480 }}
-        >
-          <div
-            className="product-gallery__main-placeholder"
-            style={{
-              aspectRatio: '1',
-              background: 'var(--shadow-bright)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            No Image
-          </div>
+        <div className="product-gallery__main product-gallery__main--solo">
+          <div className="product-gallery__main-placeholder">No Image</div>
         </div>
       )}
     </div>

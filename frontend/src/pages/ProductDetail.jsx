@@ -3,9 +3,13 @@ import { Link, useParams } from 'react-router-dom';
 import api from '../api.js';
 import ProductGallery from '../components/product/ProductGallery.jsx';
 import ProductInfo from '../components/product/ProductInfo.jsx';
-import ProductTabs from '../components/product/ProductTabs.jsx';
+import ProductDetailTabs from '../components/product/ProductDetailTabs.jsx';
 import { CATEGORY_LABELS } from '../constants/categoryLabels.js';
-import { getGalleryImages } from '../utils/productNormalize.js';
+import {
+  getGalleryImages,
+  resolveCategoryListImages,
+} from '../utils/productNormalize.js';
+import './ProductDetail.css';
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -45,6 +49,11 @@ export default function ProductDetail() {
     [product]
   );
 
+  const listImagePair = useMemo(
+    () => (product ? resolveCategoryListImages(product.category, product) : null),
+    [product]
+  );
+
   if (loading) {
     return (
       <div className="product-detail product-detail--loading">
@@ -69,56 +78,48 @@ export default function ProductDetail() {
 
   return (
     <div className="product-detail">
-      <nav className="product-detail__breadcrumb" aria-label="breadcrumb">
-        <ol
-          className="product-detail__breadcrumb-list"
-          style={{
-            listStyle: 'none',
-            padding: 0,
-            margin: '0 0 16px',
-            display: 'flex',
-            flexWrap: 'wrap',
-            gap: 8,
-          }}
-        >
-          <li className="product-detail__breadcrumb-item">
-            <Link to="/">홈</Link>
-          </li>
-          <li aria-hidden="true">{'>'}</li>
-          <li className="product-detail__breadcrumb-item">
-            <Link to="/category">카테고리</Link>
-          </li>
-          <li aria-hidden="true">{'>'}</li>
-          <li className="product-detail__breadcrumb-item">
-            <Link to={`/category?category=${encodeURIComponent(product.category)}`}>
-              {catName}
-            </Link>
-          </li>
-          <li aria-hidden="true">{'>'}</li>
-          <li className="product-detail__breadcrumb-item product-detail__breadcrumb-item--current">
-            {product.name}
-          </li>
-        </ol>
-      </nav>
-
-      <div
-        className="product-detail__main-grid"
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-          gap: 24,
-          alignItems: 'flex-start',
-        }}
-      >
-        <div className="product-detail__col product-detail__col--gallery">
-          <ProductGallery images={galleryImages} productName={product.name} />
+      <div className="product-detail__hero">
+        <div className="product-detail__hero-gallery">
+          <ProductGallery
+            images={galleryImages}
+            productName={product.name}
+            listImagePrimary={listImagePair?.imageSrc ?? null}
+            listImageFallback={listImagePair?.imageSrcFallback ?? null}
+          />
         </div>
-        <div className="product-detail__col product-detail__col--info">
+        <div className="product-detail__hero-info">
+          <nav className="product-detail__breadcrumb" aria-label="breadcrumb">
+            <ol className="product-detail__breadcrumb-list">
+              <li className="product-detail__breadcrumb-item">
+                <Link to="/">홈</Link>
+              </li>
+              <li aria-hidden="true">
+                {' '}&gt;{' '}
+              </li>
+              <li className="product-detail__breadcrumb-item">
+                <Link to="/category">카테고리</Link>
+              </li>
+              <li aria-hidden="true">
+                {' '}&gt;{' '}
+              </li>
+              <li className="product-detail__breadcrumb-item">
+                <Link to={`/category?category=${encodeURIComponent(product.category)}`}>
+                  {catName}
+                </Link>
+              </li>
+              <li aria-hidden="true">
+                {' '}&gt;{' '}
+              </li>
+              <li className="product-detail__breadcrumb-item product-detail__breadcrumb-item--current">
+                {product.name}
+              </li>
+            </ol>
+          </nav>
           <ProductInfo product={product} />
         </div>
       </div>
 
-      <ProductTabs product={product} />
+      <ProductDetailTabs product={product} />
     </div>
   );
 }

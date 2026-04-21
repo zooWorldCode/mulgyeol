@@ -1,0 +1,15 @@
+.page-wide-band {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 1280px;
+  height: 150px;
+  display: flex;
+  align-items: center;
+}
+
+.page-wide-band__text {
+  margin: 0;
+  padding: 0;
+  font-size: var(--font-size-xl);
+  line-height: 1;
+}

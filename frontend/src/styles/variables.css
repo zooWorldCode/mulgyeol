@@ -1,4 +1,5 @@
 :root {
+  --color-black: #1b1918;
   --color-white: #fffcf6;
   --color-key: #fadac6;
   --color-point: #ed906e;
@@ -7,4 +8,16 @@
   --shadow-deep: #969189;
 
   --color-text: #2a2523;
+
+  /* Typography: under 30px → 14 / 18 / 20px bands; 30px+ unchanged */
+  --font-size-sm: 14px;
+  --font-size-md: 18px;
+  --font-size-lg: 20px;
+  --font-size-xl: 30px;
+
+  /* PaginationBar (이벤트·블로그·카테고리 등 공통) */
+  --pagination-nav-bg: #fde2d2;
+  --pagination-nav-border: var(--color-text);
+  --pagination-nav-fg: var(--color-text);
+  --pagination-page-muted: var(--shadow-deep);
 }

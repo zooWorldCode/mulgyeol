@@ -1,6 +1,7 @@
 import { Outlet } from 'react-router-dom';
 import Header from './Header.jsx';
 import Footer from './Footer.jsx';
+import TopMarqueeBar from './TopMarqueeBar.jsx';
 import '../styles/layout.css';
 
 export default function Layout() {
@@ -15,10 +16,11 @@ export default function Layout() {
     >
       <Header />
       <main className="site-main" style={{ flex: 1 }}>
-        <div className="container" style={{ padding: 16 }}>
+        <div className="container">
           <Outlet />
         </div>
       </main>
+      <TopMarqueeBar />
       <Footer />
     </div>
   );

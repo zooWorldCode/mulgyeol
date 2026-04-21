@@ -4,6 +4,28 @@ import { addToCart } from '../../cart/cartStorage.js';
 import { addToWishlist } from '../../wishlist/wishlistStorage.js';
 import { getDefaultOptions, getPricing } from '../../utils/productNormalize.js';
 import QuantitySelector from './QuantitySelector.jsx';
+import './ProductInfo.css';
+
+const FREE_SHIPPING_THRESHOLD = 30000;
+const SHIPPING_FEE = 3000;
+
+function StarRow({ rating, max = 5 }) {
+  const filled = Math.min(max, Math.round(Math.max(0, Math.min(max, Number(rating) || 0))));
+  return (
+    <span className="product-info__stars" aria-hidden>
+      {Array.from({ length: max }, (_, i) => (
+        <span
+          key={i}
+          className={
+            i < filled ? 'product-info__star product-info__star--on' : 'product-info__star'
+          }
+        >
+          ★
+        </span>
+      ))}
+    </span>
+  );
+}
 
 /**
  * @param {{ product: object }} props
@@ -25,13 +47,22 @@ export default function ProductInfo({ product }) {
     [product]
   );
 
-  const unitPrice = sale;
-  const totalPrice = unitPrice * qty;
+  const totalPrice = sale * qty;
 
   const rating = Number(product.rating) || 0;
   const reviewCount = Number(product.reviewCount) || 0;
   const subtitle =
-    product.subtitle || product.description?.slice(0, 80) || '';
+    product.subtitle ||
+    (typeof product.description === 'string'
+      ? product.description.slice(0, 80)
+      : '') ||
+    '';
+
+  const pointsPreview = Math.max(0, Math.floor(sale * qty * 0.01));
+  const shippingLine1 = `구매 적립 ${pointsPreview.toLocaleString('ko-KR')}P`;
+  const shippingLine2 =
+    product.shippingNote ||
+    `${(FREE_SHIPPING_THRESHOLD / 10000).toFixed(0)}만원 이상 무료배송 · 그 외 배송비 ${SHIPPING_FEE.toLocaleString('ko-KR')}원`;
 
   function handleBuyNow() {
     navigate('/order', {
@@ -57,73 +88,69 @@ export default function ProductInfo({ product }) {
   return (
     <div className="product-info">
       <h1 className="product-info__title">{product.name}</h1>
-      {subtitle ? (
-        <p className="product-info__subtitle">{subtitle}</p>
-      ) : null}
+      {subtitle ? <p className="product-info__subtitle">{subtitle}</p> : null}
 
       <div className="product-info__rating-row">
-        <span className="product-info__rating-stars" aria-hidden>
-          ★
-        </span>
-        <span className="product-info__rating-value">
-          {rating.toFixed(1)}
-        </span>
-        <span className="product-info__review-count">
-          리뷰 {reviewCount}건
+        <StarRow rating={rating} />
+        <span className="product-info__rating-value">{rating.toFixed(1)}</span>
+        <span className="product-info__review-participants">
+          {reviewCount.toLocaleString('ko-KR')}명 참여
         </span>
       </div>
 
-      <div className="product-info__price-block">
-        <div className="product-info__price-row">
-          <span className="product-info__label">정가</span>
-          <span
-            className="product-info__original-price"
-            style={{ textDecoration: 'line-through', color: 'var(--shadow-deep)' }}
-          >
-            {original.toLocaleString()}원
-          </span>
-        </div>
-        <div className="product-info__price-row">
-          <span className="product-info__label">판매가</span>
-          <strong className="product-info__sale-price">
-            {sale.toLocaleString()}원
-          </strong>
-        </div>
-        <div className="product-info__price-row">
-          <span className="product-info__label">할인율</span>
-          <span className="product-info__discount-rate">{discountRate}%</span>
-        </div>
+      <hr className="product-info__rule" />
+
+      <div className="product-info__price-line">
+        {original > sale ? (
+          <del className="product-info__original">
+            {original.toLocaleString('ko-KR')}원
+          </del>
+        ) : null}
+        <strong className="product-info__sale">{sale.toLocaleString('ko-KR')}원</strong>
+        {discountRate > 0 ? (
+          <span className="product-info__badge">{discountRate}% 할인</span>
+        ) : null}
       </div>
 
-      <p className="product-info__shipping">{product.shippingNote}</p>
+      <div className="product-info__meta">
+        <p className="product-info__meta-line">{shippingLine1}</p>
+        <p className="product-info__meta-line">{shippingLine2}</p>
+      </div>
 
-      <div className="product-info__field">
-        <label className="product-info__label" htmlFor="product-option">
-          옵션
+      <hr className="product-info__rule" />
+
+      <div className="product-info__option-block">
+        <label className="product-info__option-label" htmlFor="product-detail-option">
+          상품 선택
         </label>
-        <select
-          id="product-option"
-          className="product-info__select"
-          value={selectedOption}
-          onChange={(e) => setSelectedOption(e.target.value)}
-        >
-          {options.map((opt) => (
-            <option key={opt} value={opt}>
-              {opt}
-            </option>
-          ))}
-        </select>
+        <div className="product-info__select-shell">
+          <select
+            id="product-detail-option"
+            className="product-info__select"
+            value={selectedOption}
+            onChange={(e) => setSelectedOption(e.target.value)}
+          >
+            {options.map((opt) => (
+              <option key={opt} value={opt}>
+                {opt}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
 
-      <div className="product-info__field">
-        <QuantitySelector value={qty} onChange={setQty} min={1} />
-      </div>
-
-      <div className="product-info__total">
-        <span className="product-info__total-label">총 상품금액</span>{' '}
-        <strong className="product-info__total-price">
-          {totalPrice.toLocaleString()}원
-        </strong>
+      <div className="product-info__qty-block">
+        <span className="product-info__option-label" id="product-detail-qty-label">
+          수량
+        </span>
+        <QuantitySelector
+          value={qty}
+          onChange={setQty}
+          min={1}
+          showLabel={false}
+          className="product-quantity-selector--compact"
+          aria-labelledby="product-detail-qty-label"
+        />
       </div>
 
       <div className="product-info__actions">
@@ -134,20 +161,22 @@ export default function ProductInfo({ product }) {
         >
           바로 구매
         </button>
-        <button
-          type="button"
-          className="product-info__btn product-info__btn--cart"
-          onClick={handleAddCart}
-        >
-          장바구니
-        </button>
-        <button
-          type="button"
-          className="product-info__btn product-info__btn--wish"
-          onClick={handleWishlist}
-        >
-          찜하기
-        </button>
+        <div className="product-info__actions-row2">
+          <button
+            type="button"
+            className="product-info__btn product-info__btn--secondary"
+            onClick={handleAddCart}
+          >
+            장바구니
+          </button>
+          <button
+            type="button"
+            className="product-info__btn product-info__btn--secondary"
+            onClick={handleWishlist}
+          >
+            찜하기
+          </button>
+        </div>
       </div>
     </div>
   );
