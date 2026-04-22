@@ -1,11 +1,9 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { clearAuthSession, getAuthUser } from '../auth/session.js';
 import PageWideBand from '../components/common/PageWideBand.jsx';
+import { getRecentOrders } from '../orders/orderStorage.js';
 import './MyPage.css';
-
-const PLATE_IMG =
-  'https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=176&h=176&fit=crop&q=80';
 
 const SIDE_MENU = [
   { key: 'home', label: '홈', icon: 'home' },
@@ -19,38 +17,10 @@ const SIDE_MENU = [
 ];
 
 const DUMMY_SUMMARY = {
-  activeOrders: 2,
   coupons: 3,
   points: 12000,
   wishlist: 8,
 };
-
-const DUMMY_RECENT_ORDERS = [
-  {
-    id: 'O-20260418-001',
-    name: '모던 세라믹 디너 플레이트',
-    option: '화이트 / 4P 세트',
-    priceOriginal: 48000,
-    priceSale: 38400,
-    status: '배송중',
-  },
-  {
-    id: 'O-20260417-002',
-    name: '모던 세라믹 디너 플레이트',
-    option: '화이트 / 4P 세트',
-    priceOriginal: 48000,
-    priceSale: 38400,
-    status: '배송중',
-  },
-  {
-    id: 'O-20260416-003',
-    name: '모던 세라믹 디너 플레이트',
-    option: '화이트 / 4P 세트',
-    priceOriginal: 48000,
-    priceSale: 38400,
-    status: '배송중',
-  },
-];
 
 function MenuIcon({ name, size = 20 }) {
   const stroke = 'currentColor';
@@ -166,6 +136,19 @@ export default function MyPage() {
   const user = getAuthUser();
   const nickname = user?.nickname || '00';
   const [activeMenu, setActiveMenu] = useState('home');
+  const recentOrders = getRecentOrders();
+  const recentOrderRows = recentOrders.flatMap((order) =>
+    (order.lines || []).map((line, index) => ({
+      id: `${order.id}-${line.productId}-${line.option || 'default'}-${index}`,
+      orderId: order.id,
+      name: line.name,
+      option: line.option,
+      image: line.image,
+      quantity: line.quantity,
+      price: line.price,
+      status: order.status,
+    }))
+  );
 
   function handleLogout() {
     clearAuthSession();
@@ -239,7 +222,7 @@ export default function MyPage() {
                 <SummaryIcon name="truck" />
               </div>
               <p className="mypage__summary-label">진행 중인 주문</p>
-              <p className="mypage__summary-value">{DUMMY_SUMMARY.activeOrders} 건</p>
+              <p className="mypage__summary-value">{recentOrders.length} 건</p>
             </div>
             <div className="mypage__summary-cell">
               <div className="mypage__summary-icon">
@@ -269,33 +252,45 @@ export default function MyPage() {
               <h2 id="mypage-recent-orders" className="mypage__section-title">
                 최근 주문 내역
               </h2>
-              <Link to="/order" className="mypage__section-link">
+              <span className="mypage__section-link" aria-hidden="true">
                 주문 배송 조회 전체 보기
-              </Link>
+              </span>
             </div>
 
             <div className="mypage__orders">
-              {DUMMY_RECENT_ORDERS.map((row) => (
-                <div key={row.id} className="mypage__order-row">
-                  <img className="mypage__order-thumb" src={PLATE_IMG} alt="" width={88} height={88} />
-                  <div className="mypage__order-body">
-                    <div className="mypage__order-info">
-                      <p className="mypage__order-name">{row.name}</p>
-                      <p className="mypage__order-option">{row.option}</p>
-                    </div>
-                    <div className="mypage__order-tail">
-                      <div className="mypage__order-price">
-                        <del>{formatWon(row.priceOriginal)}</del>
-                        <strong>{formatWon(row.priceSale)}</strong>
+              {recentOrderRows.length === 0 ? (
+                <p className="mypage__orders-empty">최근 주문 내역이 없습니다.</p>
+              ) : (
+                recentOrderRows.map((row) => (
+                  <div key={row.id} className="mypage__order-row">
+                    <img
+                      className="mypage__order-thumb"
+                      src={row.image || '/images/icon/check.png'}
+                      alt=""
+                      width={88}
+                      height={88}
+                    />
+                    <div className="mypage__order-body">
+                      <div className="mypage__order-info">
+                        <p className="mypage__order-name">{row.name}</p>
+                        <p className="mypage__order-option">
+                          {row.option || '기본 옵션'} / {row.quantity}개
+                        </p>
+                        <p className="mypage__order-id">{row.orderId}</p>
                       </div>
-                      <span className="mypage__order-status">{row.status}</span>
-                      <button type="button" className="mypage__order-detail">
-                        주문 상세보기
-                      </button>
+                      <div className="mypage__order-tail">
+                        <div className="mypage__order-price">
+                          <strong>{formatWon(row.price * row.quantity)}</strong>
+                        </div>
+                        <span className="mypage__order-status">{row.status}</span>
+                        <button type="button" className="mypage__order-detail">
+                          주문 상세보기
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))
+              )}
             </div>
           </section>
         </div>

@@ -9,10 +9,10 @@
   --color-text: #2a2523;
 
   /* Typography */
-  --font-size-sm: 14px;
-  --font-size-md: 18px;
+  --font-size-sm: 16px;
+  --font-size-md: 20px;
   --font-size-lg: 20px;
-  --font-size-xl: 18px;
+  --font-size-xl: 30px;
 
   /* PaginationBar */
   --pagination-nav-bg: #fadac6;

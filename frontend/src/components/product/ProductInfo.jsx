@@ -7,6 +7,7 @@ import {
 } from '../../cart/cartStorage.js';
 import { addToWishlist } from '../../wishlist/wishlistStorage.js';
 import { getDefaultOptions, getPricing } from '../../utils/productNormalize.js';
+import Button from '../common/Button.jsx';
 import QuantitySelector from './QuantitySelector.jsx';
 import './ProductInfo.css';
 
@@ -102,7 +103,6 @@ export default function ProductInfo({ product }) {
 
       <div className="product-info__rating-row">
         <StarRow rating={rating} />
-        <span className="product-info__rating-value">{rating.toFixed(1)}</span>
         <span className="product-info__review-participants">
           {reviewCount.toLocaleString('ko-KR')}명 참여
         </span>
@@ -130,7 +130,7 @@ export default function ProductInfo({ product }) {
       <hr className="product-info__rule" />
 
       <div className="product-info__option-block">
-        <label className="product-info__option-label" htmlFor="product-detail-option">
+        <label className="product-info__option-label product-info__option-label--sr" htmlFor="product-detail-option">
           상품 선택
         </label>
         <div className="product-info__select-shell">
@@ -150,7 +150,7 @@ export default function ProductInfo({ product }) {
       </div>
 
       <div className="product-info__qty-block">
-        <span className="product-info__option-label" id="product-detail-qty-label">
+        <span className="product-info__option-label product-info__option-label--sr" id="product-detail-qty-label">
           수량
         </span>
         <QuantitySelector
@@ -164,13 +164,13 @@ export default function ProductInfo({ product }) {
       </div>
 
       <div className="product-info__actions">
-        <button
+        <Button
           type="button"
           className="product-info__btn product-info__btn--buy"
           onClick={handleBuyNow}
         >
           바로 구매
-        </button>
+        </Button>
         <div className="product-info__actions-row2">
           <button
             type="button"

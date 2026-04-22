@@ -2,9 +2,6 @@
   position: relative;
 }
 
-.site-header {
-  border-bottom: 1px solid var(--shadow-bright);
-}
 
 .site-header__inner {
   padding: 30px 0;

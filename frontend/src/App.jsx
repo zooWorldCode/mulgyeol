@@ -19,6 +19,7 @@ import BlogPage from './pages/BlogPage.jsx';
 import BlogPostDetail from './pages/BlogPostDetail.jsx';
 import Search from './pages/Search.jsx';
 import Order from './pages/Order.jsx';
+import OrderCompletePage from './pages/OrderCompletePage.jsx';
 
 export default function App() {
   return (
@@ -44,8 +45,17 @@ export default function App() {
         <Route path="products/:id" element={<ProductDetail />} />
         <Route path="cart" element={<Cart />} />
         <Route path="order" element={<Order />} />
+        <Route path="order/complete" element={<OrderCompletePage />} />
         <Route
           path="mypage"
+          element={
+            <ProtectedRoute>
+              <MyPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="mypage/orders"
           element={
             <ProtectedRoute>
               <MyPage />

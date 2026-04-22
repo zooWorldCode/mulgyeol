@@ -9,6 +9,7 @@ import {
   removeCartLine,
   updateCartLineQuantity,
 } from '../cart/cartStorage.js';
+import { addRecentOrder } from '../orders/orderStorage.js';
 import PageWideBand from '../components/common/PageWideBand.jsx';
 import './Cart.css';
 
@@ -94,7 +95,15 @@ export default function Cart() {
   }
 
   function handleOrder() {
-    navigate('/order', {
+    addRecentOrder({
+      lines,
+      subtotal,
+      couponDiscount,
+      pointDiscount,
+      shipping,
+      finalAmount,
+    });
+    navigate('/order/complete', {
       state: {
         cartCheckout: true,
         lines,

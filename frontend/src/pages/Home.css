@@ -1,0 +1,41 @@
+.home-page {
+  width: 100%;
+  background: var(--color-white);
+  color: var(--color-text);
+}
+
+.home-section {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 72px 16px;
+  box-sizing: border-box;
+}
+
+.home-section__title {
+  margin: 0 0 24px;
+  font-size: 30px;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.home-section__placeholder {
+  min-height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--shadow-bright);
+  border-radius: 8px;
+  color: var(--shadow-deep);
+  font-size: var(--font-size-sm);
+}
+
+@media (max-width: 768px) {
+  .home-section {
+    padding: 48px 16px;
+  }
+
+  .home-section__title {
+    font-size: 24px;
+  }
+}

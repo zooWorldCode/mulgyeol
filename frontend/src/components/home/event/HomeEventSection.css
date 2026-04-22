@@ -1,0 +1,116 @@
+.home-event-section {
+  width: 100vw;
+  max-width: none;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  box-sizing: border-box;
+}
+
+.home-event-section__banner {
+  display: block;
+  width: 100%;
+  min-height: 950px;
+  background: url('/images/main/event/EVENT.png') center/cover no-repeat;
+}
+
+.home-event-section__inner {
+  display: flex;
+  flex-direction: column;
+  max-width: 1280px;
+  width: 100%;
+  padding: 20px 0;
+  min-height: 950px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.home-event-section__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 32px;
+}
+
+.home-event-section__copy {
+  display: block;
+  color: var(--color-text);
+}
+
+.home-event-section__copy p {
+  margin: 0;
+  font-size: 20px;
+  line-height: 1.55;
+}
+
+.home-event-section__copy--right {
+  text-align: right;
+}
+
+.home-event-section__name {
+  display: block;
+  width: min(760px, 70vw);
+  height: auto;
+  margin: 28px auto 0;
+}
+
+.home-event-section__tagline {
+  margin: 30px 0 0 0;
+  color: var(--color-text);
+  font-size: 20px;
+  line-height: 1.5;
+  font-weight: 600;
+  text-align: center;
+}
+
+.home-event-section__button {
+  display: block;
+  position: relative;
+  width: 100%;
+  margin: auto auto 0;
+}
+
+.home-event-section__button-text {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 1;
+  color: var(--color-point);
+  font-size: 20px;
+  line-height: 1;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+}
+
+.home-event-section__button img {
+  display: block;
+  width: 100%;
+  max-width: 1280px;
+  height: auto;
+}
+
+@media (max-width: 768px) {
+  .home-event-section {
+    padding: 48px 0;
+  }
+
+  .home-event-section__banner,
+  .home-event-section__inner {
+    min-height: 320px;
+  }
+
+  .home-event-section__inner {
+    padding: 36px 16px;
+  }
+
+  .home-event-section__top {
+    flex-direction: column;
+  }
+
+  .home-event-section__copy--right {
+    text-align: left;
+  }
+
+  .home-event-section__button img {
+    width: 100%;
+  }
+}
