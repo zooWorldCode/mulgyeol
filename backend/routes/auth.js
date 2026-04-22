@@ -94,7 +94,7 @@ router.post('/login', async (req, res) => {
     const emailNorm = String(email).toLowerCase().trim();
 
     const user = await User.findOne({ email: emailNorm }).select('+password');
-    if (!user) {
+    if (!user || !user.password) {
       return res
         .status(401)
         .json({ message: '이메일 또는 비밀번호가 올바르지 않습니다.' });

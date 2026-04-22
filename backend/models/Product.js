@@ -28,6 +28,7 @@ const productSchema = new mongoose.Schema(
     rating: { type: Number, default: 0, min: 0, max: 5 },
     reviewCount: { type: Number, default: 0, min: 0 },
     options: { type: [String], default: [] },
+    listOnly: { type: Boolean, default: false },
     shippingNote: { type: String, default: '택배 배송 · 주문 후 2~3일 이내 출고(영업일 기준)' },
   },
   { timestamps: true }

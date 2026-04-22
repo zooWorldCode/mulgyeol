@@ -243,6 +243,44 @@ const PRODUCTS = [
   },
 ];
 
+const DUMMY_THUMB = '/images/product_list/test/test.png';
+const DUMMY_CATEGORIES = [
+  { category: 'plate', label: 'Plate' },
+  { category: 'bowl', label: 'Bowl' },
+  { category: 'cup_teaware', label: 'Cup' },
+  { category: 'vase', label: 'Vase' },
+  { category: 'decor', label: 'Decor' },
+];
+
+function createListOnlyDummyProducts() {
+  return DUMMY_CATEGORIES.flatMap(({ category, label }, categoryIndex) =>
+    Array.from({ length: 18 }, (_, index) => {
+      const n = index + 3;
+      const price = 9000 + categoryIndex * 2500 + index * 700;
+      return {
+        name: `${label} Dummy ${String(n).padStart(2, '0')}`,
+        subtitle: 'List display dummy product',
+        price,
+        originalPrice: Math.round(price / 0.8),
+        discountRate: 20,
+        image: DUMMY_THUMB,
+        images: [DUMMY_THUMB],
+        category,
+        description: '',
+        detailSpecs: [],
+        popularity: 10 + index,
+        rating: 0,
+        reviewCount: 0,
+        options: ['Default'],
+        shippingNote: 'Display only',
+        listOnly: true,
+      };
+    })
+  );
+}
+
+PRODUCTS.push(...createListOnlyDummyProducts());
+
 async function seed() {
   const uri = process.env.MONGODB_URI;
   if (!uri) {

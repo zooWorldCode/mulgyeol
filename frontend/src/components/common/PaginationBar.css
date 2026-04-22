@@ -49,6 +49,13 @@
   cursor: not-allowed;
 }
 
+.pagination-bar__nav-icon {
+  display: block;
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}
+
 .pagination-bar__pages {
   display: flex;
   flex-wrap: wrap;

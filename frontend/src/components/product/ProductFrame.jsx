@@ -38,6 +38,7 @@ export default function ProductFrame({
   const navigate = useNavigate();
   const [wishTick, setWishTick] = useState(0);
   const [imgSrc, setImgSrc] = useState(imageSrc);
+  const canOpenDetail = Boolean(to) && !product?.listOnly;
 
   useEffect(() => {
     setImgSrc(imageSrc);
@@ -111,23 +112,43 @@ export default function ProductFrame({
   return (
     <article className="product-frame">
       <div className="product-frame__visual">
-        <Link to={to} className="product-frame__media-link">
-          {imgSrc ? (
-            <img
-              src={imgSrc}
-              alt=""
-              className="product-frame__img"
-              loading="lazy"
-              onError={() => {
-                if (imageSrcFallback && imgSrc !== imageSrcFallback) {
-                  setImgSrc(imageSrcFallback);
-                }
-              }}
-            />
-          ) : (
-            <span className="product-frame__placeholder">No Image</span>
-          )}
-        </Link>
+        {canOpenDetail ? (
+          <Link to={to} className="product-frame__media-link">
+            {imgSrc ? (
+              <img
+                src={imgSrc}
+                alt=""
+                className="product-frame__img"
+                loading="lazy"
+                onError={() => {
+                  if (imageSrcFallback && imgSrc !== imageSrcFallback) {
+                    setImgSrc(imageSrcFallback);
+                  }
+                }}
+              />
+            ) : (
+              <span className="product-frame__placeholder">No Image</span>
+            )}
+          </Link>
+        ) : (
+          <div className="product-frame__media-link" aria-disabled="true">
+            {imgSrc ? (
+              <img
+                src={imgSrc}
+                alt=""
+                className="product-frame__img"
+                loading="lazy"
+                onError={() => {
+                  if (imageSrcFallback && imgSrc !== imageSrcFallback) {
+                    setImgSrc(imageSrcFallback);
+                  }
+                }}
+              />
+            ) : (
+              <span className="product-frame__placeholder">No Image</span>
+            )}
+          </div>
+        )}
         <div className="product-frame__fab">
           <button
             type="button"
@@ -147,16 +168,29 @@ export default function ProductFrame({
           </button>
         </div>
       </div>
-      <Link to={to} className="product-frame__info">
-        <h3 className="product-frame__name">{productName}</h3>
-        <div className="product-frame__price-row">
-          {pct > 0 ? <span className="product-frame__discount">{pct}%</span> : null}
-          <span className="product-frame__price-current">{formatWon(sale)}</span>
-          {orig != null && orig > sale ? (
-            <span className="product-frame__price-original">{formatWon(orig)}</span>
-          ) : null}
+      {canOpenDetail ? (
+        <Link to={to} className="product-frame__info">
+          <h3 className="product-frame__name">{productName}</h3>
+          <div className="product-frame__price-row">
+            {pct > 0 ? <span className="product-frame__discount">{pct}%</span> : null}
+            <span className="product-frame__price-current">{formatWon(sale)}</span>
+            {orig != null && orig > sale ? (
+              <span className="product-frame__price-original">{formatWon(orig)}</span>
+            ) : null}
+          </div>
+        </Link>
+      ) : (
+        <div className="product-frame__info" aria-disabled="true">
+          <h3 className="product-frame__name">{productName}</h3>
+          <div className="product-frame__price-row">
+            {pct > 0 ? <span className="product-frame__discount">{pct}%</span> : null}
+            <span className="product-frame__price-current">{formatWon(sale)}</span>
+            {orig != null && orig > sale ? (
+              <span className="product-frame__price-original">{formatWon(orig)}</span>
+            ) : null}
+          </div>
         </div>
-      </Link>
+      )}
     </article>
   );
 }

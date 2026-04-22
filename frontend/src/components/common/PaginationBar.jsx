@@ -1,5 +1,12 @@
 import './PaginationBar.css';
 
+const NAV_ICONS = {
+  first: '/images/icon/pagenation_L_end.png',
+  prev: '/images/icon/pagenation_L.png',
+  next: '/images/icon/pagenation_R.png',
+  last: '/images/icon/pagenation_R_end.png',
+};
+
 /**
  * @param {{
  *   page: number;
@@ -34,7 +41,12 @@ export default function PaginationBar({
             onClick={() => onPageChange(1)}
             aria-label="첫 페이지"
           >
-            &lt;&lt;
+            <img
+              className="pagination-bar__nav-icon"
+              src={NAV_ICONS.first}
+              alt=""
+              aria-hidden="true"
+            />
           </button>
           <button
             type="button"
@@ -43,7 +55,12 @@ export default function PaginationBar({
             onClick={() => onPageChange(page - 1)}
             aria-label="이전 페이지"
           >
-            &lt;
+            <img
+              className="pagination-bar__nav-icon"
+              src={NAV_ICONS.prev}
+              alt=""
+              aria-hidden="true"
+            />
           </button>
         </div>
 
@@ -78,7 +95,12 @@ export default function PaginationBar({
             onClick={() => onPageChange(page + 1)}
             aria-label="다음 페이지"
           >
-            &gt;
+            <img
+              className="pagination-bar__nav-icon"
+              src={NAV_ICONS.next}
+              alt=""
+              aria-hidden="true"
+            />
           </button>
           <button
             type="button"
@@ -87,7 +109,12 @@ export default function PaginationBar({
             onClick={() => onPageChange(totalPages)}
             aria-label="마지막 페이지"
           >
-            &gt;&gt;
+            <img
+              className="pagination-bar__nav-icon"
+              src={NAV_ICONS.last}
+              alt=""
+              aria-hidden="true"
+            />
           </button>
         </div>
       </div>

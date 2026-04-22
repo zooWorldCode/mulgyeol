@@ -6,12 +6,14 @@ import authRoutes from './routes/auth.js';
 import oauthRoutes from './routes/oauth.js';
 import { checkNickname } from './routes/checkNickname.js';
 import { listProducts, getProductById } from './routes/products.js';
+import { createProductReview, listProductReviews } from './routes/reviews.js';
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 const MONGODB_URI = process.env.MONGODB_URI;
+const MONGODB_TIMEOUT_MS = Number(process.env.MONGODB_TIMEOUT_MS || 10000);
 
 if (!MONGODB_URI) {
   console.error(
@@ -37,17 +39,24 @@ app.use('/api/auth', authRoutes);
 app.use('/api/auth', oauthRoutes);
 
 app.get('/api/products', listProducts);
+app.get('/api/products/:id/reviews', listProductReviews);
+app.post('/api/products/:id/reviews', createProductReview);
 app.get('/api/products/:id', getProductById);
 
 async function start() {
   try {
-    await mongoose.connect(MONGODB_URI);
+    await mongoose.connect(MONGODB_URI, {
+      serverSelectionTimeoutMS: MONGODB_TIMEOUT_MS,
+    });
     console.log('MongoDB connected');
     app.listen(PORT, () => {
       console.log(`Server listening on http://localhost:${PORT}`);
     });
   } catch (err) {
     console.error('MongoDB connection error:', err.message);
+    console.error(
+      'Check your MONGODB_URI and MongoDB Atlas Network Access IP allowlist.'
+    );
     process.exit(1);
   }
 }
