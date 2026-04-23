@@ -1,7 +1,6 @@
 .product-detail {
   background-color: var(--color-white);
   color: var(--color-text);
-  padding: 50px 0;
   min-height: 40vh;
   box-sizing: border-box;
 }

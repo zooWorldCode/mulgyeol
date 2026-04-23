@@ -62,12 +62,16 @@ function listGalleryImageCandidates(folder, id) {
  */
 export function resolveCategoryListImages(categoryParam, p) {
   const folder = listFolderForRow(categoryParam, p);
+  const explicitImage =
+    p.image || (Array.isArray(p.images) && p.images.find(Boolean)) || null;
+  if (explicitImage && !String(explicitImage).includes('/images/sample')) {
+    return { imageSrc: explicitImage, imageSrcFallback: undefined };
+  }
+
   const id = listThumbIdFromName(p.name);
   const pair = folder && id ? listThumbnailPair(folder, id) : null;
   if (!pair) {
-    const fallback =
-      p.image || (Array.isArray(p.images) && p.images.find(Boolean)) || null;
-    return { imageSrc: fallback, imageSrcFallback: undefined };
+    return { imageSrc: explicitImage, imageSrcFallback: undefined };
   }
   return { imageSrc: pair.primary, imageSrcFallback: pair.legacy };
 }
@@ -82,16 +86,27 @@ export function getGalleryImages(product) {
   if (!product) return [];
 
   const urls = [];
+  const explicitImages = Array.isArray(product.images)
+    ? product.images.filter((x) => typeof x === 'string' && x.trim())
+    : [];
+  if (explicitImages.some((src) => !src.includes('/images/sample'))) {
+    return explicitImages;
+  }
+  if (
+    product.image &&
+    String(product.image).trim() &&
+    !String(product.image).includes('/images/sample')
+  ) {
+    return [String(product.image).trim()];
+  }
+
   const folder = PRODUCT_LIST_FOLDER[product.category];
   const id = listThumbIdFromName(product.name);
   if (folder && id) {
     return listGalleryImageCandidates(folder, id);
   }
 
-  const arr = Array.isArray(product.images)
-    ? product.images.filter((x) => typeof x === 'string' && x.trim())
-    : [];
-  for (const u of arr) {
+  for (const u of explicitImages) {
     const t = String(u).trim();
     if (t && !urls.includes(t)) urls.push(t);
   }

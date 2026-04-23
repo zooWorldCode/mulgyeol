@@ -27,6 +27,12 @@ export default function HomeEventSection() {
           <p className="home-event-section__tagline">
             {'{ 본연을 잃지 않은 아름다움 }'}
           </p>
+          <img
+            className="home-event-section__feature-image"
+            src="/images/main/event/event-image.png"
+            alt=""
+            aria-hidden="true"
+          />
           <Link to="/event" className="home-event-section__button">
             <span className="home-event-section__button-text">
               이벤트 보러가기

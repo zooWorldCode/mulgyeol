@@ -29,13 +29,32 @@ export default function CartItem({ line, onRemove, onQuantityChange }) {
           ) : (
             <div className="cart-item__thumb-placeholder">No Image</div>
           )}
+
+          <div className="cart-item__qty">
+            <button
+              type="button"
+              className="cart-item__qty-btn"
+              onClick={() => onQuantityChange(qty - 1)}
+              disabled={qty <= 1}
+              aria-label="수량 감소"
+            >
+              -
+            </button>
+            <span className="cart-item__qty-value">{qty}</span>
+            <button
+              type="button"
+              className="cart-item__qty-btn"
+              onClick={() => onQuantityChange(qty + 1)}
+              aria-label="수량 증가"
+            >
+              +
+            </button>
+          </div>
         </div>
 
         <div className="cart-item__info">
           <h3 className="cart-item__name">{line.name}</h3>
-          {line.option ? (
-            <p className="cart-item__option">{line.option}</p>
-          ) : null}
+          {line.option ? <p className="cart-item__option">{line.option}</p> : null}
         </div>
 
         <div className="cart-item__price-block">
@@ -53,33 +72,18 @@ export default function CartItem({ line, onRemove, onQuantityChange }) {
         </div>
 
         <div className="cart-item__footer">
-          <div className="cart-item__qty">
-            <button
-              type="button"
-              className="cart-item__qty-btn"
-              onClick={() => onQuantityChange(qty - 1)}
-              disabled={qty <= 1}
-              aria-label="수량 감소"
-            >
-              −
-            </button>
-            <span className="cart-item__qty-value">{qty}</span>
-            <button
-              type="button"
-              className="cart-item__qty-btn"
-              onClick={() => onQuantityChange(qty + 1)}
-              aria-label="수량 증가"
-            >
-              +
-            </button>
-          </div>
           <button
             type="button"
             className="cart-item__remove"
             onClick={onRemove}
             aria-label="삭제"
           >
-            ✕
+            <img
+              src="/images/icon/close.png"
+              alt=""
+              className="cart-item__remove-icon"
+              aria-hidden="true"
+            />
           </button>
         </div>
       </div>

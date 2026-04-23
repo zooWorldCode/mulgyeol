@@ -62,7 +62,8 @@
 }
 
 .cart-page__checkout:hover:not(:disabled) {
-  opacity: 0.92;
+  background-color: var(--color-point);
+  color: var(--color-text);
 }
 
 .cart-page__checkout:disabled {

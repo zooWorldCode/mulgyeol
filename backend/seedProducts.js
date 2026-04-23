@@ -12,13 +12,16 @@ dotenv.config();
  */
 const PRODUCTS = [
   {
-    name: '접시 샘플 1',
+    name: '선셋 오렌지 접시',
     subtitle: '매트 무광 도자기 접시',
     price: 12000,
     originalPrice: 18000,
     discountRate: 33,
-    image: '/images/sample1.jpg',
-    images: ['/images/sample1.jpg', '/images/sample2.jpg', '/images/sample3.jpg'],
+    image: '/images/product_list/plate/1/1_1.png',
+    images: [
+      '/images/product_list/plate/1/1_1.png',
+      '/images/product_list/plate/1/1_2.png',
+    ],
     category: 'plate',
     description: '데일리 식탁에 어울리는 접시입니다.',
     detailSpecs: [
@@ -35,13 +38,16 @@ const PRODUCTS = [
     shippingNote: '택배 배송 · 3만원 이상 무료배송',
   },
   {
-    name: '접시 샘플 2',
+    name: '베이지 플라워 접시',
     subtitle: '미니 플레이트',
     price: 15000,
     originalPrice: 19000,
     discountRate: 21,
-    image: '',
-    images: [],
+    image: '/images/product_list/plate/2/2_1.png',
+    images: [
+      '/images/product_list/plate/2/2_1.png',
+      '/images/product_list/plate/2/2_2.png',
+    ],
     category: 'plate',
     description: '이미지 없음 예시 상품입니다.',
     detailSpecs: [
@@ -58,13 +64,16 @@ const PRODUCTS = [
     shippingNote: '택배 배송',
   },
   {
-    name: '그릇 샘플 1',
-    subtitle: '라면용 대접',
+    name: '푸른빛 담는 동양풍 식사 그릇',
+    subtitle: '국물용 대접',
     price: 18000,
     originalPrice: 22000,
     discountRate: 18,
-    image: '/images/sample2.jpg',
-    images: ['/images/sample2.jpg', '/images/sample1.jpg'],
+    image: '/images/product_list/bowl/1/1_1.png',
+    images: [
+      '/images/product_list/bowl/1/1_1.png',
+      '/images/product_list/bowl/1/1_2.png',
+    ],
     category: 'bowl',
     description: '깊은 볼 타입 그릇입니다.',
     detailSpecs: [
@@ -81,13 +90,16 @@ const PRODUCTS = [
     shippingNote: '택배 배송 · 제주/도서 추가 운임',
   },
   {
-    name: '그릇 샘플 2',
+    name: '깊은 새벽 공기 그릇',
     subtitle: '공기 세트',
     price: 22000,
     originalPrice: 26000,
     discountRate: 15,
-    image: '/images/sample1.jpg',
-    images: ['/images/sample1.jpg'],
+    image: '/images/product_list/bowl/2/2_1.png',
+    images: [
+      '/images/product_list/bowl/2/2_1.png',
+      '/images/product_list/bowl/2/2_2.png',
+    ],
     category: 'bowl',
     description: '공기 2P 세트',
     detailSpecs: [
@@ -104,13 +116,16 @@ const PRODUCTS = [
     shippingNote: '택배 배송',
   },
   {
-    name: '컵 샘플 1',
+    name: '부드러운 핑크 곡선 컵',
     subtitle: '핸들 머그',
     price: 9000,
     originalPrice: 12000,
     discountRate: 25,
-    image: '/images/sample3.jpg',
-    images: ['/images/sample3.jpg', '/images/sample2.jpg', '/images/sample1.jpg'],
+    image: '/images/product_list/cup/1/1_1.png',
+    images: [
+      '/images/product_list/cup/1/1_1.png',
+      '/images/product_list/cup/1/1_2.png',
+    ],
     category: 'cup_teaware',
     description: '350ml 머그컵',
     detailSpecs: [
@@ -127,13 +142,17 @@ const PRODUCTS = [
     shippingNote: '택배 배송',
   },
   {
-    name: '다기 세트',
-    subtitle: '다기 + 받침',
+    name: '화이트 스톤 컷 도자 세트',
+    subtitle: '찻잔 + 찻주전자',
     price: 45000,
     originalPrice: 52000,
     discountRate: 13,
-    image: '/images/sample1.jpg',
-    images: ['/images/sample1.jpg', '/images/sample3.jpg'],
+    image: '/images/product_list/cup/2/2_1.png',
+    images: [
+      '/images/product_list/cup/2/2_1.png',
+      '/images/product_list/cup/2/2_2.png',
+      '/images/product_list/cup/2/2_3.png',
+    ],
     category: 'cup_teaware',
     description: '다도용 다기 세트',
     detailSpecs: [
@@ -150,13 +169,16 @@ const PRODUCTS = [
     shippingNote: '택배 배송 · 안전 포장',
   },
   {
-    name: '화병 A',
-    subtitle: '슬림 롱 베이스',
+    name: '숲빛 개구리 화병',
+    subtitle: '슬림 숏 베이스',
     price: 28000,
     originalPrice: 35000,
     discountRate: 20,
-    image: '',
-    images: [],
+    image: '/images/product_list/vase/1/1_1.png',
+    images: [
+      '/images/product_list/vase/1/1_1.png',
+      '/images/product_list/vase/1/1_2.png',
+    ],
     category: 'vase',
     description: '슬림형 화병',
     detailSpecs: [
@@ -173,13 +195,16 @@ const PRODUCTS = [
     shippingNote: '택배 배송',
   },
   {
-    name: '화병 B',
-    subtitle: '와이드 볼',
+    name: '디저트 감성 케이크 화병',
+    subtitle: '스몰 볼',
     price: 35000,
     originalPrice: 40000,
     discountRate: 12,
-    image: '/images/sample2.jpg',
-    images: ['/images/sample2.jpg'],
+    image: '/images/product_list/vase/2/2_1.png',
+    images: [
+      '/images/product_list/vase/2/2_1.png',
+      '/images/product_list/vase/2/2_2.png',
+    ],
     category: 'vase',
     description: '꽃꽂이용 와이드 화병',
     detailSpecs: [
@@ -196,13 +221,16 @@ const PRODUCTS = [
     shippingNote: '택배 배송',
   },
   {
-    name: '장식 오브제',
-    subtitle: '미니 조각',
+    name: '파도 오브제',
+    subtitle: '문진 겸 장식품',
     price: 16000,
     originalPrice: 20000,
     discountRate: 20,
-    image: '/images/sample3.jpg',
-    images: ['/images/sample3.jpg', '/images/sample2.jpg'],
+    image: '/images/product_list/deco/1/1_1.png',
+    images: [
+      '/images/product_list/deco/1/1_1.png',
+      '/images/product_list/deco/1/1_2.png',
+    ],
     category: 'decor',
     description: '선반 장식용 오브제',
     detailSpecs: [
@@ -219,13 +247,16 @@ const PRODUCTS = [
     shippingNote: '택배 배송',
   },
   {
-    name: '장식 트레이',
-    subtitle: '우드 핸들 트레이',
+    name: '탁구대 악세사리 트레이',
+    subtitle: '도자 악세사리 트레이 겸 장식',
     price: 24000,
     originalPrice: 28000,
     discountRate: 14,
-    image: '/images/sample1.jpg',
-    images: ['/images/sample1.jpg', '/images/sample2.jpg'],
+    image: '/images/product_list/deco/2/2_1.png',
+    images: [
+      '/images/product_list/deco/2/2_1.png',
+      '/images/product_list/deco/2/2_2.png',
+    ],
     category: 'decor',
     description: '티타임 트레이',
     detailSpecs: [

@@ -1,4 +1,5 @@
 import { getAuthUser } from '../auth/session.js';
+import { resolveCategoryListImages } from '../utils/productNormalize.js';
 
 const PREFIX = 'shopmall_cart';
 
@@ -36,9 +37,24 @@ function emitCartUpdated() {
   }
 }
 
+function resolveCartThumb(product) {
+  const listImage = resolveCategoryListImages(product.category, product);
+  return (
+    listImage.imageSrc ||
+    (Array.isArray(product.images) && product.images.find(Boolean)) ||
+    product.image ||
+    ''
+  );
+}
+
 /** @param {CartLine[]} lines */
 export function setCartLines(lines) {
   localStorage.setItem(storageKey(), JSON.stringify(lines));
+  emitCartUpdated();
+}
+
+export function clearCartLines() {
+  localStorage.removeItem(storageKey());
   emitCartUpdated();
 }
 
@@ -77,12 +93,15 @@ export function addToCart(product, qty = 1, option = '') {
   const idx = lines.findIndex(
     (l) => l.productId === productId && (l.option ?? '') === opt
   );
-  if (idx >= 0) return false;
+  const thumb = resolveCartThumb(product);
 
-  const thumb =
-    (Array.isArray(product.images) && product.images.find(Boolean)) ||
-    product.image ||
-    '';
+  if (idx >= 0) {
+    if (!lines[idx].image && thumb) {
+      lines[idx].image = thumb;
+      setCartLines(lines);
+    }
+    return false;
+  }
 
   lines.push({
     productId,

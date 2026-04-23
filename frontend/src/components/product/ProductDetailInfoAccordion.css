@@ -1,8 +1,7 @@
 .pdi-acc {
   font-family: 'Pretendard', 'Noto Sans KR', 'Apple SD Gothic Neo', system-ui, sans-serif;
   background: var(--color-white);
-  padding: 24px 16px;
-  max-width: 720px;
+  width: 100%;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -11,11 +10,10 @@
 }
 
 .pdi-acc__card {
-  background: var(--color-white);
-  border: 1px solid var(--color-white);
+  border: 1px solid var(--color-text);
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 1px 4px var(--color-white);
+  box-shadow: 0 1px 4px var(--shadow-bright);
   transition: box-shadow 0.2s ease;
 }
 
@@ -29,7 +27,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 16px 20px;
-  background: var(--color-white);
+  background: var(--shadow-bright);
   border: none;
   cursor: pointer;
   text-align: left;
@@ -45,13 +43,11 @@
 .pdi-acc__title {
   font-size: var(--font-size-sm);
   font-weight: 700;
-  color: var(--color-white);
   letter-spacing: 0.02em;
 }
 
 .pdi-acc__chevron {
   font-size: var(--font-size-md);
-  color: var(--color-white);
   transition: transform 0.25s ease;
   line-height: 1;
 }
@@ -91,19 +87,17 @@
 .pdi-acc__label {
   padding: 9px 12px 9px 0;
   font-size: var(--font-size-sm);
-  color: var(--color-white);
   white-space: nowrap;
   width: 130px;
   vertical-align: top;
-  border-bottom: 1px solid var(--color-white);
+  border-bottom: 1px solid var(--shadow-bright);
 }
 
 .pdi-acc__value {
   padding: 9px 0;
   font-size: var(--font-size-sm);
-  color: var(--color-white);
   line-height: 1.6;
-  border-bottom: 1px solid var(--color-white);
+  border-bottom: 1px solid var(--shadow-bright);
 }
 
 .pdi-acc__usage {
@@ -129,15 +123,15 @@
 }
 
 .pdi-acc__badge--ok {
-  background: var(--color-white);
-  color: var(--color-white);
-  border: 1px solid var(--color-white);
+  background-color: rgb(216, 255, 226);
+  border: 1px solid rgb(42, 167, 125);
+  color: rgb(60, 138, 86);
 }
 
 .pdi-acc__badge--no {
-  background: var(--color-white);
-  color: var(--color-white);
-  border: 1px solid var(--color-white);
+  background-color: rgb(255, 228, 228);
+  border: 1px solid rgb(226, 121, 121);
+  color: rgb(151, 70, 70);
 }
 
 .pdi-acc__badge-icon {
@@ -146,13 +140,12 @@
 }
 
 .pdi-acc__notes {
-  border-top: 1px dashed var(--color-white);
+  border-top: 1px dashed var(--shadow-bright);
   padding-top: 12px;
 }
 
 .pdi-acc__note {
   font-size: var(--font-size-sm);
-  color: var(--color-white);
   line-height: 1.7;
   margin: 0 0 4px;
 }

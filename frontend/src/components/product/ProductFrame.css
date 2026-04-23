@@ -59,7 +59,6 @@
   background-color: var(--color-point);
   color: var(--color-white);
   cursor: pointer;
-  box-shadow: 0 2px 8px var(--color-white);
   transition: transform 0.15s ease, opacity 0.15s ease;
 }
 
@@ -74,14 +73,16 @@
   height: auto;
   max-height: 24px;
   object-fit: contain;
-  /* SVG ?êÏÇ∞?Ä stroke var(--color-white) Í≥†Ï†ï ??FAB Î∞∞Í≤Ω ?ÑÏóê???∞ÏÉâ?ºÎ°ú */
   filter: brightness(0) invert(1);
   pointer-events: none;
 }
 
-.product-frame__fab-btn--wish-on {
-  box-shadow: inset 0 0 0 2px var(--color-white);
+.product-frame__fab-icon--wish {
+  width: 22px;
+  color: currentColor;
+  filter: none;
 }
+
 
 .product-frame__info {
   display: block;

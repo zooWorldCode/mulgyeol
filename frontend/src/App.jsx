@@ -3,6 +3,7 @@ import TopNoticeBar from './components/TopNoticeBar.jsx';
 import Layout from './components/Layout.jsx';
 import AuthShell from './components/auth/AuthShell.jsx';
 import ProtectedRoute from './components/auth/ProtectedRoute.jsx';
+import ScrollToTop from './components/ScrollToTop.jsx';
 import Home from './pages/Home.jsx';
 import Login from './pages/Login.jsx';
 import Signup from './pages/Signup.jsx';
@@ -24,6 +25,7 @@ import OrderCompletePage from './pages/OrderCompletePage.jsx';
 export default function App() {
   return (
     <>
+      <ScrollToTop />
       <TopNoticeBar />
       <Routes>
       <Route element={<AuthShell />}>

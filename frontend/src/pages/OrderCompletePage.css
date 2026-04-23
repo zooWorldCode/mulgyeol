@@ -5,7 +5,6 @@
   margin: 0 auto;
   padding: 120px 24px;
   box-sizing: border-box;
-  background: #ffffff;
   color: var(--color-text);
 }
 
@@ -60,7 +59,7 @@
   width: 220px;
   min-height: 54px;
   padding: 14px 18px;
-  border-radius: 4px;
+  border-radius: 10px;
   font-size: 20px;
   font-weight: 600;
   line-height: 1.4;

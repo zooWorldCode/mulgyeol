@@ -13,7 +13,6 @@ const publicUrl = (path) => {
   return `${base}${path.replace(/^\//, '')}`;
 };
 const ICON_CART = publicUrl('images/icon/cart.svg');
-const ICON_WISHLIST = publicUrl('images/icon/wishlist.svg');
 
 function formatWon(n) {
   const v = Number(n);
@@ -101,9 +100,11 @@ export default function ProductFrame({
         return;
       }
       if (persistProduct) {
-        addToWishlist(persistProduct);
+        const added = addToWishlist(persistProduct);
         setWishTick((t) => t + 1);
-        navigate('/wishlist');
+        if (added) {
+          alert('위시리스트에 추가되었습니다.');
+        }
       }
     },
     [onWishlist, product, persistProduct, inWishlist]
@@ -164,7 +165,23 @@ export default function ProductFrame({
             aria-label={inWishlist ? '찜 해제' : '찜하기'}
             onClick={handleWish}
           >
-            <img src={ICON_WISHLIST} alt="" className="product-frame__fab-icon" width={22} height={20} />
+            <svg
+              className="product-frame__fab-icon product-frame__fab-icon--wish"
+              width="26"
+              height="24"
+              viewBox="0 0 26 24"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <path
+                d="M24.4961 6.90882C24.5026 3.66505 21.768 1.0293 18.3885 1.02253C15.8626 1.01747 13.6902 2.48294 12.7527 4.57875C11.8236 2.4792 9.65704 1.00505 7.12991 0.999985C3.75299 0.993222 1.00651 3.61799 1.00002 6.86176C0.98114 16.2863 12.7167 22.5494 12.7167 22.5494C12.7167 22.5494 24.4773 16.3334 24.4961 6.90882Z"
+                fill={inWishlist ? 'currentColor' : 'none'}
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
           </button>
         </div>
       </div>

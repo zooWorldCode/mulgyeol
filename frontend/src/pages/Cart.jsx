@@ -5,6 +5,7 @@ import OrderSummary from '../components/cart/OrderSummary.jsx';
 import CouponField from '../components/cart/CouponField.jsx';
 import PointToggle from '../components/cart/PointToggle.jsx';
 import {
+  clearCartLines,
   getCartLines,
   removeCartLine,
   updateCartLineQuantity,
@@ -95,7 +96,7 @@ export default function Cart() {
   }
 
   function handleOrder() {
-    addRecentOrder({
+    const order = addRecentOrder({
       lines,
       subtotal,
       couponDiscount,
@@ -103,6 +104,8 @@ export default function Cart() {
       shipping,
       finalAmount,
     });
+    if (!order) return;
+    clearCartLines();
     navigate('/order/complete', {
       state: {
         cartCheckout: true,

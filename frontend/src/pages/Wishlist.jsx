@@ -1,12 +1,13 @@
-import { useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useMemo, useState } from 'react';
 import { getAuthUser } from '../auth/session.js';
-import { addToCart } from '../cart/cartStorage.js';
-import { getWishlist, removeFromWishlist } from '../wishlist/wishlistStorage.js';
+import { getWishlist } from '../wishlist/wishlistStorage.js';
 import PageWideBand from '../components/common/PageWideBand.jsx';
 import SortBar from '../components/common/SortBar.jsx';
 import PaginationBar from '../components/common/PaginationBar.jsx';
-import { getPricing } from '../utils/productNormalize.js';
+import SearchField from '../components/common/SearchField.jsx';
+import ProductFrame from '../components/product/ProductFrame.jsx';
+import { getPricing, resolveCategoryListImages } from '../utils/productNormalize.js';
+import './Wishlist.css';
 
 const PAGE_SIZE = 8;
 
@@ -38,37 +39,21 @@ function sortList(list, sortId) {
 
 export default function Wishlist() {
   const user = getAuthUser();
-  const [reload, setReload] = useState(0);
+  const initialList = useMemo(() => {
+    void user?.id;
+    return getWishlist();
+  }, [user?.id]);
+
   const [search, setSearch] = useState('');
   const [sort, setSort] = useState('all');
   const [page, setPage] = useState(1);
 
-  const rawList = useMemo(() => {
-    void reload;
-    void user?.id;
-    return getWishlist();
-  }, [reload, user?.id]);
-
-  const filtered = useMemo(
-    () => filterByName(rawList, search),
-    [rawList, search]
+  const sorted = useMemo(
+    () => sortList(filterByName(initialList, search), sort),
+    [initialList, search, sort]
   );
 
-  const sorted = useMemo(() => sortList(filtered, sort), [filtered, sort]);
-
   const totalPages = Math.max(1, Math.ceil(sorted.length / PAGE_SIZE));
-
-  useEffect(() => {
-    setPage((p) => Math.min(Math.max(1, p), totalPages));
-  }, [totalPages]);
-
-  useEffect(() => {
-    const onWishlistUpdated = () => setReload((n) => n + 1);
-    window.addEventListener('shopmall-wishlist-updated', onWishlistUpdated);
-    return () =>
-      window.removeEventListener('shopmall-wishlist-updated', onWishlistUpdated);
-  }, []);
-
   const effectivePage = Math.min(page, totalPages);
 
   const pageItems = useMemo(() => {
@@ -76,61 +61,26 @@ export default function Wishlist() {
     return sorted.slice(start, start + PAGE_SIZE);
   }, [sorted, effectivePage]);
 
-  function refresh() {
-    setReload((n) => n + 1);
-  }
-
-  function handleRemove(e, productId) {
-    e.preventDefault();
-    e.stopPropagation();
-    removeFromWishlist(productId);
-    if (page > 1 && pageItems.length === 1 && effectivePage === page) {
-      setPage(Math.max(1, page - 1));
-    }
-    refresh();
-  }
-
-  function handleAddCart(e, product) {
-    e.preventDefault();
-    e.stopPropagation();
-    const ok = addToCart(product, 1, '');
-    alert(ok ? '장바구니에 담았습니다.' : '이미 장바구니에 있는 상품입니다.');
-  }
-
-  function goPage(p) {
-    setPage(Math.min(Math.max(1, p), totalPages));
+  function goPage(nextPage) {
+    setPage(Math.min(Math.max(1, nextPage), totalPages));
   }
 
   return (
-    <div>
+    <div className="wishlist-page">
       <PageWideBand text="위시리스트" />
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'flex-start',
-          gap: 16,
-          flexWrap: 'wrap',
-          marginBottom: 16,
-        }}
-      >
-        <div style={{ flex: '1 1 240px' }}>
-          <h1 style={{ marginTop: 0 }}>위시리스트</h1>
-          <div>
-            <label htmlFor="wishlist-search">상품명 검색</label>
-            <br />
-            <input
-              id="wishlist-search"
-              type="search"
-              value={search}
-              onChange={(e) => {
-                setSearch(e.target.value);
-                setPage(1);
-              }}
-              placeholder="상품명 입력"
-              style={{ width: '100%', maxWidth: 360, boxSizing: 'border-box' }}
-            />
-          </div>
+
+      <div className="wishlist-page__toolbar">
+        <div className="wishlist-page__search">
+          <SearchField
+            id="wishlist-search"
+            value={search}
+            onChange={(value) => {
+              setSearch(value);
+              setPage(1);
+            }}
+            placeholder="상품명을 입력해 주세요"
+            ariaLabel="상품명 검색"
+          />
         </div>
         <SortBar
           value={sort}
@@ -142,117 +92,34 @@ export default function Wishlist() {
       </div>
 
       {sorted.length === 0 ? (
-        <p>찜한 상품이 없습니다.</p>
+        <p className="wishlist-page__empty">찜한 상품이 없습니다.</p>
       ) : (
         <>
-          <div style={{ marginBottom: 12 }}>
-            {sorted.length} items · 페이지 {effectivePage} / {totalPages}
+          <div className="wishlist-page__count">
+            {sorted.length} items
           </div>
 
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(4, minmax(0, 1fr))',
-              gap: 12,
-              marginBottom: 24,
-            }}
-          >
+          <div className="wishlist-page__grid">
             {pageItems.map((p) => {
               const { sale, original, discountRate } = getPricing(p);
-              const pct = discountRate;
+              const { imageSrc, imageSrcFallback } = resolveCategoryListImages(
+                'all',
+                p
+              );
+
               return (
-                <div
+                <ProductFrame
                   key={p._id}
-                  style={{
-                    border: '1px solid var(--shadow-bright)',
-                    display: 'flex',
-                    flexDirection: 'row',
-                    minWidth: 0,
-                  }}
-                >
-                  <Link
-                    to={`/product/${p._id}`}
-                    style={{
-                      flex: 1,
-                      minWidth: 0,
-                      padding: 8,
-                      textDecoration: 'none',
-                      color: 'inherit',
-                      display: 'block',
-                    }}
-                  >
-                    <div
-                      style={{
-                        aspectRatio: '1',
-                        background: 'var(--shadow-bright)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        marginBottom: 8,
-                        overflow: 'hidden',
-                      }}
-                    >
-                      {p.image ? (
-                        <img
-                          src={p.image}
-                          alt=""
-                          style={{
-                            width: '100%',
-                            height: '100%',
-                            objectFit: 'cover',
-                          }}
-                        />
-                      ) : (
-                        <span style={{ color: 'var(--shadow-deep)' }}>
-                          No Image
-                        </span>
-                      )}
-                    </div>
-                    <div style={{ marginBottom: 4 }}>{p.name}</div>
-                    <div
-                      style={{ color: 'var(--color-point)', marginBottom: 2 }}
-                    >
-                      {pct > 0 ? `${pct}%` : '-'}
-                    </div>
-                    <div style={{ fontWeight: 'bold' }}>
-                      {sale.toLocaleString()}원
-                    </div>
-                    {original != null && original > sale ? (
-                      <div
-                        style={{
-                          color: 'var(--shadow-deep)',
-                          textDecoration: 'line-through',
-                        }}
-                      >
-                        {original.toLocaleString()}원
-                      </div>
-                    ) : null}
-                  </Link>
-                  <div
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      gap: 6,
-                      padding: 8,
-                      borderLeft: '1px solid var(--shadow-bright)',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    <button
-                      type="button"
-                      onClick={(e) => handleAddCart(e, p)}
-                    >
-                      장바구니
-                    </button>
-                    <button
-                      type="button"
-                      onClick={(e) => handleRemove(e, p._id)}
-                      aria-label="찜 해제"
-                    >
-                      ♡ 해제
-                    </button>
-                  </div>
-                </div>
+                  product={p}
+                  to={`/product/${p._id}`}
+                  imageSrc={imageSrc}
+                  imageSrcFallback={imageSrcFallback}
+                  thumbSrc={imageSrc}
+                  productName={p.name}
+                  currentPrice={sale}
+                  originalPrice={original}
+                  discountPercent={discountRate}
+                />
               );
             })}
           </div>

@@ -8,6 +8,7 @@ import './Header.css';
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   useEffect(() => {
     if (!mobileMenuOpen && !searchOpen) return undefined;
@@ -19,11 +20,18 @@ export default function Header() {
   }, [mobileMenuOpen, searchOpen]);
 
   return (
-    <div className="header-hover-area">
+    <div
+      className={`header-hover-area${dropdownOpen ? ' header-hover-area--dropdown-open' : ''}`}
+      onMouseLeave={() => setDropdownOpen(false)}
+    >
       <header className="site-header">
         <div className="container site-header__inner">
           <div className="site-header__row">
-            <nav className="site-header__main-nav" aria-label="주 메뉴">
+            <nav
+              className="site-header__main-nav"
+              aria-label="주 메뉴"
+              onMouseEnter={() => setDropdownOpen(true)}
+            >
               <Link to="/" className="site-header__nav-link site-header__logo">
                 <img src="/images/logo/CI_logo.svg" alt="홈" width={70} />
               </Link>
@@ -65,11 +73,7 @@ export default function Header() {
                 title="위시리스트"
                 aria-label="위시리스트"
               >
-                <img
-                  src="/images/icon/wishlist.svg"
-                  alt=""
-                  className="site-header__icon-img"
-                />
+                <img src="/images/icon/wishlist.svg" alt="" className="site-header__icon-img" />
               </Link>
               <Link
                 to="/mypage"

@@ -49,7 +49,7 @@
 
 .category-title__item--active .category-title__circle {
   background-color: var(--color-point);
-  box-shadow: 0 2px 20px var(--color-point);
+  box-shadow: 0 2px 20px var(--color-key);
 }
 
 .category-title__circle img {
@@ -60,7 +60,7 @@
 }
 
 .category-title__label {
-  font-size: var(--font-size-xl);
+  font-size: var(--font-size-lg);
   font-weight: 500;
   text-align: center;
   line-height: 1.35;
@@ -69,13 +69,13 @@
 
 .category-title__label:hover {
   text-decoration: underline;
-  text-underline-offset: 4px;
+  text-underline-offset: 6px;
   color: var(--color-text);
 }
 
 .category-title__item--active .category-title__label {
   text-decoration: underline;
-  text-underline-offset: 4px;
+  text-underline-offset: 6px;
   color: var(--color-text);
 }
 
