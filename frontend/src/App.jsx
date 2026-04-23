@@ -21,12 +21,14 @@ import BlogPostDetail from './pages/BlogPostDetail.jsx';
 import Search from './pages/Search.jsx';
 import Order from './pages/Order.jsx';
 import OrderCompletePage from './pages/OrderCompletePage.jsx';
+import ScratchCouponModal from './components/coupon/ScratchCouponModal.jsx';
 
 export default function App() {
   return (
     <>
       <ScrollToTop />
       <TopNoticeBar />
+      <ScratchCouponModal />
       <Routes>
       <Route element={<AuthShell />}>
         <Route path="login" element={<Login />} />
@@ -45,7 +47,14 @@ export default function App() {
         <Route path="search" element={<Search />} />
         <Route path="product/:id" element={<ProductDetail />} />
         <Route path="products/:id" element={<ProductDetail />} />
-        <Route path="cart" element={<Cart />} />
+        <Route
+          path="cart"
+          element={
+            <ProtectedRoute>
+              <Cart />
+            </ProtectedRoute>
+          }
+        />
         <Route path="order" element={<Order />} />
         <Route path="order/complete" element={<OrderCompletePage />} />
         <Route

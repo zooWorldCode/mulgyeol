@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getAuthToken } from '../../auth/session.js';
 import {
   addToCart,
   getCartLines,
@@ -68,7 +69,18 @@ export default function ProductInfo({ product }) {
     product.shippingNote ||
     `${(FREE_SHIPPING_THRESHOLD / 10000).toFixed(0)}만원 이상 무료배송 · 그 외 배송비 ${SHIPPING_FEE.toLocaleString('ko-KR')}원`;
 
+  function requireLogin() {
+    if (getAuthToken()) {
+      return true;
+    }
+
+    navigate('/login');
+    return false;
+  }
+
   function handleBuyNow() {
+    if (!requireLogin()) return;
+
     const added = addToCart(product, qty, selectedOption);
     if (!added) {
       const existing = getCartLines().find(
@@ -88,6 +100,8 @@ export default function ProductInfo({ product }) {
   }
 
   function handleAddCart() {
+    if (!requireLogin()) return;
+
     const ok = addToCart(product, qty, selectedOption);
     alert(ok ? '장바구니에 담았습니다.' : '이미 장바구니에 있는 상품입니다.');
   }
