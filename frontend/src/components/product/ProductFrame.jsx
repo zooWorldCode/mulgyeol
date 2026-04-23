@@ -25,6 +25,7 @@ export default function ProductFrame({
   product,
   imageSrc,
   imageSrcFallback,
+  hoverImageSrc,
   /** 장바구니·위시리스트 저장 시 사용할 썸네일 URL (예: 카테고리에서 해석한 목록 이미지) */
   thumbSrc,
   productName,
@@ -36,12 +37,20 @@ export default function ProductFrame({
 }) {
   const navigate = useNavigate();
   const [wishTick, setWishTick] = useState(0);
-  const [imgSrc, setImgSrc] = useState(imageSrc);
+  const [baseImgSrc, setBaseImgSrc] = useState(imageSrc);
+  const [hovering, setHovering] = useState(false);
+  const [hoverImgFailed, setHoverImgFailed] = useState(false);
   const canOpenDetail = Boolean(to) && !product?.listOnly;
 
   useEffect(() => {
-    setImgSrc(imageSrc);
-  }, [imageSrc]);
+    setBaseImgSrc(imageSrc);
+    setHoverImgFailed(false);
+  }, [imageSrc, hoverImageSrc]);
+
+  const shouldShowHoverImage = Boolean(
+    hovering && hoverImageSrc && !hoverImgFailed
+  );
+  const renderedImgSrc = shouldShowHoverImage ? hoverImageSrc : baseImgSrc;
 
   const persistProduct = useMemo(() => {
     if (!product?._id) return null;
@@ -114,16 +123,30 @@ export default function ProductFrame({
     <article className="product-frame">
       <div className="product-frame__visual">
         {canOpenDetail ? (
-          <Link to={to} className="product-frame__media-link">
-            {imgSrc ? (
+          <Link
+            to={to}
+            className="product-frame__media-link"
+            onMouseEnter={() => setHovering(true)}
+            onMouseLeave={() => setHovering(false)}
+          >
+            {renderedImgSrc ? (
               <img
-                src={imgSrc}
+                src={renderedImgSrc}
                 alt=""
-                className="product-frame__img"
+                className={
+                  'product-frame__img' +
+                  (shouldShowHoverImage
+                    ? ' product-frame__img--hover'
+                    : ' product-frame__img--base')
+                }
                 loading="lazy"
                 onError={() => {
-                  if (imageSrcFallback && imgSrc !== imageSrcFallback) {
-                    setImgSrc(imageSrcFallback);
+                  if (shouldShowHoverImage) {
+                    setHoverImgFailed(true);
+                    return;
+                  }
+                  if (imageSrcFallback && baseImgSrc !== imageSrcFallback) {
+                    setBaseImgSrc(imageSrcFallback);
                   }
                 }}
               />
@@ -132,16 +155,30 @@ export default function ProductFrame({
             )}
           </Link>
         ) : (
-          <div className="product-frame__media-link" aria-disabled="true">
-            {imgSrc ? (
+          <div
+            className="product-frame__media-link"
+            aria-disabled="true"
+            onMouseEnter={() => setHovering(true)}
+            onMouseLeave={() => setHovering(false)}
+          >
+            {renderedImgSrc ? (
               <img
-                src={imgSrc}
+                src={renderedImgSrc}
                 alt=""
-                className="product-frame__img"
+                className={
+                  'product-frame__img' +
+                  (shouldShowHoverImage
+                    ? ' product-frame__img--hover'
+                    : ' product-frame__img--base')
+                }
                 loading="lazy"
                 onError={() => {
-                  if (imageSrcFallback && imgSrc !== imageSrcFallback) {
-                    setImgSrc(imageSrcFallback);
+                  if (shouldShowHoverImage) {
+                    setHoverImgFailed(true);
+                    return;
+                  }
+                  if (imageSrcFallback && baseImgSrc !== imageSrcFallback) {
+                    setBaseImgSrc(imageSrcFallback);
                   }
                 }}
               />

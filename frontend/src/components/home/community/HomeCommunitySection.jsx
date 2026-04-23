@@ -30,7 +30,7 @@ export default function HomeCommunitySection() {
     <section className="home-community" aria-labelledby="home-community-title">
       <Link to="/community" className="home-community__heading">
         <h2 id="home-community-title">커뮤니티</h2>
-        <span aria-hidden="true">-&gt;</span>
+        <span className="home-community__heading-arrow" aria-hidden="true">-&gt;</span>
       </Link>
 
       <div className="home-community__feature-grid">

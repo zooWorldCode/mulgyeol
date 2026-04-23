@@ -12,9 +12,14 @@ import {
 } from '../cart/cartStorage.js';
 import { addRecentOrder } from '../orders/orderStorage.js';
 import PageWideBand from '../components/common/PageWideBand.jsx';
+import {
+  addPointBalance,
+  calcEarnedPoints,
+  getPointBalance,
+  spendPointBalance,
+} from '../utils/pointStorage.js';
 import './Cart.css';
 
-const DUMMY_POINT_BALANCE = 12000;
 const SHIPPING_FEE = 3000;
 const FREE_SHIPPING_THRESHOLD = 30000;
 
@@ -35,6 +40,10 @@ export default function Cart() {
     void tick;
     return getCartLines();
   }, [tick]);
+  const pointBalance = useMemo(() => {
+    void tick;
+    return getPointBalance();
+  }, [tick]);
 
   const refresh = () => setTick((t) => t + 1);
 
@@ -42,6 +51,11 @@ export default function Cart() {
     const onCartUpdated = () => setTick((t) => t + 1);
     window.addEventListener('shopmall-cart-updated', onCartUpdated);
     return () => window.removeEventListener('shopmall-cart-updated', onCartUpdated);
+  }, []);
+  useEffect(() => {
+    const onPointUpdated = () => setTick((t) => t + 1);
+    window.addEventListener('shopmall-point-updated', onPointUpdated);
+    return () => window.removeEventListener('shopmall-point-updated', onPointUpdated);
   }, []);
 
   const subtotal = useMemo(() => computeSubtotal(lines), [lines]);
@@ -57,8 +71,8 @@ export default function Cart() {
 
   const pointDiscount = useMemo(() => {
     if (!pointEnabled) return 0;
-    return Math.min(DUMMY_POINT_BALANCE, Math.max(0, afterCoupon));
-  }, [pointEnabled, afterCoupon]);
+    return Math.min(pointBalance, Math.max(0, afterCoupon));
+  }, [pointEnabled, afterCoupon, pointBalance]);
 
   const afterDiscounts = subtotal - couponDiscount - pointDiscount;
 
@@ -96,13 +110,24 @@ export default function Cart() {
   }
 
   function handleOrder() {
+    if (lines.length === 0) return;
+
+    const earnedPoints = lines.reduce(
+      (sum, line) => sum + calcEarnedPoints(Number(line.price) * Number(line.quantity)),
+      0
+    );
+    const usedPointResult = spendPointBalance(pointDiscount);
+    const usedPoints = usedPointResult.used;
+    addPointBalance(earnedPoints);
+
     const order = addRecentOrder({
       lines,
       subtotal,
       couponDiscount,
-      pointDiscount,
+      pointDiscount: usedPoints,
       shipping,
       finalAmount,
+      earnedPoints,
     });
     if (!order) return;
     clearCartLines();
@@ -112,11 +137,12 @@ export default function Cart() {
         lines,
         subtotal,
         couponDiscount,
-        pointDiscount,
+        pointDiscount: usedPoints,
         shipping,
         finalAmount,
         appliedCouponCode,
         pointEnabled,
+        earnedPoints,
       },
     });
   }
@@ -152,7 +178,7 @@ export default function Cart() {
               onApply={handleApplyCoupon}
             />
             <PointToggle
-              balance={DUMMY_POINT_BALANCE}
+              balance={pointBalance}
               enabled={pointEnabled}
               onChange={setPointEnabled}
             />

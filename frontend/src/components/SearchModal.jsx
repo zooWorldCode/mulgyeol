@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
+import api from '../api.js';
 import './SearchModal.css';
 
 const PLACEHOLDER = '찾고자 하시는 상품을 검색해주세요';
@@ -23,6 +24,35 @@ export default function SearchModal({ open, onClose }) {
   const inputRef = useRef(null);
   const [query, setQuery] = useState('');
 
+  async function navigateByKeyword(rawKeyword) {
+    const keyword = rawKeyword.trim();
+    if (!keyword) return;
+
+    try {
+      const { data } = await api.get('/api/products', {
+        params: { page: 1, limit: 200 },
+      });
+      const products = Array.isArray(data?.products) ? data.products : [];
+      const normalized = keyword.toLowerCase();
+      const matched = products.find((p) =>
+        String(p?.name || '')
+          .toLowerCase()
+          .includes(normalized)
+      );
+      const category = matched?.category ? String(matched.category) : '';
+
+      if (category) {
+        navigate(`/category?category=${encodeURIComponent(category)}`);
+        return true;
+      }
+    } catch {
+      // Ignore API errors and handle with the same message below.
+    }
+
+    alert('해당 상품은 존재하지 않습니다.');
+    return false;
+  }
+
   useEffect(() => {
     if (!open) return undefined;
     const onKey = (e) => {
@@ -41,16 +71,18 @@ export default function SearchModal({ open, onClose }) {
 
   if (!open) return null;
 
-  function submit(e) {
+  async function submit(e) {
     e.preventDefault();
     const q = query.trim();
-    if (q) navigate(`/search?q=${encodeURIComponent(q)}`);
-    onClose();
+    if (q) {
+      const moved = await navigateByKeyword(q);
+      if (moved) onClose();
+    }
   }
 
-  function pickKeyword(term) {
-    navigate(`/search?q=${encodeURIComponent(term)}`);
-    onClose();
+  async function pickKeyword(term) {
+    const moved = await navigateByKeyword(term);
+    if (moved) onClose();
   }
 
   const node = (

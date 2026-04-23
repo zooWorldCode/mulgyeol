@@ -22,9 +22,15 @@
   line-height: 1;
 }
 
-.home-community__heading span {
+.home-community__heading-arrow {
   font-size: 34px;
   line-height: 1;
+  transition: transform 0.2s ease;
+}
+
+.home-community__heading:hover .home-community__heading-arrow,
+.home-community__heading:focus-visible .home-community__heading-arrow {
+  transform: translateX(4px);
 }
 
 .home-community__feature-grid {

@@ -3,7 +3,11 @@ import { Link } from 'react-router-dom';
 import api from '../../../api.js';
 import SortBar from '../../common/SortBar.jsx';
 import ProductFrame from '../../product/ProductFrame.jsx';
-import { getPricing, resolveCategoryListImages } from '../../../utils/productNormalize.js';
+import {
+  getGalleryImages,
+  getPricing,
+  resolveCategoryListImages,
+} from '../../../utils/productNormalize.js';
 import './HomeBestsSection.css';
 
 const tabs = [
@@ -56,7 +60,7 @@ export default function HomeBestsSection() {
       <div className="home-bests__head">
         <Link to={`/category?category=${activeTab}`} className="home-bests__heading">
           <h2 id="home-bests-title">베스트 상품들</h2>
-          <span aria-hidden="true">→</span>
+          <span className="home-bests__heading-arrow" aria-hidden="true">→</span>
         </Link>
 
         <SortBar
@@ -78,6 +82,9 @@ export default function HomeBestsSection() {
               activeTab,
               product
             );
+            const hoverImageSrc = getGalleryImages(product).find(
+              (src) => src && src !== imageSrc && src !== imageSrcFallback
+            );
 
             return (
               <ProductFrame
@@ -86,6 +93,7 @@ export default function HomeBestsSection() {
                 to={`/product/${product._id}`}
                 imageSrc={imageSrc}
                 imageSrcFallback={imageSrcFallback}
+                hoverImageSrc={hoverImageSrc}
                 thumbSrc={imageSrc}
                 productName={product.name}
                 currentPrice={sale}

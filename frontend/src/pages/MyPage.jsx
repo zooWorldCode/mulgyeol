@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { clearAuthSession, getAuthUser } from '../auth/session.js';
 import PageWideBand from '../components/common/PageWideBand.jsx';
 import { getRecentOrders } from '../orders/orderStorage.js';
+import { getPointBalance } from '../utils/pointStorage.js';
+import { getWishlist } from '../wishlist/wishlistStorage.js';
 import './MyPage.css';
 
 const SIDE_MENU = [
@@ -18,8 +20,6 @@ const SIDE_MENU = [
 
 const DUMMY_SUMMARY = {
   coupons: 3,
-  points: 12000,
-  wishlist: 8,
 };
 
 function MenuIcon({ name, size = 20 }) {
@@ -136,7 +136,16 @@ export default function MyPage() {
   const user = getAuthUser();
   const nickname = user?.nickname || '00';
   const [activeMenu, setActiveMenu] = useState('home');
+  const [summaryTick, setSummaryTick] = useState(0);
   const recentOrders = getRecentOrders();
+  const summary = useMemo(() => {
+    void summaryTick;
+    return {
+      coupons: DUMMY_SUMMARY.coupons,
+      points: getPointBalance(),
+      wishlist: getWishlist().length,
+    };
+  }, [summaryTick]);
   const recentOrderRows = recentOrders.flatMap((order) =>
     (order.lines || []).map((line, index) => ({
       id: `${order.id}-${line.productId}-${line.option || 'default'}-${index}`,
@@ -158,6 +167,16 @@ export default function MyPage() {
   function handleWithdraw() {
     alert('회원탈퇴 기능은 준비 중입니다.');
   }
+
+  useEffect(() => {
+    const refresh = () => setSummaryTick((v) => v + 1);
+    window.addEventListener('shopmall-wishlist-updated', refresh);
+    window.addEventListener('shopmall-point-updated', refresh);
+    return () => {
+      window.removeEventListener('shopmall-wishlist-updated', refresh);
+      window.removeEventListener('shopmall-point-updated', refresh);
+    };
+  }, []);
 
   function formatWon(n) {
     return `${n.toLocaleString('ko-KR')}원`;
@@ -222,28 +241,28 @@ export default function MyPage() {
                 <SummaryIcon name="truck" />
               </div>
               <p className="mypage__summary-label">진행 중인 주문</p>
-              <p className="mypage__summary-value">{recentOrders.length} 건</p>
+              <p className="mypage__summary-value">{recentOrderRows.length} 건</p>
             </div>
             <div className="mypage__summary-cell">
               <div className="mypage__summary-icon">
                 <SummaryIcon name="ticket" />
               </div>
               <p className="mypage__summary-label">보유 쿠폰</p>
-              <p className="mypage__summary-value">{DUMMY_SUMMARY.coupons} 장</p>
+              <p className="mypage__summary-value">{summary.coupons} 장</p>
             </div>
             <div className="mypage__summary-cell">
               <div className="mypage__summary-icon">
                 <SummaryIcon name="coins" />
               </div>
               <p className="mypage__summary-label">보유 포인트</p>
-              <p className="mypage__summary-value">{DUMMY_SUMMARY.points.toLocaleString('ko-KR')} P</p>
+              <p className="mypage__summary-value">{summary.points.toLocaleString('ko-KR')} P</p>
             </div>
             <div className="mypage__summary-cell">
               <div className="mypage__summary-icon">
                 <SummaryIcon name="heart" />
               </div>
               <p className="mypage__summary-label">찜한 상품</p>
-              <p className="mypage__summary-value">{DUMMY_SUMMARY.wishlist} 개</p>
+              <p className="mypage__summary-value">{summary.wishlist} 개</p>
             </div>
           </section>
 

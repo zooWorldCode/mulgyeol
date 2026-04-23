@@ -7,6 +7,7 @@ import {
 } from '../../cart/cartStorage.js';
 import { addToWishlist } from '../../wishlist/wishlistStorage.js';
 import { getDefaultOptions, getPricing } from '../../utils/productNormalize.js';
+import { calcEarnedPoints } from '../../utils/pointStorage.js';
 import Button from '../common/Button.jsx';
 import QuantitySelector from './QuantitySelector.jsx';
 import './ProductInfo.css';
@@ -61,7 +62,7 @@ export default function ProductInfo({ product }) {
       : '') ||
     '';
 
-  const pointsPreview = Math.max(0, Math.floor(sale * qty * 0.01));
+  const pointsPreview = calcEarnedPoints(sale * qty);
   const shippingLine1 = `구매 적립 ${pointsPreview.toLocaleString('ko-KR')}P`;
   const shippingLine2 =
     product.shippingNote ||

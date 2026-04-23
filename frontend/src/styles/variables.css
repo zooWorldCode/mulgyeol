@@ -15,7 +15,7 @@
   --font-size-xl: 30px;
 
   /* PaginationBar */
-  --pagination-nav-bg: #fadac6;
+  --pagination-nav-bg: #f6eeeb;
   --pagination-nav-border: var(--color-text);
   --pagination-nav-fg: var(--color-text);
   --pagination-page-muted: var(--shadow-deep);

@@ -5,7 +5,11 @@ import CategoryTitle from '../components/CategoryTitle.jsx';
 import ProductFrame from '../components/product/ProductFrame.jsx';
 import SortBar from '../components/common/SortBar.jsx';
 import PaginationBar from '../components/common/PaginationBar.jsx';
-import { getPricing, resolveCategoryListImages } from '../utils/productNormalize.js';
+import {
+  getGalleryImages,
+  getPricing,
+  resolveCategoryListImages,
+} from '../utils/productNormalize.js';
 import './Category.css';
 
 const CATEGORY_TITLE = {
@@ -161,6 +165,9 @@ export default function Category() {
         {data.products.map((p) => {
           const { sale, original, discountRate } = getPricing(p);
           const { imageSrc, imageSrcFallback } = resolveCategoryListImages(category, p);
+          const hoverImageSrc = getGalleryImages(p).find(
+            (src) => src && src !== imageSrc && src !== imageSrcFallback
+          );
           return (
             <ProductFrame
               key={p._id}
@@ -168,6 +175,7 @@ export default function Category() {
               to={`/product/${p._id}`}
               imageSrc={imageSrc}
               imageSrcFallback={imageSrcFallback}
+              hoverImageSrc={hoverImageSrc}
               thumbSrc={imageSrc}
               productName={p.name}
               currentPrice={sale}

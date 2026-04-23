@@ -28,6 +28,7 @@ export function addRecentOrder({
   subtotal = 0,
   couponDiscount = 0,
   pointDiscount = 0,
+  earnedPoints = 0,
   shipping = 0,
   finalAmount = 0,
 } = {}) {
@@ -49,6 +50,7 @@ export function addRecentOrder({
     subtotal,
     couponDiscount,
     pointDiscount,
+    earnedPoints,
     shipping,
     finalAmount,
   };

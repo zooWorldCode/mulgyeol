@@ -42,7 +42,7 @@ export default function HomeCategorySection() {
     <section className="home-category" aria-labelledby="home-category-title">
       <Link to="/category" className="home-category__heading">
         <h2 id="home-category-title">카테고리</h2>
-        <span aria-hidden="true">→</span>
+        <span className="home-category__heading-arrow" aria-hidden="true">→</span>
       </Link>
 
       <div className="home-category__grid">
