@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import './BlogPostDetail.css';
 import { DUMMY_POSTS, getPostById } from '../data/postsDummy.js';
@@ -12,11 +12,11 @@ const CATEGORY_META = [
 ];
 
 const AUTHOR_META = [
-  { name: '김이현', role: '에디터', badge: '김' },
+  { name: '김다현', role: '에디터', badge: '김' },
   { name: '박수진', role: '작가', badge: '박' },
-  { name: '이준호', role: '큐레이터', badge: '이' },
-  { name: '최유나', role: '디렉터', badge: '최' },
-  { name: '정해인', role: '필자', badge: '정' },
+  { name: '이서윤', role: '큐레이터', badge: '이' },
+  { name: '최수유', role: '에디터', badge: '최' },
+  { name: '정해인', role: '작가', badge: '정' },
 ];
 
 const COMMENT_PRESETS = [
@@ -24,24 +24,21 @@ const COMMENT_PRESETS = [
     name: '박수진',
     time: '3일 전',
     body:
-      '공산품에 채우지 못하는 결을 좋아한다는 표현에 공감했어요. 천천히 만든 물건이 주는 밀도가 분명히 있네요.',
-    likes: 12,
+      '공방 안의 공기와 작업 리듬이 자연스럽게 떠오르는 글이었어요. 천천히 만든 물건이 주는 감각이 잘 전해집니다.',
     badge: '박',
   },
   {
-    name: '이준호',
+    name: '이서윤',
     time: '5일 전',
     body:
-      '결과보다 만드는 과정이 남긴 감각을 본다는 문장이 좋았습니다. 도자기를 다시 보게 되는 글이네요.',
-    likes: 8,
+      '결과보다 만들어지는 과정을 바라보는 시선이 좋아요. 도자기를 다시 보게 만드는 글이네요.',
     badge: '이',
   },
   {
-    name: '최유나',
+    name: '최수유',
     time: '1주 전',
     body:
-      '감각을 되찾는 일이라는 마지막 문장이 오래 남아요. 느린 제작 리듬을 디자인 언어로 잘 풀어냈네요.',
-    likes: 5,
+      '마지막 문장이 특히 좋았어요. 쓰임이 있는 물건이 생활 속에서 어떻게 기억이 되는지 잘 느껴졌습니다.',
     badge: '최',
   },
 ];
@@ -49,17 +46,12 @@ const COMMENT_PRESETS = [
 function formatDate(dateString) {
   const parsed = new Date(dateString);
   if (Number.isNaN(parsed.getTime())) return dateString;
+
   return new Intl.DateTimeFormat('ko-KR', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
   }).format(parsed);
-}
-
-function estimateReadMinutes(post) {
-  const text = `${post.summary || ''} ${post.content || ''}`.trim();
-  const minutes = Math.max(4, Math.ceil(text.length / 140));
-  return `${minutes}분`;
 }
 
 function buildTags(post, categoryLabel) {
@@ -70,16 +62,17 @@ function buildTags(post, categoryLabel) {
 }
 
 function buildParagraphs(post) {
-  const summary = post.summary || '도자기는 손의 흔적과 시간이 만든 감각을 담아내는 매체입니다.';
+  const summary =
+    post.summary || '도자기는 손의 흔적과 시간이 만든 감각을 담아내는 매체입니다.';
   const content =
     post.content ||
-    '매끈한 완성도만으로는 설명할 수 없는 온도와 결이 생활 속에서 천천히 쌓이기 때문입니다.';
+    '매끈한 완성만으로는 설명되지 않는 온도와 결이 생활 가까이에서 천천히 스며듭니다.';
 
   return [
     summary,
     content,
-    '또 하나는 손으로 만든 물건이 주는 느린 리듬입니다. 반복과 건조, 소성과 기다림이 이어지는 과정은 물건의 표면을 넘어 사용자의 감정까지 바꾸어 놓습니다.',
-    '결국 좋은 도자기를 좋아하게 된다는 건 단순히 소유가 아니라 감각을 회복하는 경험에 가깝습니다. 매끈함 너머의 작은 차이를 알아보는 순간, 물건은 취향을 넘어 기억이 됩니다.',
+    '하나의 손으로 만든 물건은 쓰는 사람의 하루와 감정까지도 조금씩 바꿔 놓습니다. 반복과 건조, 소성과 기다림이 이어지는 과정은 물건의 표면을 넘어 사용자의 기억에도 남게 됩니다.',
+    '좋은 도자기를 좋아하게 되는 건 단순한 취향만은 아닙니다. 감각이 회복되는 경험에 가깝습니다. 매번 조금씩 다른 표정을 발견하는 시간, 물건과 취향 사이의 대화가 이어집니다.',
   ];
 }
 
@@ -94,6 +87,7 @@ export default function BlogPostDetail() {
   const { id } = useParams();
   const location = useLocation();
   const basePath = location.pathname.startsWith('/blog') ? '/blog' : '/community';
+
   const [commentDraft, setCommentDraft] = useState('');
   const [liked, setLiked] = useState(false);
 
@@ -108,17 +102,24 @@ export default function BlogPostDetail() {
   const category = CATEGORY_META[((postIndex >= 0 ? postIndex : 0) % CATEGORY_META.length)];
 
   const paragraphs = useMemo(() => (post ? buildParagraphs(post) : []), [post]);
-  const comments = useMemo(() => (post ? buildComments(post) : []), [post]);
+  const initialComments = useMemo(() => (post ? buildComments(post) : []), [post]);
+  const [comments, setComments] = useState(initialComments);
   const tags = useMemo(
     () => (post ? buildTags(post, category.label) : []),
     [category.label, post]
   );
-  const readTime = post ? estimateReadMinutes(post) : '0분';
+
   const previousPost = postIndex > 0 ? DUMMY_POSTS[postIndex - 1] : null;
   const nextPost =
     postIndex >= 0 && postIndex < DUMMY_POSTS.length - 1
       ? DUMMY_POSTS[postIndex + 1]
       : null;
+
+  useEffect(() => {
+    setComments(initialComments);
+    setCommentDraft('');
+    setLiked(false);
+  }, [initialComments]);
 
   const handleShare = async () => {
     if (!post) return;
@@ -143,6 +144,28 @@ export default function BlogPostDetail() {
     }
   };
 
+  const handleCommentSubmit = () => {
+    const trimmedDraft = commentDraft.trim();
+    if (!trimmedDraft || !post) return;
+
+    const newComment = {
+      id: `${post.id}-comment-user-${Date.now()}`,
+      name: '나',
+      time: '방금 전',
+      body: trimmedDraft,
+      badge: '나',
+    };
+
+    setComments((currentComments) => [newComment, ...currentComments]);
+    setCommentDraft('');
+  };
+
+  const handleCommentDelete = (commentId) => {
+    setComments((currentComments) =>
+      currentComments.filter((comment) => comment.id !== commentId)
+    );
+  };
+
   if (!post) {
     return (
       <section className="blog-post-detail blog-post-detail--not-found">
@@ -159,7 +182,7 @@ export default function BlogPostDetail() {
       <header className="blog-post-detail__header">
         <div className="blog-post-detail__header-top">
           <Link to={basePath} className="blog-post-detail__ghost-btn">
-            ← 블로그 목록
+            블로그 목록
           </Link>
           <button
             type="button"
@@ -169,8 +192,6 @@ export default function BlogPostDetail() {
             공유
           </button>
         </div>
-
-        <span className="blog-post-detail__badge">{category.label}</span>
 
         <h1 className="blog-post-detail__title">{post.title}</h1>
 
@@ -185,7 +206,6 @@ export default function BlogPostDetail() {
 
           <div className="blog-post-detail__meta">
             <span>{formatDate(post.createdAt)}</span>
-            <span>{readTime}</span>
             <span>조회 {Number(post.views).toLocaleString()}</span>
           </div>
         </div>
@@ -212,13 +232,10 @@ export default function BlogPostDetail() {
           <p>{paragraphs[1]}</p>
 
           <blockquote className="blog-post-detail__quote">
-            좋은 도자기는 눈보다 손이 먼저 알아챈다.
+            좋은 도자기는 눈보다 손이 먼저 알아봅니다.
           </blockquote>
 
           <p>{paragraphs[2]}</p>
-
-          <div className="blog-post-detail__inline-image">본문 이미지 자리</div>
-
           <p>{paragraphs[3]}</p>
         </div>
       </section>
@@ -226,10 +243,27 @@ export default function BlogPostDetail() {
       <section className="blog-post-detail__reaction">
         <button
           type="button"
-          className="blog-post-detail__ghost-btn"
+          className={
+            'blog-post-detail__ghost-btn' +
+            (liked ? ' blog-post-detail__ghost-btn--liked' : '')
+          }
           onClick={() => setLiked((value) => !value)}
         >
-          {liked ? '♥ 좋아요' : '♡ 좋아요'}
+          <svg
+            aria-hidden="true"
+            viewBox="0 0 26 24"
+            className="blog-post-detail__button-icon"
+          >
+            <path
+              d="M24.4961 6.90882C24.5026 3.66505 21.768 1.0293 18.3885 1.02253C15.8626 1.01747 13.6902 2.48294 12.7527 4.57875C11.8236 2.4792 9.65704 1.00505 7.12991 0.999985C3.75299 0.993222 1.00651 3.61799 1.00002 6.86176C0.98114 16.2863 12.7167 22.5494 12.7167 22.5494C12.7167 22.5494 24.4773 16.3334 24.4961 6.90882Z"
+              className="blog-post-detail__button-icon-fill"
+            />
+            <path
+              d="M24.4961 6.90882C24.5026 3.66505 21.768 1.0293 18.3885 1.02253C15.8626 1.01747 13.6902 2.48294 12.7527 4.57875C11.8236 2.4792 9.65704 1.00505 7.12991 0.999985C3.75299 0.993222 1.00651 3.61799 1.00002 6.86176C0.98114 16.2863 12.7167 22.5494 12.7167 22.5494C12.7167 22.5494 24.4773 16.3334 24.4961 6.90882Z"
+              className="blog-post-detail__button-icon-stroke"
+            />
+          </svg>
+          <span>좋아요</span>
         </button>
 
         <div className="blog-post-detail__tags">
@@ -257,7 +291,12 @@ export default function BlogPostDetail() {
               rows={4}
             />
             <div className="blog-post-detail__comment-actions">
-              <button type="button" className="blog-post-detail__ghost-btn">
+              <button
+                type="button"
+                className="blog-post-detail__ghost-btn"
+                onClick={handleCommentSubmit}
+                disabled={!commentDraft.trim()}
+              >
                 등록
               </button>
             </div>
@@ -267,22 +306,23 @@ export default function BlogPostDetail() {
         <ul className="blog-post-detail__comment-list">
           {comments.map((comment) => (
             <li key={comment.id} className="blog-post-detail__comment-item">
-              <div className="blog-post-detail__comment-head">
-                <span className="blog-post-detail__avatar">{comment.badge}</span>
-                <div className="blog-post-detail__comment-meta">
-                  <strong>{comment.name}</strong>
-                  <span>{comment.time}</span>
+              <div className="blog-post-detail__comment-top">
+                <div className="blog-post-detail__comment-head">
+                  <span className="blog-post-detail__avatar">{comment.badge}</span>
+                  <div className="blog-post-detail__comment-meta">
+                    <strong>{comment.name}</strong>
+                    <span>{comment.time}</span>
+                  </div>
                 </div>
+                <button
+                  type="button"
+                  className="blog-post-detail__comment-delete"
+                  onClick={() => handleCommentDelete(comment.id)}
+                >
+                  삭제
+                </button>
               </div>
               <p className="blog-post-detail__comment-body">{comment.body}</p>
-              <div className="blog-post-detail__comment-buttons">
-                <button type="button" className="blog-post-detail__ghost-btn">
-                  ♡ {comment.likes}
-                </button>
-                <button type="button" className="blog-post-detail__ghost-btn">
-                  답글
-                </button>
-              </div>
             </li>
           ))}
         </ul>
@@ -295,30 +335,27 @@ export default function BlogPostDetail() {
               to={`${basePath}/${previousPost.id}`}
               className="blog-post-detail__pager-card"
             >
-              <span className="blog-post-detail__pager-label">← 이전 글</span>
+              <span className="blog-post-detail__pager-label">이전 글</span>
               <strong>{previousPost.title}</strong>
             </Link>
           ) : (
             <div className="blog-post-detail__pager-card blog-post-detail__pager-card--disabled">
-              <span className="blog-post-detail__pager-label">← 이전 글</span>
-              <strong>첫 번째 글입니다</strong>
+              <span className="blog-post-detail__pager-label">이전 글</span>
+              <strong>첫 번째 글입니다.</strong>
             </div>
           )}
         </div>
 
         <div className="blog-post-detail__pager-card-wrap">
           {nextPost ? (
-            <Link
-              to={`${basePath}/${nextPost.id}`}
-              className="blog-post-detail__pager-card"
-            >
-              <span className="blog-post-detail__pager-label">다음 글 →</span>
+            <Link to={`${basePath}/${nextPost.id}`} className="blog-post-detail__pager-card">
+              <span className="blog-post-detail__pager-label">다음 글</span>
               <strong>{nextPost.title}</strong>
             </Link>
           ) : (
             <div className="blog-post-detail__pager-card blog-post-detail__pager-card--disabled">
-              <span className="blog-post-detail__pager-label">다음 글 →</span>
-              <strong>마지막 글입니다</strong>
+              <span className="blog-post-detail__pager-label">다음 글</span>
+              <strong>마지막 글입니다.</strong>
             </div>
           )}
         </div>

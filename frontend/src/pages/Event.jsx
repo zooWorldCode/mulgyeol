@@ -42,12 +42,12 @@ export default function Event() {
           textAlign: 'center',
         }}
       >
-        <h1 className="event-page__hero-title" style={{ margin: '0 0 12px' }}>
-          물결의 계절별 시간표
+        <h1 className="event-page__hero-title" style={{ margin: '0 0 20px', fontSize: 'var(--font-size-xl)' }}>
+          물결의 특별한 순간들
         </h1>
         <p
           className="event-page__hero-desc"
-          style={{ margin: 0, lineHeight: 1.6, color: 'var(--color-text)' }}
+          style={{ margin: 0, lineHeight: 1.6, color: 'var(--color-text)' ,fontSize: 'var(--font-size-md)' }}
         >
           진행중인 이벤트부터 곧 찾아올 소식까지,
           <br />
