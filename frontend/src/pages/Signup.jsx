@@ -1,8 +1,10 @@
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api.js';
+import { claimGuestCoupons } from '../couponApi.js';
 import { persistAuthToken } from '../auth/session.js';
 import Button from '../components/common/Button.jsx';
+import { getCouponGuestId } from '../utils/couponUtils.js';
 import './Signup.css';
 
 const TERMS_META = [
@@ -32,11 +34,26 @@ export default function Signup() {
   const [submitError, setSubmitError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const redirectTo = useMemo(() => {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('redirect') || '/';
+  }, []);
 
   const allTermsChecked = useMemo(
     () => TERMS_META.every(({ key }) => terms[key]),
     [terms]
   );
+
+  async function claimCouponsForUser(user) {
+    try {
+      await claimGuestCoupons({
+        userId: user?.id ? String(user.id) : null,
+        guestId: getCouponGuestId(),
+      });
+    } catch {
+      // Ignore claim errors so signup can still succeed.
+    }
+  }
 
   function onNicknameChange(e) {
     setNickname(e.target.value);
@@ -63,7 +80,7 @@ export default function Signup() {
       setNicknameDup({
         status: 'error',
         checkedAs: null,
-        message: '닉네임을 입력한 뒤 중복확인을 해 주세요.',
+        message: '닉네임을 입력한 뒤 중복 확인을 해주세요.',
       });
       return;
     }
@@ -110,12 +127,12 @@ export default function Signup() {
     const pwd = password;
     const pwd2 = passwordConfirm;
 
-    if (!nick) errors.push('닉네임을 입력하세요.');
+    if (!nick) errors.push('닉네임을 입력해 주세요.');
     if (nicknameDup.status !== 'ok' || nick !== nicknameDup.checkedAs) {
-      errors.push('닉네임 중복확인을 완료해 주세요.');
+      errors.push('닉네임 중복 확인을 완료해 주세요.');
     }
 
-    if (!emailNorm) errors.push('이메일을 입력하세요.');
+    if (!emailNorm) errors.push('이메일을 입력해 주세요.');
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailNorm)) {
       errors.push('올바른 이메일 형식이 아닙니다.');
     }
@@ -148,7 +165,8 @@ export default function Signup() {
         nickname: nick,
       });
       persistAuthToken(data.token, true, data.user ?? null);
-      navigate('/');
+      await claimCouponsForUser(data.user);
+      navigate(redirectTo);
     } catch (err) {
       const msg =
         err.response?.data?.message ||
@@ -174,7 +192,7 @@ export default function Signup() {
               type="text"
               value={nickname}
               onChange={onNicknameChange}
-              placeholder="닉네임을 입력하세요"
+              placeholder="닉네임을 입력해 주세요"
               required
               autoComplete="nickname"
             />
@@ -212,7 +230,7 @@ export default function Signup() {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="이메일을 입력하세요"
+            placeholder="이메일을 입력해 주세요"
             required
             autoComplete="email"
           />
@@ -228,7 +246,7 @@ export default function Signup() {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="비밀번호를 입력하세요"
+            placeholder="비밀번호를 입력해 주세요"
             required
             autoComplete="new-password"
           />
@@ -244,7 +262,7 @@ export default function Signup() {
             type="password"
             value={passwordConfirm}
             onChange={(e) => setPasswordConfirm(e.target.value)}
-            placeholder="비밀번호를 확인하세요"
+            placeholder="비밀번호를 다시 입력해 주세요"
             required
             autoComplete="new-password"
           />
@@ -265,7 +283,7 @@ export default function Signup() {
                 checked={allTermsChecked}
                 onChange={(e) => setAllTerms(e.target.checked)}
               />{' '}
-              모두 확인하였으며 동의합니다
+              모두 확인했으며 동의합니다
             </label>
           </div>
 

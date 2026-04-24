@@ -11,6 +11,7 @@
   overflow: hidden;
   padding: 70px 50px;
   background-color: var(--color-white);
+  font-size: var(--font-size-sm);
 }
 
 .signup-page__form {
@@ -24,6 +25,7 @@
 .signup-page__label {
   display: inline-block;
   margin-bottom: 4px;
+  font-size: var(--font-size-md);
 }
 
 .signup-page__nickname-row {

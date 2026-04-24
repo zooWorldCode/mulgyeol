@@ -1,9 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api.js';
+import { claimGuestCoupons } from '../couponApi.js';
 import { parseUserFromAccessToken, persistAuthToken } from '../auth/session.js';
 import { SOCIAL_PROVIDER_IDS, socialLoginHandlers } from '../auth/socialAuth.js';
 import Button from '../components/common/Button.jsx';
+import { getCouponGuestId } from '../utils/couponUtils.js';
 import './Login.css';
 
 const SOCIAL_IMAGE_NAME = {
@@ -19,6 +21,21 @@ export default function Login() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const redirectTo = useMemo(() => {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('redirect') || '/';
+  }, []);
+
+  async function claimCouponsForUser(user) {
+    try {
+      await claimGuestCoupons({
+        userId: user?.id ? String(user.id) : null,
+        guestId: getCouponGuestId(),
+      });
+    } catch {
+      // Ignore claim errors so login can still succeed.
+    }
+  }
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -35,9 +52,10 @@ export default function Login() {
     if (token) {
       const user = parseUserFromAccessToken(token);
       persistAuthToken(token, true, user);
-      navigate('/', { replace: true });
+      void claimCouponsForUser(user);
+      navigate(redirectTo, { replace: true });
     }
-  }, [navigate]);
+  }, [navigate, redirectTo]);
 
   async function handleLogin(e) {
     e.preventDefault();
@@ -46,7 +64,8 @@ export default function Login() {
     try {
       const { data } = await api.post('/api/auth/login', { email, password });
       persistAuthToken(data.token, remember, data.user ?? null);
-      navigate('/');
+      await claimCouponsForUser(data.user);
+      navigate(redirectTo);
     } catch (err) {
       const msg =
         err.response?.data?.message ||
@@ -60,7 +79,7 @@ export default function Login() {
 
   return (
     <div className="login-page">
-      <img src="/images/social_log/logo_log.png" alt="로그인 로고"/>
+      <img src="/images/social_log/logo_log.png" alt="로그인 로고" />
       <form className="login-page__form" onSubmit={handleLogin}>
         <div className="login-page__field">
           <label className="login-page__label" htmlFor="login-email">
@@ -72,7 +91,7 @@ export default function Login() {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="이메일을 입력하세요"
+            placeholder="이메일을 입력해 주세요"
             autoComplete="email"
             required
           />
@@ -88,7 +107,7 @@ export default function Login() {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="비밀번호를 입력하세요"
+            placeholder="비밀번호를 입력해 주세요"
             autoComplete="current-password"
             required
           />
@@ -129,7 +148,7 @@ export default function Login() {
           <Button
             type="button"
             disabled={loading}
-            onClick={() => navigate('/signup')}
+            onClick={() => navigate(`/signup?redirect=${encodeURIComponent(redirectTo)}`)}
           >
             회원가입
           </Button>

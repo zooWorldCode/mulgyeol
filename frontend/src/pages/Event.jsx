@@ -43,7 +43,7 @@ export default function Event() {
         }}
       >
         <h1 className="event-page__hero-title" style={{ margin: '0 0 12px' }}>
-          물결의 특별한 순간들
+          물결의 계절별 시간표
         </h1>
         <p
           className="event-page__hero-desc"
@@ -51,7 +51,7 @@ export default function Event() {
         >
           진행중인 이벤트부터 곧 찾아올 소식까지,
           <br />
-          물결의 모든 이벤트를 한눈에 확인하세요.
+          물결의 모든 이벤트를 한눈에 확인해보세요.
         </p>
       </section>
 

@@ -21,14 +21,12 @@ import BlogPostDetail from './pages/BlogPostDetail.jsx';
 import Search from './pages/Search.jsx';
 import Order from './pages/Order.jsx';
 import OrderCompletePage from './pages/OrderCompletePage.jsx';
-import ScratchCouponModal from './components/coupon/ScratchCouponModal.jsx';
 
 export default function App() {
   return (
     <>
       <ScrollToTop />
       <TopNoticeBar />
-      <ScratchCouponModal />
       <Routes>
       <Route element={<AuthShell />}>
         <Route path="login" element={<Login />} />

@@ -35,10 +35,6 @@ function sortPosts(posts, sortId) {
 }
 
 function pickFeatured(sorted) {
-  const flagged = sorted.filter((p) => p.isFeatured);
-  if (flagged.length) {
-    return [...flagged].sort((a, b) => b.views - a.views)[0];
-  }
   return sorted[0] || null;
 }
 
@@ -59,7 +55,7 @@ export default function BlogPage() {
 
   const rest = useMemo(() => {
     if (!featured) return sorted;
-    return sorted.filter((p) => p.id !== featured.id);
+    return sorted.slice(1);
   }, [sorted, featured]);
 
   const totalPages = Math.max(1, Math.ceil(rest.length / PAGE_SIZE));
@@ -81,9 +77,6 @@ export default function BlogPage() {
   return (
     <div className="blog-page">
       <PageWideBand text="블로그" />
-      <h1 className="blog-page__title" style={{ marginTop: 0 }}>
-        블로그 in 도예
-      </h1>
 
       <div
         className="blog-page__toolbar"
@@ -125,7 +118,8 @@ export default function BlogPage() {
                   style={{
                     display: 'grid',
                     gridTemplateColumns: 'repeat(4, minmax(0, 1fr))',
-                    gap: 16,
+                    columnGap: 30,
+                    rowGap: 50, 
                   }}
                 >
                   {pageItems.map((post) => (

@@ -19,7 +19,7 @@
   width: min(100%, 400px);
   padding: 28px;
   border-radius: 8px;
-  background: #ffffff;
+  background: #fffcf6;
   box-shadow: 0 18px 48px rgba(0, 0, 0, 0.2);
   text-align: center;
 }
@@ -35,7 +35,7 @@
   border: 0;
   border-radius: 50%;
   background: transparent;
-  color: #4a4f4a;
+  color: #2a2523;
   cursor: pointer;
   font-size: 24px;
   line-height: 1;
@@ -43,21 +43,21 @@
 
 .scratch-coupon__eyebrow {
   margin: 0 0 8px;
-  color: #667268;
+  color: #2a2523;
   font-size: 13px;
   font-weight: 700;
 }
 
 .scratch-coupon__title {
   margin: 0 0 20px;
-  color: #202620;
+  color: #2a2523;
   font-size: 22px;
   line-height: 1.35;
 }
 
 .scratch-coupon__reward {
   display: block;
-  color: #253327;
+  color: #2a2523;
   font-size: 32px;
   line-height: 1.2;
 }
@@ -65,7 +65,7 @@
 .scratch-coupon__hint {
   display: block;
   margin-top: 8px;
-  color: #687168;
+  color: #2a2523;
   font-size: 14px;
 }
 
@@ -89,15 +89,95 @@
   font-size: 14px;
 }
 
+.scratch-coupon__auth-box {
+  margin-top: 16px;
+  padding: 18px 16px;
+  border-radius: 8px;
+  background: #f6efe7;
+  text-align: left;
+}
+
+.scratch-coupon__auth-title {
+  display: block;
+  color: #1f2a22;
+  font-size: 18px;
+}
+
+.scratch-coupon__auth-text {
+  margin: 10px 0 0;
+  color: #5d665e;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.scratch-coupon__auth-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.scratch-coupon__auth-button {
+  padding: 12px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.scratch-coupon__auth-button--secondary {
+  border: 0;
+  background: #2a2523;
+  color: #fffcf6;
+}
+
+.scratch-coupon__auth-button--primary {
+  border: 1px solid #2a2523;
+  background: transparent;
+  color: #2a2523;
+}
+
+.scratch-coupon__auth-button--secondary:hover {
+  border: 0;
+  background: #ed906e;
+  color: #2a2523;
+}
+
+.scratch-coupon__auth-button--primary:hover {
+  border: 1px solid #2a2523;
+  background: #fffcf6;
+  color: #2a2523;
+}
+
 .scratch-coupon__button {
   width: 100%;
   margin-top: 20px;
   padding: 12px 16px;
   border: 0;
   border-radius: 6px;
-  background: #2f4a36;
-  color: #ffffff;
+  background: #2a2523;
+  color: #ed906e;
   cursor: pointer;
   font-size: 15px;
   font-weight: 700;
+}
+
+.scratch-coupon__hide-today {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  color: #5d665e;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.scratch-coupon__hide-today input {
+  margin: 0;
+}
+
+@media (max-width: 480px) {
+  .scratch-coupon__auth-actions {
+    grid-template-columns: 1fr;
+  }
 }

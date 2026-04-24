@@ -91,6 +91,36 @@ router.post('/issue', async (req, res) => {
   }
 });
 
+router.post('/claim', async (req, res) => {
+  try {
+    const userId = normalizeId(req.body.userId);
+    const guestId = normalizeId(req.body.guestId);
+
+    if (!userId || !guestId) {
+      return res.status(400).json({
+        success: false,
+        message: 'userId and guestId are required.',
+      });
+    }
+
+    const result = await Coupon.updateMany(
+      { guestId, userId: null },
+      { $set: { userId } }
+    );
+
+    return res.json({
+      success: true,
+      claimedCount: result.modifiedCount ?? 0,
+    });
+  } catch (err) {
+    console.error('Coupon claim error:', err);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to claim coupons.',
+    });
+  }
+});
+
 router.get('/list/:userId', async (req, res) => {
   try {
     const userId = normalizeId(req.params.userId);

@@ -314,12 +314,13 @@ PRODUCTS.push(...createListOnlyDummyProducts());
 
 async function seed() {
   const uri = process.env.MONGODB_URI;
+  const dbName = process.env.MONGODB_DB_NAME || 'shop';
   if (!uri) {
     console.error('Missing MONGODB_URI in .env');
     process.exit(1);
   }
 
-  await mongoose.connect(uri);
+  await mongoose.connect(uri, { dbName });
   await Product.deleteMany({});
 
   if (!PRODUCTS.length) {

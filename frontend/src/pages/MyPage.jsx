@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { clearAuthSession, getAuthUser } from '../auth/session.js';
+import { getCouponList } from '../couponApi.js';
 import PageWideBand from '../components/common/PageWideBand.jsx';
 import { getRecentOrders } from '../orders/orderStorage.js';
 import { getPointBalance } from '../utils/pointStorage.js';
@@ -18,14 +19,17 @@ const SIDE_MENU = [
   { key: 'profile', label: '회원 정보 수정', icon: 'user' },
 ];
 
-const DUMMY_SUMMARY = {
-  coupons: 3,
-};
-
 function MenuIcon({ name, size = 20 }) {
   const stroke = 'currentColor';
   const sw = 1.75;
-  const common = { width: size, height: size, viewBox: '0 0 24 24', fill: 'none', stroke, strokeWidth: sw };
+  const common = {
+    width: size,
+    height: size,
+    viewBox: '0 0 24 24',
+    fill: 'none',
+    stroke,
+    strokeWidth: sw,
+  };
   switch (name) {
     case 'home':
       return (
@@ -93,7 +97,14 @@ function MenuIcon({ name, size = 20 }) {
 function SummaryIcon({ name, size = 26 }) {
   const stroke = 'currentColor';
   const sw = 1.6;
-  const common = { width: size, height: size, viewBox: '0 0 24 24', fill: 'none', stroke, strokeWidth: sw };
+  const common = {
+    width: size,
+    height: size,
+    viewBox: '0 0 24 24',
+    fill: 'none',
+    stroke,
+    strokeWidth: sw,
+  };
   switch (name) {
     case 'truck':
       return (
@@ -134,18 +145,21 @@ function SummaryIcon({ name, size = 26 }) {
 export default function MyPage() {
   const navigate = useNavigate();
   const user = getAuthUser();
-  const nickname = user?.nickname || '00';
+  const nickname = user?.nickname || '고객';
   const [activeMenu, setActiveMenu] = useState('home');
   const [summaryTick, setSummaryTick] = useState(0);
+  const [couponCount, setCouponCount] = useState(0);
   const recentOrders = getRecentOrders();
+
   const summary = useMemo(() => {
     void summaryTick;
     return {
-      coupons: DUMMY_SUMMARY.coupons,
+      coupons: couponCount,
       points: getPointBalance(),
       wishlist: getWishlist().length,
     };
-  }, [summaryTick]);
+  }, [couponCount, summaryTick]);
+
   const recentOrderRows = recentOrders.flatMap((order) =>
     (order.lines || []).map((line, index) => ({
       id: `${order.id}-${line.productId}-${line.option || 'default'}-${index}`,
@@ -158,6 +172,20 @@ export default function MyPage() {
       status: order.status,
     }))
   );
+
+  useEffect(() => {
+    async function loadCoupons() {
+      if (!user?.id) return;
+      try {
+        const data = await getCouponList(String(user.id));
+        setCouponCount(Array.isArray(data?.coupons) ? data.coupons.length : 0);
+      } catch {
+        setCouponCount(0);
+      }
+    }
+
+    loadCoupons();
+  }, [user?.id, summaryTick]);
 
   function handleLogout() {
     clearAuthSession();
@@ -213,7 +241,7 @@ export default function MyPage() {
               <br />
               점심시간 12:00~13:00
               <br />
-              주말·공휴일 휴무
+              주말 및 공휴일 휴무
             </p>
           </div>
         </aside>
@@ -241,14 +269,14 @@ export default function MyPage() {
                 <SummaryIcon name="truck" />
               </div>
               <p className="mypage__summary-label">진행 중인 주문</p>
-              <p className="mypage__summary-value">{recentOrderRows.length} 건</p>
+              <p className="mypage__summary-value">{recentOrderRows.length}건</p>
             </div>
             <div className="mypage__summary-cell">
               <div className="mypage__summary-icon">
                 <SummaryIcon name="ticket" />
               </div>
               <p className="mypage__summary-label">보유 쿠폰</p>
-              <p className="mypage__summary-value">{summary.coupons} 장</p>
+              <p className="mypage__summary-value">{summary.coupons}개</p>
             </div>
             <div className="mypage__summary-cell">
               <div className="mypage__summary-icon">
@@ -262,7 +290,7 @@ export default function MyPage() {
                 <SummaryIcon name="heart" />
               </div>
               <p className="mypage__summary-label">찜한 상품</p>
-              <p className="mypage__summary-value">{summary.wishlist} 개</p>
+              <p className="mypage__summary-value">{summary.wishlist}개</p>
             </div>
           </section>
 

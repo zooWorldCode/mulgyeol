@@ -47,7 +47,7 @@
 }
 
 .product-detail-tabs__panel {
-  padding: 32px 0 24px;
+  padding: 32px 0 0px;
   box-sizing: border-box;
 }
 
@@ -59,7 +59,7 @@
 }
 
 .product-detail-tabs__subheading {
-  margin: 24px 0 12px;
+  margin: 24px 0 0px;
   font-size: var(--font-size-sm);
   font-weight: 600;
   color: var(--color-text);
@@ -115,7 +115,6 @@
 .product-detail-tabs__reviews {
   background: var(--color-white);
   border-radius: 14px;
-  padding: 24px;
 }
 
 .product-detail-tabs__review-action {
@@ -134,9 +133,6 @@
   color: var(--color-point);
 }
 
-.product-detail-tabs__pagination {
-  margin-top: 18px;
-}
 
 .review-modal {
   position: fixed;

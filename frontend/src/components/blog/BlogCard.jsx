@@ -1,6 +1,12 @@
 import { Link } from 'react-router-dom';
 
 function Meta({ views, commentsCount, likes }) {
+  const itemStyle = {
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: 5,
+  };
+
   return (
     <div
       className="blog-card__meta"
@@ -9,24 +15,26 @@ function Meta({ views, commentsCount, likes }) {
         gap: 10,
         flexWrap: 'wrap',
         color: 'var(--shadow-deep)',
+        fontSize: 'var(--font-size-sm)',
+        marginTop: 'auto',
       }}
     >
-      <span>
-        <span aria-hidden>👁</span> {Number(views).toLocaleString()}
+      <span style={itemStyle}>
+        <img src="/images/icon/eye.png" alt="" width="14" height="14" />
+        {Number(views).toLocaleString()}
       </span>
-      <span>
-        <span aria-hidden>💬</span> {Number(commentsCount).toLocaleString()}
+      <span style={itemStyle}>
+        <img src="/images/icon/chat.png" alt="" width="14" height="14" />
+        {Number(commentsCount).toLocaleString()}
       </span>
-      <span>
-        <span aria-hidden>♡</span> {Number(likes).toLocaleString()}
+      <span style={itemStyle}>
+        <img src="/images/icon/wishlist.svg" alt="" width="14" height="14" />
+        {Number(likes).toLocaleString()}
       </span>
     </div>
   );
 }
 
-/**
- * @param {{ post: object; basePath: string }} props
- */
 export default function BlogCard({ post, basePath }) {
   const summary =
     post.summary ||
@@ -41,19 +49,23 @@ export default function BlogCard({ post, basePath }) {
         style={{
           textDecoration: 'none',
           color: 'inherit',
-          border: '1px solid var(--shadow-bright)',
-          display: 'block',
+          backgroundColor: 'var(--shadow-bright)',
+          display: 'flex',
+          flexDirection: 'column',
+          minHeight: 550,
           height: '100%',
         }}
       >
         <div
           className="blog-card__thumb"
           style={{
-            aspectRatio: '16/10',
+            width: '100%',
+            height: 350,
             background: 'var(--shadow-bright)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
+            overflow: 'hidden'
           }}
         >
           {post.image ? (
@@ -61,6 +73,8 @@ export default function BlogCard({ post, basePath }) {
               src={post.image}
               alt=""
               className="blog-card__image"
+              loading="lazy"
+              decoding="async"
               style={{ width: '100%', height: '100%', objectFit: 'cover' }}
             />
           ) : (
@@ -72,11 +86,26 @@ export default function BlogCard({ post, basePath }) {
             </span>
           )}
         </div>
-        <div className="blog-card__body" style={{ padding: 10 }}>
-          <h3 className="blog-card__title" style={{ margin: '0 0 8px' }}>
+        <div
+          className="blog-card__body"
+          style={{
+            padding: 10,
+            display: 'flex',
+            flexDirection: 'column',
+            flex: 1,
+          }}
+        >
+          <h3 className="blog-card__title" style={{ margin: '0 0 15px' }}>
             {post.title}
           </h3>
-          <p className="blog-card__summary" style={{ margin: '0 0 8px' }}>
+          <p
+            className="blog-card__summary"
+            style={{
+              margin: '0 0 20px',
+              fontSize: 'var(--font-size-sm)',
+              color: 'var(--shadow-deep)',
+            }}
+          >
             {summary}
           </p>
           <Meta

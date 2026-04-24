@@ -19,30 +19,70 @@ const TAB_ITEMS = [
   { id: 'qna', label: 'Q&A' },
 ];
 
-const FALLBACK_REVIEWS = [
+const DEFAULT_REVIEWS = [
   {
-    id: 'r1',
+    id: 'default-r1',
     nickname: '물결회원',
     date: '2026.02.05',
     rating: 4,
     content:
-      '디자인이 깔끔해서 어떤 식탁에도 잘 어울려요. 컬러와 마감이 좋아서 매일 손이 갑니다.',
+      '유약 표현이 은은해서 어떤 식탁에도 잘 어울려요. 컬러와 마감이 좋아서 매일 손이 갑니다.',
   },
   {
-    id: 'r2',
-    nickname: '도자기좋아',
+    id: 'default-r2',
+    nickname: '도자기취향',
     date: '2026.02.20',
     rating: 4,
     content:
-      '실사용하기 좋은 무게감이에요. 포장도 꼼꼼했고 선물용으로도 만족스러웠습니다.',
+      '손에 잡히는 무게감이 안정적이에요. 포장도 꼼꼼하고 선물용으로도 만족스러웠습니다.',
   },
   {
-    id: 'r3',
+    id: 'default-r3',
     nickname: '세라믹러버',
     date: '2026.03.03',
     rating: 5,
     content:
       '사진보다 실물이 더 고급스러워요. 다음에는 같은 라인으로 컵도 추가 구매하려고 합니다.',
+  },
+  {
+    id: 'default-r4',
+    nickname: '인테리어랩',
+    date: '2026.03.12',
+    rating: 5,
+    content:
+      '쉐입이 부드럽고 표면 질감도 좋아요. 데일리로 바로 쓰기 좋은 균형감이 있습니다.',
+  },
+  {
+    id: 'default-r5',
+    nickname: '예상보다',
+    date: '2026.03.19',
+    rating: 4,
+    content:
+      '재질감이 좋아 보이고 가격대도 만족스러워요. 테이블 위에서 존재감이 은근히 큽니다.',
+  },
+  {
+    id: 'default-r6',
+    nickname: '주방기록',
+    date: '2026.03.27',
+    rating: 5,
+    content:
+      '사진보다 분위기가 더 살아 있어서 손님상 차릴 때 특히 예쁘게 느껴졌어요.',
+  },
+  {
+    id: 'default-r7',
+    nickname: '데일리픽',
+    date: '2026.04.02',
+    rating: 4,
+    content:
+      '크기감도 좋고 마감도 깔끔해서 입문용으로 만족해요. 다른 색도 있으면 사고 싶어요.',
+  },
+  {
+    id: 'default-r8',
+    nickname: '생활자인',
+    date: '2026.04.11',
+    rating: 5,
+    content:
+      '일상에서 매일 쓰기 좋은 타입입니다. 배송도 무난했고 전체적으로 만족도가 높아요.',
   },
 ];
 
@@ -59,11 +99,29 @@ function formatReviewDate(value) {
     .replace(/\s/g, '');
 }
 
+function normalizeReview(review) {
+  return {
+    ...review,
+    date: review.date || formatReviewDate(review.createdAt),
+  };
+}
+
 function buildDistribution(reviews) {
   return [5, 4, 3, 2, 1].map((score) => ({
     score,
     count: reviews.filter((review) => Number(review.rating) === score).length,
   }));
+}
+
+function getAverageRating(reviews, fallback = 4.2) {
+  if (!reviews.length) return Number(fallback) || 0;
+
+  return Number(
+    (
+      reviews.reduce((sum, review) => sum + Number(review.rating || 0), 0) /
+      reviews.length
+    ).toFixed(1)
+  );
 }
 
 function getCurrentUser() {
@@ -73,14 +131,10 @@ function getCurrentUser() {
   return token ? parseUserFromAccessToken(token) : null;
 }
 
-/**
- * @param {{ product: object }} props
- */
 export default function ProductDetailTabs({ product }) {
   const [activeTab, setActiveTab] = useState('detail');
   const [reviewPage, setReviewPage] = useState(1);
   const [reviews, setReviews] = useState([]);
-  const [reviewMeta, setReviewMeta] = useState(null);
   const [reviewError, setReviewError] = useState('');
   const [isReviewFormOpen, setIsReviewFormOpen] = useState(false);
   const [ratingInput, setRatingInput] = useState(5);
@@ -96,23 +150,17 @@ export default function ProductDetailTabs({ product }) {
     async function loadReviews() {
       if (!productId) return;
       setReviewError('');
+
       try {
         const { data } = await api.get(`/api/products/${productId}/reviews`);
         if (cancelled) return;
         setReviews(Array.isArray(data.reviews) ? data.reviews : []);
-        setReviewMeta({
-          total: Number(data.total) || 0,
-          averageRating: Number(data.averageRating) || 0,
-          distribution: Array.isArray(data.distribution)
-            ? data.distribution
-            : null,
-        });
         setReviewPage(1);
       } catch (err) {
         if (!cancelled) {
           setReviewError(
             err.response?.data?.message ||
-              '리뷰를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.'
+              '리뷰를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.'
           );
         }
       }
@@ -124,31 +172,22 @@ export default function ProductDetailTabs({ product }) {
     };
   }, [productId]);
 
-  const displayReviews = reviews.length > 0 ? reviews : FALLBACK_REVIEWS;
-  const normalizedReviews = displayReviews.map((review) => ({
-    ...review,
-    date: review.date || formatReviewDate(review.createdAt),
-  }));
+  const normalizedReviews = useMemo(() => {
+    const userReviews = reviews.map(normalizeReview);
+    const defaultReviews = DEFAULT_REVIEWS.map(normalizeReview);
+    return [...userReviews, ...defaultReviews];
+  }, [reviews]);
 
-  const reviewCount =
-    reviewMeta && reviews.length > 0
-      ? reviewMeta.total
-      : Number(product.reviewCount ?? normalizedReviews.length) || 0;
-  const averageRating =
-    reviewMeta && reviews.length > 0
-      ? reviewMeta.averageRating
-      : Number(product.rating || 4.2);
+  const reviewCount = normalizedReviews.length;
+  const averageRating = getAverageRating(normalizedReviews, product?.rating);
 
   const reviewSummary = useMemo(
     () => ({
       averageRating,
       totalReviews: reviewCount,
-      distribution:
-        reviewMeta?.distribution && reviews.length > 0
-          ? reviewMeta.distribution
-          : buildDistribution(normalizedReviews),
+      distribution: buildDistribution(normalizedReviews),
     }),
-    [averageRating, normalizedReviews, reviewCount, reviewMeta, reviews.length]
+    [averageRating, normalizedReviews, reviewCount]
   );
 
   const pageSize = 3;
@@ -158,8 +197,9 @@ export default function ProductDetailTabs({ product }) {
     reviewPage * pageSize
   );
 
-  async function handleSubmitReview(e) {
-    e.preventDefault();
+  async function handleSubmitReview(event) {
+    event.preventDefault();
+
     if (!currentUser) {
       setReviewError('로그인 후 리뷰를 작성할 수 있습니다.');
       return;
@@ -167,17 +207,14 @@ export default function ProductDetailTabs({ product }) {
 
     setSubmitting(true);
     setReviewError('');
+
     try {
       const { data } = await api.post(`/api/products/${productId}/reviews`, {
         rating: ratingInput,
         content: contentInput,
       });
+
       setReviews(Array.isArray(data.reviews) ? data.reviews : []);
-      setReviewMeta({
-        total: Number(data.total) || 0,
-        averageRating: Number(data.averageRating) || 0,
-        distribution: Array.isArray(data.distribution) ? data.distribution : [],
-      });
       setContentInput('');
       setRatingInput(5);
       setReviewPage(1);
@@ -185,7 +222,7 @@ export default function ProductDetailTabs({ product }) {
     } catch (err) {
       setReviewError(
         err.response?.data?.message ||
-          '리뷰 등록에 실패했습니다. 잠시 후 다시 시도해주세요.'
+          '리뷰 등록에 실패했습니다. 잠시 후 다시 시도해 주세요.'
       );
     } finally {
       setSubmitting(false);
@@ -195,22 +232,24 @@ export default function ProductDetailTabs({ product }) {
   return (
     <section className="product-detail-tabs" aria-label="상품 상세 정보">
       <div className="product-detail-tabs__nav" role="tablist">
-        {TAB_ITEMS.map((t) => {
-          const active = activeTab === t.id;
-          const label = t.id === 'reviews' ? `리뷰(${reviewCount})` : t.label;
+        {TAB_ITEMS.map((tab) => {
+          const active = activeTab === tab.id;
+          const label =
+            tab.id === 'reviews' ? `리뷰(${reviewCount})` : tab.label;
+
           return (
             <button
-              key={t.id}
+              key={tab.id}
               type="button"
               role="tab"
-              id={`product-detail-tab-${t.id}`}
+              id={`product-detail-tab-${tab.id}`}
               className={
                 'product-detail-tabs__tab' +
                 (active ? ' product-detail-tabs__tab--active' : '')
               }
               aria-selected={active}
               aria-controls="product-detail-tab-panel"
-              onClick={() => setActiveTab(t.id)}
+              onClick={() => setActiveTab(tab.id)}
             >
               {label}
             </button>
@@ -240,13 +279,13 @@ export default function ProductDetailTabs({ product }) {
             <h2 className="product-detail-tabs__heading">구매 / 배송 안내</h2>
             <p className="product-detail-tabs__description">
               {product.shippingNote ||
-                '상품 배송 및 배송비와 지역 안내는 주문 단계에서 확인할 수 있습니다.'}
+                '상품 배송 및 배송비 안내는 주문 단계에서 다시 확인하실 수 있습니다.'}
             </p>
             <h3 className="product-detail-tabs__subheading">교환 / 반품</h3>
             <ul className="product-detail-tabs__bullet-list">
-              <li>상품 수령 후 7일 이내 교환 및 반품 신청이 가능합니다.</li>
+              <li>상품 수령 후 7일 이내 교환 및 반품 요청이 가능합니다.</li>
               <li>단순 변심에 의한 교환 및 반품 배송비는 고객 부담입니다.</li>
-              <li>파손 및 불량은 수령 후 48시간 이내 고객센터로 연락해주세요.</li>
+              <li>파손 및 불량은 수령 후 48시간 이내 고객센터로 연락해 주세요.</li>
             </ul>
           </div>
         ) : null}
@@ -287,7 +326,8 @@ export default function ProductDetailTabs({ product }) {
           <div className="product-detail-tabs__qna">
             <h2 className="product-detail-tabs__heading">Q&A</h2>
             <p className="product-detail-tabs__muted">
-              상품 문의 게시판은 준비 중입니다. 급한 문의는 고객센터로 연락해주세요.
+              상품 문의 게시판은 준비 중입니다. 급한 문의는 고객센터로 연락해
+              주세요.
             </p>
           </div>
         ) : null}
@@ -309,7 +349,7 @@ export default function ProductDetailTabs({ product }) {
                 aria-label="닫기"
                 onClick={() => setIsReviewFormOpen(false)}
               >
-                ×
+                x
               </button>
             </div>
 
@@ -317,7 +357,7 @@ export default function ProductDetailTabs({ product }) {
               <span>닉네임</span>
               <input
                 type="text"
-                value={currentUser?.nickname || '로그인이 필요합니다'}
+                value={currentUser?.nickname || '로그인이 필요합니다.'}
                 readOnly
               />
             </label>
@@ -326,7 +366,7 @@ export default function ProductDetailTabs({ product }) {
               <span>별점</span>
               <select
                 value={ratingInput}
-                onChange={(e) => setRatingInput(Number(e.target.value))}
+                onChange={(event) => setRatingInput(Number(event.target.value))}
               >
                 {[5, 4, 3, 2, 1].map((score) => (
                   <option key={score} value={score}>
@@ -340,8 +380,8 @@ export default function ProductDetailTabs({ product }) {
               <span>내용</span>
               <textarea
                 value={contentInput}
-                onChange={(e) => setContentInput(e.target.value)}
-                placeholder="상품을 사용해본 느낌을 적어주세요."
+                onChange={(event) => setContentInput(event.target.value)}
+                placeholder="상품 사용 후기를 적어주세요."
                 rows={6}
                 maxLength={1000}
                 required

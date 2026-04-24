@@ -3,29 +3,70 @@ import './ScratchCard.css';
 
 export default function ScratchCard({ children, onComplete }) {
   const canvasRef = useRef(null);
+  const coverImageRef = useRef(null);
   const isDrawingRef = useRef(false);
+  const hasScratchedRef = useRef(false);
   const completedRef = useRef(false);
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!canvas) return undefined;
 
-    const rect = canvas.getBoundingClientRect();
-    const scale = window.devicePixelRatio || 1;
-    canvas.width = Math.floor(rect.width * scale);
-    canvas.height = Math.floor(rect.height * scale);
+    function drawCover() {
+      const rect = canvas.getBoundingClientRect();
+      const scale = window.devicePixelRatio || 1;
+      canvas.width = Math.floor(rect.width * scale);
+      canvas.height = Math.floor(rect.height * scale);
 
-    const ctx = canvas.getContext('2d');
-    ctx.scale(scale, scale);
-    ctx.fillStyle = '#b9c0c7';
-    ctx.fillRect(0, 0, rect.width, rect.height);
-    ctx.fillStyle = '#ffffff';
-    ctx.font = '700 18px sans-serif';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText('긁어서 쿠폰 확인', rect.width / 2, rect.height / 2);
+      const ctx = canvas.getContext('2d');
+      const coverImage = coverImageRef.current;
+
+      ctx.scale(scale, scale);
+      ctx.clearRect(0, 0, rect.width, rect.height);
+
+      if (coverImage) {
+        ctx.drawImage(coverImage, 0, 0, rect.width, rect.height);
+        ctx.fillStyle = 'rgba(42, 37, 35, 0)';
+        ctx.fillRect(0, 0, rect.width, rect.height);
+      } else {
+        ctx.fillStyle = '#ed906e';
+        ctx.fillRect(0, 0, rect.width, rect.height);
+      }
+
+      ctx.fillStyle = '#fffcf6';
+      ctx.font = '400 20px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('유약을 긁어보세요!', rect.width / 2, rect.height / 2);
+    }
+
+    const coverImage = new Image();
+    coverImage.src = '/images/coupon/scratch.png';
+    coverImage.onload = () => {
+      coverImageRef.current = coverImage;
+      if (!hasScratchedRef.current && !completedRef.current) {
+        drawCover();
+      }
+      setReady(true);
+    };
+    coverImage.onerror = () => {
+      setReady(true);
+    };
+
+    drawCover();
     setReady(true);
+
+    const resizeObserver = new ResizeObserver(() => {
+      if (hasScratchedRef.current || completedRef.current) return;
+      drawCover();
+    });
+
+    resizeObserver.observe(canvas);
+
+    return () => {
+      resizeObserver.disconnect();
+    };
   }, []);
 
   function getPoint(event) {
@@ -41,6 +82,7 @@ export default function ScratchCard({ children, onComplete }) {
 
   function scratch(event) {
     event.preventDefault();
+    hasScratchedRef.current = true;
 
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
