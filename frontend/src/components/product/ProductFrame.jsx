@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { getAuthToken } from '../../auth/session.js';
 import { addToCart } from '../../cart/cartStorage.js';
 import {
   addToWishlist,
@@ -100,6 +101,10 @@ export default function ProductFrame({
       e.stopPropagation();
       if (onWishlist) {
         onWishlist(e);
+        return;
+      }
+      if (!getAuthToken()) {
+        alert('로그인후 가능합니다');
         return;
       }
       if (!product?._id) return;

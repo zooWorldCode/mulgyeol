@@ -107,6 +107,11 @@ export default function ProductInfo({ product }) {
   }
 
   function handleWishlist() {
+    if (!getAuthToken()) {
+      alert('로그인후 가능합니다');
+      return;
+    }
+
     const ok = addToWishlist(product);
     alert(ok ? '위시리스트에 담았습니다.' : '이미 위시리스트에 있습니다.');
   }

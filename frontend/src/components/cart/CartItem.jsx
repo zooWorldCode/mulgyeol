@@ -29,27 +29,27 @@ export default function CartItem({ line, onRemove, onQuantityChange }) {
           ) : (
             <div className="cart-item__thumb-placeholder">No Image</div>
           )}
+        </div>
 
-          <div className="cart-item__qty">
-            <button
-              type="button"
-              className="cart-item__qty-btn"
-              onClick={() => onQuantityChange(qty - 1)}
-              disabled={qty <= 1}
-              aria-label="수량 감소"
-            >
-              -
-            </button>
-            <span className="cart-item__qty-value">{qty}</span>
-            <button
-              type="button"
-              className="cart-item__qty-btn"
-              onClick={() => onQuantityChange(qty + 1)}
-              aria-label="수량 증가"
-            >
-              +
-            </button>
-          </div>
+        <div className="cart-item__qty">
+          <button
+            type="button"
+            className="cart-item__qty-btn"
+            onClick={() => onQuantityChange(qty - 1)}
+            disabled={qty <= 1}
+            aria-label="수량 감소"
+          >
+            -
+          </button>
+          <span className="cart-item__qty-value">{qty}</span>
+          <button
+            type="button"
+            className="cart-item__qty-btn"
+            onClick={() => onQuantityChange(qty + 1)}
+            aria-label="수량 증가"
+          >
+            +
+          </button>
         </div>
 
         <div className="cart-item__info">

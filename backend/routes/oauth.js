@@ -13,8 +13,17 @@ function frontendBase() {
   return (process.env.FRONTEND_PUBLIC_URL || 'http://localhost:5173').replace(/\/$/, '');
 }
 
+function oauthRedirectBase() {
+  return (
+    process.env.OAUTH_REDIRECT_BASE_URL ||
+    process.env.BACKEND_PUBLIC_URL ||
+    process.env.FRONTEND_PUBLIC_URL ||
+    'http://localhost:5173'
+  ).replace(/\/$/, '');
+}
+
 function callbackUrl(provider) {
-  const base = frontendBase();
+  const base = oauthRedirectBase();
   return `${base}/api/auth/oauth/${provider}/callback`;
 }
 

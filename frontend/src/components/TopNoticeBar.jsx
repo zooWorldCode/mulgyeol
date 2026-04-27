@@ -3,8 +3,8 @@ import './TopNoticeBar.css';
 
 /** 한 줄에 보여줄 문구들. 필요 시 이 배열만 수정하면 됩니다. */
 export const TOP_NOTICE_MESSAGES = [
-  '신규 회원 가입 시 첫 구매 10% 할인',
-  '5만 원 이상 구매 시 무료 배송',
+  '신규 회원 가입 시 첫 구매 25% 할인',
+  '3만 원 이상 구매 시 무료 배송',
 ];
 
 const HIDDEN_PATHS = ['/login', '/signup'];

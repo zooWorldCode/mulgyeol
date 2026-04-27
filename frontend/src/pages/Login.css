@@ -4,20 +4,18 @@
   align-items: center;
   justify-content: end;
   margin: auto auto 0;
-  height: 90vh;
+  height: 100vh;
   width: 500px;
-  border-top-left-radius: 9999px;
-  border-top-right-radius: 9999px;
   overflow: hidden;
   padding: 70px 50px;
   background-color: var(--color-white);
-
-  
 }
-.login-page>img{
+
+.login-page>img {
   margin-bottom: 50px;
   width: 150px;
 }
+
 .login-page__form {
   width: 100%;
 }
@@ -99,6 +97,7 @@
   display: flex;
   justify-content: space-between;
 }
+
 .login-page__social-image-btn {
   border: none;
   background: var(--color-white);

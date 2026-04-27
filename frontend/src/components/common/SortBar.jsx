@@ -11,9 +11,9 @@ export const PRODUCT_SORT_OPTIONS = [
 /** 이벤트 목록 상태 필터 (Event.jsx) */
 export const EVENT_STATUS_OPTIONS = [
   { id: 'all', label: '전체' },
-  { id: 'preview', label: '예정된' },
+  { id: 'preview', label: '예정' },
   { id: 'ongoing', label: '진행중' },
-  { id: 'ended', label: '종료된' },
+  { id: 'ended', label: '종료' },
 ];
 
 /** 블로그·커뮤니티 글 정렬 (BlogPage.jsx) */

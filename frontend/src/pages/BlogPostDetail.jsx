@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import './BlogPostDetail.css';
+import { getAuthUser } from '../auth/session.js';
 import { DUMMY_POSTS, getPostById } from '../data/postsDummy.js';
 
 const CATEGORY_META = [
@@ -104,6 +105,9 @@ export default function BlogPostDetail() {
   const paragraphs = useMemo(() => (post ? buildParagraphs(post) : []), [post]);
   const initialComments = useMemo(() => (post ? buildComments(post) : []), [post]);
   const [comments, setComments] = useState(initialComments);
+  const currentUser = getAuthUser();
+  const currentUserName = currentUser?.nickname?.trim() || '나';
+  const currentUserBadge = currentUserName.slice(0, 1);
   const tags = useMemo(
     () => (post ? buildTags(post, category.label) : []),
     [category.label, post]
@@ -150,10 +154,10 @@ export default function BlogPostDetail() {
 
     const newComment = {
       id: `${post.id}-comment-user-${Date.now()}`,
-      name: '나',
+      name: currentUserName,
       time: '방금 전',
       body: trimmedDraft,
-      badge: '나',
+      badge: currentUserBadge,
     };
 
     setComments((currentComments) => [newComment, ...currentComments]);
@@ -280,7 +284,7 @@ export default function BlogPostDetail() {
 
         <div className="blog-post-detail__comment-form">
           <span className="blog-post-detail__avatar blog-post-detail__avatar--accent">
-            나
+            {currentUserBadge}
           </span>
           <div className="blog-post-detail__comment-input-wrap">
             <textarea
