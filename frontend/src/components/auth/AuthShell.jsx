@@ -10,7 +10,12 @@ export default function AuthShell() {
         flexDirection: 'column',
         padding: 0,
         boxSizing: 'border-box',
-        background: 'var(--color-point)',
+        backgroundColor: 'var(--color-point)',
+        backgroundImage:
+          "linear-gradient(rgba(237, 144, 110, 0.78), rgba(237, 144, 110, 0.78)), url('/images/social_log/back.png')",
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'cover',
       }}
     >
       <Outlet />
