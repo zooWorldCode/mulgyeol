@@ -10,7 +10,7 @@
   display: block;
   width: 100%;
   min-height: 950px;
-  background: url('/images/main/event/EVENT.png') center/cover no-repeat;
+  background: url('/images/main/event/EVENT.webp') center/cover no-repeat;
 }
 
 .home-event-section__inner {
@@ -82,11 +82,19 @@
   left: 50%;
   top: 50%;
   z-index: 1;
-  color: var(--color-point);
+  color: var(--color-white);
   font-size: 20px;
   line-height: 1;
   transform: translate(-50%, -50%);
   white-space: nowrap;
+  transition:
+    color 0.3s ease,
+    text-decoration-color 0.3s ease;
+}
+
+.home-event-section__button-text:hover {
+  color: var(--color-white);
+  text-decoration: underline var(--color-white);
 }
 
 .home-event-section__button img {

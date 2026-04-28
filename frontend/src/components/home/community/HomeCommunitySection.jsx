@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { DUMMY_POSTS } from '../../../data/postsDummy.js';
 import './HomeCommunitySection.css';
@@ -11,6 +12,7 @@ const notices = [
 const faqItems = ['주문 & 배송', '교환 & 환불', '상품 문의', '회원 & 결제'];
 
 export default function HomeCommunitySection() {
+  const [activeCardIndex, setActiveCardIndex] = useState(0);
   const featureCards = DUMMY_POSTS.slice(0, 3).map((post, index) => ({
     id: post.id,
     to: `/blog/${post.id}`,
@@ -26,8 +28,8 @@ export default function HomeCommunitySection() {
         <span className="home-community__heading-arrow" aria-hidden="true">-&gt;</span>
       </Link>
 
-      <div className="home-community__feature-grid">
-        {featureCards.map((card) => (
+      <div className={`home-community__feature-grid home-community__feature-grid--active-${activeCardIndex}`}>
+        {featureCards.map((card, index) => (
           <Link
             key={card.id}
             to={card.to}
@@ -35,6 +37,8 @@ export default function HomeCommunitySection() {
               'home-community__feature-card' +
               (card.large ? ' home-community__feature-card--large' : '')
             }
+            onMouseEnter={() => setActiveCardIndex(index)}
+            onFocus={() => setActiveCardIndex(index)}
           >
             {card.image ? (
               <img

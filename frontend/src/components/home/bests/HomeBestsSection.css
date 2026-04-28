@@ -4,6 +4,8 @@
   margin: 0 auto;
   padding: 100px 0;
   box-sizing: border-box;
+  content-visibility: auto;
+  contain-intrinsic-size: 720px;
 }
 
 .home-bests__head {
@@ -11,13 +13,13 @@
   align-items: center;
   justify-content: space-between;
   gap: 24px;
-  margin-bottom: 42px;
+  margin-bottom: 24px;
 }
 
 .home-bests__heading {
   display: inline-flex;
   align-items: center;
-  gap: 18px;
+  gap: 14px;
   color: var(--color-text);
 }
 

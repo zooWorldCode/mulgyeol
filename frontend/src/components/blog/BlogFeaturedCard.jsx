@@ -89,7 +89,13 @@ export default function BlogFeaturedCard({ post, basePath }) {
         >
           <h2
             className="blog-featured-card__title"
-            style={{ marginTop: 0, fontSize: 'var(--font-size-xl)' }}
+            style={{
+              marginTop: 0,
+              fontSize: 'var(--font-size-xl)',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
           >
             {post.title}
           </h2>

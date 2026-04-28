@@ -1,14 +1,14 @@
-import { useEffect, useMemo, useState } from 'react';
-import { LayoutGroup, motion } from 'framer-motion';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import './HomeCategorySection.css';
 
-const ROTATION_DELAY = 4000;
+const ROTATION_DELAY = 10000;
 const MotionLink = motion(Link);
 const cardTransition = {
   layout: {
-    duration: 0.72,
-    ease: [0.22, 1, 0.36, 1],
+    duration: 1.25,
+    ease: [0.16, 1, 0.3, 1],
   },
 };
 
@@ -65,75 +65,91 @@ function ArrowIcon() {
   );
 }
 
-function CategoryCard({ category, variant }) {
-  const isFeatured = variant === 'featured';
-  const className = isFeatured
-    ? 'home-category__featured-card'
-    : 'home-category__card';
+function CategoryCard({ category, position }) {
+  const isFeatured = position === 0;
+  const className = [
+    'home-category__item',
+    isFeatured ? 'home-category__item--featured' : 'home-category__item--side',
+    `home-category__item--slot-${position}`,
+  ].join(' ');
 
   return (
     <MotionLink
       layout
-      layoutId={`home-category-card-${category.id}`}
       to={`/category?category=${category.id}`}
       className={className}
-      style={
-        isFeatured
-          ? { '--featured-category-image': `url(${category.image})` }
-          : undefined
-      }
       transition={cardTransition}
       whileHover={{ y: -6 }}
     >
-      {isFeatured ? (
-        <>
-          <img
-            key={`featured-image-${category.id}`}
-            className="home-category__featured-image-layer"
-            src={category.image}
-            alt=""
-            aria-hidden="true"
-          />
+      <img
+        className="home-category__featured-image-layer"
+        src={category.image}
+        alt=""
+        aria-hidden="true"
+        loading="lazy"
+        decoding="async"
+      />
 
-          <motion.span layout="position" className="home-category__featured-copy">
-            <span className="home-category__featured-title">{category.title}</span>
-            <span className="home-category__featured-name">{category.name}</span>
-            <span className="home-category__arrow-button">
-              <ArrowIcon />
-            </span>
-          </motion.span>
+      <span
+        className="home-category__image-panel"
+        style={{ '--category-card-image': `url(${category.image})` }}
+        aria-hidden="true"
+      >
+        <span className="home-category__image-shadow" />
+      </span>
 
-          <motion.span layout="position" className="home-category__badge">
-            {category.count}
-          </motion.span>
-        </>
-      ) : (
-        <>
-          <span
-            className="home-category__image-panel"
-            style={{ '--category-card-image': `url(${category.image})` }}
-            aria-hidden="true"
-          >
-            <span className="home-category__image-shadow" />
-          </span>
+      <motion.span layout="position" className="home-category__featured-copy">
+        <span className="home-category__featured-title">{category.title}</span>
+        <span className="home-category__featured-name">{category.name}</span>
+        <span className="home-category__arrow-button">
+          <ArrowIcon />
+        </span>
+      </motion.span>
 
-          <motion.span layout="position" className="home-category__copy-panel">
-            <span className="home-category__title">{category.title}</span>
-            <span className="home-category__name">{category.name}</span>
-            <span className="home-category__arrow-button home-category__arrow-button--small">
-              <ArrowIcon />
-            </span>
-          </motion.span>
-        </>
-      )}
+      <motion.span layout="position" className="home-category__badge">
+        {category.count}
+      </motion.span>
+
+      <motion.span layout="position" className="home-category__copy-panel">
+        <span className="home-category__title">{category.title}</span>
+        <span className="home-category__name">{category.name}</span>
+        <span className="home-category__arrow-button home-category__arrow-button--small">
+          <ArrowIcon />
+        </span>
+      </motion.span>
     </MotionLink>
   );
 }
 
 export default function HomeCategorySection() {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isInView, setIsInView] = useState(false);
+  const sectionRef = useRef(null);
 
   useEffect(() => {
+    const section = sectionRef.current;
+    if (!section || !('IntersectionObserver' in window)) {
+      setIsInView(true);
+      return undefined;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInView(entry.isIntersecting);
+      },
+      { rootMargin: '240px 0px' },
+    );
+
+    observer.observe(section);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isInView) return undefined;
+
     const rotationTimer = window.setInterval(() => {
       setActiveIndex((currentIndex) => (currentIndex + 1) % categories.length);
     }, ROTATION_DELAY);
@@ -141,34 +157,30 @@ export default function HomeCategorySection() {
     return () => {
       window.clearInterval(rotationTimer);
     };
-  }, []);
+  }, [isInView]);
 
-  const featuredCategory = categories[activeIndex];
-  const sideCategories = useMemo(
+  const orderedCategories = useMemo(
     () => [
-      ...categories.slice(activeIndex + 1),
+      ...categories.slice(activeIndex),
       ...categories.slice(0, activeIndex),
     ],
     [activeIndex],
   );
 
   return (
-    <section className="home-category" aria-labelledby="home-category-title">
-      <h2 id="home-category-title" className="home-category__sr-only">
-        카테고리
-      </h2>
+    <section ref={sectionRef} className="home-category" aria-labelledby="home-category-title">
+      <Link to="/category" className="home-category__heading">
+        <h2 id="home-category-title">카테고리</h2>
+        <span className="home-category__heading-arrow" aria-hidden="true">
+          →
+        </span>
+      </Link>
 
-      <LayoutGroup id="home-category-carousel">
-        <div className="home-category__layout">
-          <CategoryCard category={featuredCategory} variant="featured" />
-
-          <div className="home-category__side-grid">
-            {sideCategories.map((category) => (
-              <CategoryCard key={category.id} category={category} variant="side" />
-            ))}
-          </div>
-        </div>
-      </LayoutGroup>
+      <div className="home-category__layout">
+        {orderedCategories.map((category, index) => (
+          <CategoryCard key={category.id} category={category} position={index} />
+        ))}
+      </div>
     </section>
   );
 }

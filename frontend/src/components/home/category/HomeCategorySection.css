@@ -16,18 +16,50 @@
   border: 0;
 }
 
+.home-category__heading {
+  width: 100%;
+  max-width: 1280px;
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  margin: 0 auto 24px;
+  color: var(--color-text);
+}
+
+.home-category__heading h2 {
+  margin: 0;
+  font-size: var(--font-size-xl);
+  font-weight: 400;
+  line-height: 1;
+}
+
+.home-category__heading-arrow {
+  font-size: 34px;
+  line-height: 1;
+  transition: transform 0.2s ease;
+}
+
+.home-category__heading:hover .home-category__heading-arrow,
+.home-category__heading:focus-visible .home-category__heading-arrow {
+  transform: translateX(4px);
+}
+
 .home-category__layout {
   width: 100%;
   max-width: 1280px;
   height: 760px;
   display: grid;
-  grid-template-columns: minmax(0, 0.48fr) minmax(0, 0.52fr);
+  grid-template-columns: minmax(0, 0.48fr) repeat(2, minmax(0, 0.26fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  grid-template-areas:
+    "featured side-1 side-2"
+    "featured side-3 side-4";
   gap: 24px;
   margin: 0 auto;
+  overflow: visible;
 }
 
-.home-category__featured-card,
-.home-category__card {
+.home-category__item {
   position: relative;
   display: block;
   overflow: hidden;
@@ -40,14 +72,32 @@
     box-shadow 0.24s ease;
 }
 
-.home-category__featured-card:hover,
-.home-category__featured-card:focus-visible,
-.home-category__card:hover,
-.home-category__card:focus-visible {
+.home-category__item:hover,
+.home-category__item:focus-visible {
   box-shadow: 0 4px 20px color-mix(in srgb, var(--color-text) 18%, transparent);
 }
 
-.home-category__featured-card {
+.home-category__item--slot-0 {
+  grid-area: featured;
+}
+
+.home-category__item--slot-1 {
+  grid-area: side-1;
+}
+
+.home-category__item--slot-2 {
+  grid-area: side-2;
+}
+
+.home-category__item--slot-3 {
+  grid-area: side-3;
+}
+
+.home-category__item--slot-4 {
+  grid-area: side-4;
+}
+
+.home-category__item--featured {
   min-height: 0;
   background: var(--color-white);
 }
@@ -62,6 +112,17 @@
   object-fit: cover;
   object-position: center 74%;
   pointer-events: none;
+}
+
+.home-category__item--side .home-category__featured-image-layer,
+.home-category__item--side .home-category__featured-copy,
+.home-category__item--side .home-category__badge {
+  display: none;
+}
+
+.home-category__item--featured .home-category__image-panel,
+.home-category__item--featured .home-category__copy-panel {
+  display: none;
 }
 
 .home-category__featured-copy {
@@ -102,10 +163,8 @@
     color 0.2s ease;
 }
 
-.home-category__featured-card:hover .home-category__arrow-button,
-.home-category__featured-card:focus-visible .home-category__arrow-button,
-.home-category__card:hover .home-category__arrow-button,
-.home-category__card:focus-visible .home-category__arrow-button {
+.home-category__item:hover .home-category__arrow-button,
+.home-category__item:focus-visible .home-category__arrow-button {
   color: var(--color-white);
 }
 
@@ -132,10 +191,8 @@
   transition: stroke 0.2s ease;
 }
 
-.home-category__featured-card:hover .home-category__arrow-circle,
-.home-category__featured-card:focus-visible .home-category__arrow-circle,
-.home-category__card:hover .home-category__arrow-circle,
-.home-category__card:focus-visible .home-category__arrow-circle {
+.home-category__item:hover .home-category__arrow-circle,
+.home-category__item:focus-visible .home-category__arrow-circle {
   fill: var(--color-point);
   stroke: var(--color-point);
 }
@@ -156,15 +213,7 @@
   box-sizing: border-box;
 }
 
-.home-category__side-grid {
-  min-height: 0;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  grid-template-rows: repeat(2, minmax(0, 1fr));
-  gap: 24px;
-}
-
-.home-category__card {
+.home-category__item--side {
   display: grid;
   grid-template-rows: 60% 40%;
 }
@@ -219,8 +268,8 @@
   color: var(--color-point);
 }
 
-.home-category__featured-card .home-category__arrow-button,
-.home-category__featured-card .home-category__arrow-icon {
+.home-category__item--featured .home-category__arrow-button,
+.home-category__item--featured .home-category__arrow-icon {
   width: 50px;
   height: 50px;
 }

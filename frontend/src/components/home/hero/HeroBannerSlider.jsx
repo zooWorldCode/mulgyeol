@@ -43,8 +43,10 @@ export default function HeroBannerSlider() {
   const [realIndex, setRealIndex] = useState(0);
   const [animated, setAnimated] = useState(true);
   const [paused, setPaused] = useState(false);
+  const [isInView, setIsInView] = useState(true);
   const [progressKey, setProgressKey] = useState(0);
   const isJumping = useRef(false);
+  const sectionRef = useRef(null);
 
   const moveToTrack = useCallback((tIdx, rIdx, withAnim = true) => {
     setAnimated(withAnim);
@@ -74,7 +76,28 @@ export default function HeroBannerSlider() {
   }, [trackIndex]);
 
   useEffect(() => {
-    if (paused) return undefined;
+    const section = sectionRef.current;
+    if (!section || !('IntersectionObserver' in window)) {
+      setIsInView(true);
+      return undefined;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInView(entry.isIntersecting);
+      },
+      { rootMargin: '160px 0px' },
+    );
+
+    observer.observe(section);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (paused || !isInView) return undefined;
 
     const id = setInterval(() => {
       setTrackIndex((prev) => {
@@ -88,7 +111,7 @@ export default function HeroBannerSlider() {
     }, DURATION);
 
     return () => clearInterval(id);
-  }, [paused]);
+  }, [paused, isInView]);
 
   const goTo = useCallback(
     (rIdx) => {
@@ -98,7 +121,7 @@ export default function HeroBannerSlider() {
   );
 
   return (
-    <section className="hero-banner" aria-label="메인 배너">
+    <section ref={sectionRef} className="hero-banner" aria-label="메인 배너">
       <div className="hero-banner__top-divider">
         <Divider />
       </div>
@@ -124,7 +147,14 @@ export default function HeroBannerSlider() {
               to={banner.link}
               className="hero-banner__slide"
             >
-              <img className="hero-banner__image" src={banner.image} alt={banner.alt} />
+              <img
+                className="hero-banner__image"
+                src={banner.image}
+                alt={banner.alt}
+                loading={i === 1 ? 'eager' : 'lazy'}
+                decoding={i === 1 ? 'sync' : 'async'}
+                fetchPriority={i === 1 ? 'high' : 'auto'}
+              />
             </Link>
           ))}
         </div>
@@ -158,7 +188,7 @@ export default function HeroBannerSlider() {
                     className="hero-banner__progress"
                     style={{
                       animationDuration: `${DURATION}ms`,
-                      animationPlayState: paused ? 'paused' : 'running',
+                      animationPlayState: paused || !isInView ? 'paused' : 'running',
                     }}
                   />
                 ) : null}

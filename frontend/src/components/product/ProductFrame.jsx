@@ -87,6 +87,10 @@ export default function ProductFrame({
         onAddToCart(e);
         return;
       }
+      if (!getAuthToken()) {
+        alert('로그인후 가능합니다');
+        return;
+      }
       if (persistProduct) {
         addToCart(persistProduct, 1, '');
         navigate('/cart');
@@ -145,6 +149,7 @@ export default function ProductFrame({
                     : ' product-frame__img--base')
                 }
                 loading="lazy"
+                decoding="async"
                 onError={() => {
                   if (shouldShowHoverImage) {
                     setHoverImgFailed(true);
@@ -177,6 +182,7 @@ export default function ProductFrame({
                     : ' product-frame__img--base')
                 }
                 loading="lazy"
+                decoding="async"
                 onError={() => {
                   if (shouldShowHoverImage) {
                     setHoverImgFailed(true);

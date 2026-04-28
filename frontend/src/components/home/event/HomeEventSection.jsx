@@ -1,7 +1,31 @@
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './HomeEventSection.css';
 
+const eventAssets = [
+  '/images/main/event/EVENT.webp',
+  '/images/main/event/event-image.webp',
+  '/images/main/event/eventBt.webp',
+];
+
 export default function HomeEventSection() {
+  useEffect(() => {
+    const preload = () => {
+      eventAssets.forEach((src) => {
+        const image = new Image();
+        image.src = src;
+      });
+    };
+
+    if ('requestIdleCallback' in window) {
+      const id = window.requestIdleCallback(preload, { timeout: 2000 });
+      return () => window.cancelIdleCallback(id);
+    }
+
+    const id = window.setTimeout(preload, 800);
+    return () => window.clearTimeout(id);
+  }, []);
+
   return (
     <section className="home-event-section" aria-label="이벤트">
       <div className="home-event-section__banner">
@@ -23,21 +47,30 @@ export default function HomeEventSection() {
             src="/images/main/event/name.svg"
             alt=""
             aria-hidden="true"
+            loading="eager"
+            decoding="async"
           />
           <p className="home-event-section__tagline">
             {'{ 본연을 잃지 않은 아름다움 }'}
           </p>
           <img
             className="home-event-section__feature-image"
-            src="/images/main/event/event-image.png"
+            src="/images/main/event/event-image.webp"
             alt=""
             aria-hidden="true"
+            loading="eager"
+            decoding="async"
           />
           <Link to="/event" className="home-event-section__button">
             <span className="home-event-section__button-text">
               이벤트 보러가기
             </span>
-            <img src="/images/main/event/eventBt.png" alt="이벤트 페이지로 이동" />
+            <img
+              src="/images/main/event/eventBt.webp"
+              alt="이벤트 페이지로 이동"
+              loading="eager"
+              decoding="async"
+            />
           </Link>
         </div>
       </div>

@@ -4,13 +4,15 @@
   margin: 0 auto;
   padding: 100px 0 0;
   box-sizing: border-box;
+  content-visibility: auto;
+  contain-intrinsic-size: 900px;
 }
 
 .home-community__heading {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 32px;
+  gap: 14px;
+  margin-bottom: 24px;
   color: var(--color-text);
   text-decoration: none;
 }
@@ -41,15 +43,15 @@
   transition: grid-template-columns 0.35s ease;
 }
 
-.home-community__feature-grid:has(.home-community__feature-card:nth-child(1):hover) {
+.home-community__feature-grid--active-0 {
   grid-template-columns: 3fr 1fr 1fr;
 }
 
-.home-community__feature-grid:has(.home-community__feature-card:nth-child(2):hover) {
+.home-community__feature-grid--active-1 {
   grid-template-columns: 1fr 3fr 1fr;
 }
 
-.home-community__feature-grid:has(.home-community__feature-card:nth-child(3):hover) {
+.home-community__feature-grid--active-2 {
   grid-template-columns: 1fr 1fr 3fr;
 }
 
@@ -129,28 +131,22 @@
     transform 0.35s ease;
 }
 
-.home-community__feature-grid:not(:has(.home-community__feature-card:hover))
+.home-community__feature-grid--active-0
   .home-community__feature-card:nth-child(1)
   .home-community__feature-caption,
-.home-community__feature-grid:not(:has(.home-community__feature-card:hover))
+.home-community__feature-grid--active-0
   .home-community__feature-card:nth-child(1)
   .home-community__feature-arrow,
-.home-community__feature-grid:has(.home-community__feature-card:nth-child(1):hover)
-  .home-community__feature-card:nth-child(1)
-  .home-community__feature-caption,
-.home-community__feature-grid:has(.home-community__feature-card:nth-child(1):hover)
-  .home-community__feature-card:nth-child(1)
-  .home-community__feature-arrow,
-.home-community__feature-grid:has(.home-community__feature-card:nth-child(2):hover)
+.home-community__feature-grid--active-1
   .home-community__feature-card:nth-child(2)
   .home-community__feature-caption,
-.home-community__feature-grid:has(.home-community__feature-card:nth-child(2):hover)
+.home-community__feature-grid--active-1
   .home-community__feature-card:nth-child(2)
   .home-community__feature-arrow,
-.home-community__feature-grid:has(.home-community__feature-card:nth-child(3):hover)
+.home-community__feature-grid--active-2
   .home-community__feature-card:nth-child(3)
   .home-community__feature-caption,
-.home-community__feature-grid:has(.home-community__feature-card:nth-child(3):hover)
+.home-community__feature-grid--active-2
   .home-community__feature-card:nth-child(3)
   .home-community__feature-arrow {
   opacity: 1;
