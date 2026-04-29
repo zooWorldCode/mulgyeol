@@ -65,7 +65,7 @@
 
 @media (max-width: 960px) {
   .home-bests {
-    padding: 56px 10px;
+    padding: 56px 0;
   }
 
   .home-bests__head {

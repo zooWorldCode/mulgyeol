@@ -263,7 +263,7 @@
 
 @media (max-width: 960px) {
   .home-community {
-    padding: var(--section-y) 10px;
+    padding: var(--section-y) 0;
   }
 
   .home-community__feature-grid,
