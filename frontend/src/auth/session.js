@@ -9,7 +9,8 @@ export function parseUserFromAccessToken(token) {
     if (!part) return null;
     const b64 = part.replace(/-/g, '+').replace(/_/g, '/');
     const pad = '='.repeat((4 - (b64.length % 4)) % 4);
-    const json = JSON.parse(atob(b64 + pad));
+    const bytes = Uint8Array.from(atob(b64 + pad), (char) => char.charCodeAt(0));
+    const json = JSON.parse(new TextDecoder().decode(bytes));
     if (!json.sub) return null;
     return {
       id: String(json.sub),
@@ -88,6 +89,9 @@ export function getAuthToken() {
 export function getAuthUser() {
   const sessionToken = sessionStorage.getItem(TOKEN_KEY);
   if (sessionToken) {
+    const parsed = parseUserFromAccessToken(sessionToken);
+    if (parsed) return parsed;
+
     const raw = sessionStorage.getItem(USER_KEY);
     if (!raw) return null;
     try {
@@ -99,6 +103,9 @@ export function getAuthUser() {
 
   const token = getAuthToken();
   if (!token) return null;
+
+  const parsed = parseUserFromAccessToken(token);
+  if (parsed) return parsed;
 
   const raw = localStorage.getItem(USER_KEY);
   if (!raw) return null;

@@ -17,8 +17,7 @@ function oauthRedirectBase() {
   return (
     process.env.OAUTH_REDIRECT_BASE_URL ||
     process.env.BACKEND_PUBLIC_URL ||
-    process.env.FRONTEND_PUBLIC_URL ||
-    'http://localhost:5173'
+    `http://localhost:${process.env.PORT || 5000}`
   ).replace(/\/$/, '');
 }
 
@@ -169,7 +168,6 @@ router.get('/oauth/:provider/start', (req, res) => {
         redirect_uri: cb,
         response_type: 'code',
         state,
-        scope: 'profile_nickname,account_email',
       });
       return res.redirect(302, `https://kauth.kakao.com/oauth/authorize?${q}`);
     }
