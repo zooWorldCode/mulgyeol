@@ -11,7 +11,8 @@
 }
 
 .mypage__shell {
-  max-width: 1280px;
+  width: min(100% - (var(--page-gutter) * 2), var(--layout-max-width));
+  max-width: var(--layout-max-width);
   margin: 0 auto;
   display: flex;
   align-items: flex-start;
@@ -323,11 +324,29 @@
 @media (max-width: 960px) {
   .mypage__shell {
     flex-direction: column;
+    gap: 28px;
   }
 
   .mypage__sidebar {
     flex: none;
     width: 100%;
+  }
+
+  .mypage__nav {
+    flex-direction: row;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 6px;
+  }
+
+  .mypage__nav-item {
+    flex: 0 0 auto;
+    width: auto;
+    white-space: nowrap;
+  }
+
+  .mypage__cs {
+    display: none;
   }
 
   .mypage__summary {
@@ -366,8 +385,22 @@
 }
 
 @media (max-width: 600px) {
+  .mypage__topbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .mypage__actions {
+    width: 100%;
+  }
+
+  .mypage__ghost-btn {
+    flex: 1;
+  }
+
   .mypage__summary {
     grid-template-columns: 1fr;
+    border-radius: 14px;
   }
 
   .mypage__summary-cell {
@@ -380,5 +413,19 @@
   .mypage__summary-cell:first-child {
     border-top: none;
     padding-top: 8px;
+  }
+
+  .mypage__order-row {
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .mypage__order-thumb {
+    width: 72px;
+    height: 72px;
+  }
+
+  .mypage__order-tail {
+    gap: 12px;
   }
 }

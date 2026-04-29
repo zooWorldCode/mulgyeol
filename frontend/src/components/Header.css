@@ -172,9 +172,18 @@ button.site-header__icon-link {
 }
 
 @media (max-width: 940px) {
+  .site-header__inner {
+    padding: 22px 0;
+  }
+
+  .site-header__row {
+    gap: 16px;
+  }
+
   .site-header__main-nav {
     display: flex;
     gap: 0;
+    flex: 1 1 auto;
     min-width: 0;
   }
 
@@ -184,8 +193,13 @@ button.site-header__icon-link {
 
   .site-header__logo img {
     display: block;
-    max-width: min(70px, 100%);
+    width: clamp(56px, 12vw, 70px);
+    max-width: 100%;
     height: auto;
+  }
+
+  .site-header__icon-nav {
+    gap: 12px;
   }
 
   .site-header__hamburger {
@@ -200,5 +214,51 @@ button.site-header__icon-link {
 
   .header-dropdown-panel {
     display: none;
+  }
+}
+
+@media (max-width: 520px) {
+  .site-header__inner {
+    padding: 18px 0;
+  }
+
+  .site-header__row {
+    gap: 10px;
+  }
+
+  .site-header__icon-nav {
+    gap: 6px;
+  }
+
+  .site-header__icon-link,
+  .site-header__hamburger {
+    min-width: 32px;
+    min-height: 32px;
+  }
+
+  .site-header__icon-img {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+@media (max-width: 450px) {
+  .site-header__logo img {
+    width: clamp(46px, 13vw, 58px);
+  }
+
+  .site-header__icon-nav {
+    gap: 4px;
+  }
+
+  .site-header__icon-link,
+  .site-header__hamburger {
+    min-width: 30px;
+    min-height: 30px;
+  }
+
+  .site-header__icon-img {
+    width: 20px;
+    height: 20px;
   }
 }

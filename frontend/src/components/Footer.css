@@ -143,6 +143,11 @@
     flex-direction: column;
   }
 
+  .site-footer__left {
+    flex: none;
+    width: 100%;
+  }
+
   .site-footer__columns {
     justify-content: flex-start;
     width: 100%;

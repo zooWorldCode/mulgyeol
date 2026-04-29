@@ -149,7 +149,25 @@
 
 @media (max-width: 600px) {
   .product-gallery__layout {
-    gap: 14px;
+    flex-direction: column-reverse;
+    gap: 12px;
+  }
+
+  .product-gallery__thumbs-col {
+    width: 100%;
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .product-gallery__thumbs-list {
+    flex-direction: row;
+    overflow-x: auto;
+    max-width: 100%;
+    padding: 2px;
+  }
+
+  .product-gallery__scroll-btn {
+    display: none;
   }
 
   .product-gallery__thumb {
@@ -157,15 +175,11 @@
     height: 44px;
   }
 
-  .product-gallery__scroll-btn {
-    width: 40px;
-    height: 28px;
-  }
-
   .product-gallery__main {
-    flex-basis: calc(100vw - 86px);
-    width: calc(100vw - 86px);
-    height: calc(100vw - 86px);
+    flex-basis: auto;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
     min-width: 0;
     min-height: 0;
   }

@@ -14,9 +14,36 @@
   --font-size-lg: 24px;
   --font-size-xl: 30px;
 
+  /* Responsive layout */
+  --layout-max-width: 1280px;
+  --page-gutter: 24px;
+  --section-y: 72px;
+
   /* PaginationBar */
   --pagination-nav-bg: #f6eeeb;
   --pagination-nav-border: var(--color-text);
   --pagination-nav-fg: var(--color-text);
   --pagination-page-muted: var(--shadow-deep);
+}
+
+@media (max-width: 960px) {
+  :root {
+    --font-size-sm: 15px;
+    --font-size-md: 18px;
+    --font-size-lg: 21px;
+    --font-size-xl: 26px;
+    --page-gutter: 20px;
+    --section-y: 56px;
+  }
+}
+
+@media (max-width: 600px) {
+  :root {
+    --font-size-sm: 13px;
+    --font-size-md: 14px;
+    --font-size-lg: 16px;
+    --font-size-xl: 20px;
+    --page-gutter: 16px;
+    --section-y: 40px;
+  }
 }

@@ -2,11 +2,12 @@
   width: 100%;
   max-width: 1280px;
   margin: 0 auto;
+  padding: 0 30px;
   box-sizing: border-box;
 }
 
 .hero-banner__top-divider {
-  margin-bottom: 16px;
+  display: none;
 }
 
 .hero-banner__top-divider .hero-banner__divider {
@@ -77,8 +78,7 @@
 }
 
 .hero-banner__bottom-divider {
-  flex: 1;
-  margin-right: 16px;
+  display: none;
 }
 
 .hero-banner__indicators {

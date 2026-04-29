@@ -4,8 +4,8 @@
   align-items: center;
   justify-content: end;
   margin: auto auto 0;
-  height: 100vh;
-  width: 500px;
+  min-height: 100vh;
+  width: min(100%, 500px);
   overflow: hidden;
   padding: 70px 50px;
   background-color: var(--color-white);
@@ -85,4 +85,21 @@
 .signup-page__error {
   color: var(--color-point);
   margin-top: 12px;
+}
+
+@media (max-width: 600px) {
+  .signup-page {
+    justify-content: center;
+    min-height: 100svh;
+    padding: 40px var(--page-gutter);
+  }
+
+  .signup-page__field {
+    margin-bottom: 22px;
+  }
+
+  .signup-page__nickname-row {
+    align-items: stretch;
+    flex-direction: column;
+  }
 }

@@ -1,6 +1,6 @@
 .order-complete-page {
   width: 100%;
-  max-width: 1280px;
+  max-width: var(--layout-max-width);
   min-height: 640px;
   margin: 0 auto;
   padding: 120px 24px;
@@ -25,7 +25,7 @@
 
 .order-complete-page__title {
   margin: 0;
-  font-size: 20px;
+  font-size: var(--font-size-md);
   font-weight: 700;
   line-height: 1.5;
 }
@@ -37,7 +37,7 @@
 
 .order-complete-page__description p {
   margin: 0;
-  font-size: 20px;
+  font-size: var(--font-size-md);
   line-height: 1.7;
 }
 
@@ -60,7 +60,7 @@
   min-height: 54px;
   padding: 14px 18px;
   border-radius: 10px;
-  font-size: 20px;
+  font-size: var(--font-size-md);
   font-weight: 600;
   line-height: 1.4;
 }
@@ -88,7 +88,7 @@
   }
 
   .order-complete-page__description p {
-    font-size: 16px;
+    font-size: var(--font-size-sm);
   }
 
   .order-complete-page__divider {
@@ -101,6 +101,6 @@
 
   .order-complete-page__button {
     width: 100%;
-    font-size: 20px;
+    font-size: var(--font-size-md);
   }
 }

@@ -3,6 +3,7 @@
   inset: 0;
   z-index: 90;
   pointer-events: none;
+  visibility: hidden;
 }
 
 .mobile-menu__backdrop {
@@ -10,7 +11,10 @@
   inset: 0;
   border: none;
   background: var(--color-white);
-  transition: background-color 0.25s ease;
+  opacity: 0;
+  transition:
+    background-color 0.25s ease,
+    opacity 0.25s ease;
 }
 
 .mobile-menu__panel {
@@ -31,10 +35,12 @@
 
 .mobile-menu--open {
   pointer-events: auto;
+  visibility: visible;
 }
 
 .mobile-menu--open .mobile-menu__backdrop {
   background: var(--color-white);
+  opacity: 1;
 }
 
 .mobile-menu--open .mobile-menu__panel {
