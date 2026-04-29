@@ -147,4 +147,28 @@
     width: 100%;
     margin-right: 0;
   }
+
+  .hero-banner__indicators {
+    gap: 6px;
+  }
+
+  .hero-banner__dot {
+    width: 8px;
+    height: 8px;
+  }
+
+  .hero-banner__dot--active {
+    width: 32px;
+  }
+}
+
+@media (max-width: 360px) {
+  .hero-banner__dot {
+    width: 7px;
+    height: 7px;
+  }
+
+  .hero-banner__dot--active {
+    width: 28px;
+  }
 }
