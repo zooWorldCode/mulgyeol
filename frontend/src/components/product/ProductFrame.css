@@ -173,7 +173,7 @@
   }
 }
 
-@media (max-width: 420px) {
+@media (max-width: 360px) {
   .product-frame__fab {
     right: 8px;
     bottom: 8px;

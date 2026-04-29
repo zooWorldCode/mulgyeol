@@ -65,7 +65,7 @@
 
 @media (max-width: 960px) {
   .home-bests {
-    padding: 56px 30px;
+    padding: 56px 10px;
   }
 
   .home-bests__head {
@@ -92,7 +92,7 @@
   }
 }
 
-@media (max-width: 420px) {
+@media (max-width: 360px) {
   .home-bests__grid {
     grid-template-columns: 1fr;
   }

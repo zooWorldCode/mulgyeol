@@ -232,7 +232,7 @@
   }
 }
 
-@media (max-width: 400px) {
+@media (max-width: 360px) {
   .cart-item__grid {
     grid-template-columns: 112px minmax(0, 1fr);
   }

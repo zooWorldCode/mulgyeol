@@ -21,3 +21,9 @@
   max-width: 100%;
 }
 
+@media (max-width: 600px) {
+  .top-notice-bar {
+    font-size: 12px;
+  }
+}
+

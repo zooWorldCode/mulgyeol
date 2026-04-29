@@ -285,7 +285,7 @@
   }
 
   .home-category__heading {
-    padding: 0 30px;
+    padding: 0 10px;
     box-sizing: border-box;
   }
 
@@ -298,7 +298,7 @@
       "side-1 side-2"
       "side-3 side-4";
     gap: 16px;
-    padding: 0 30px;
+    padding: 0 10px;
     box-sizing: border-box;
   }
 

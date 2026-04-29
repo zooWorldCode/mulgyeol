@@ -86,12 +86,14 @@
 
 html {
   font-size: var(--font-size-md);
+  min-width: var(--layout-min-width);
   overflow-x: hidden;
 }
 
 body {
   margin: 0;
   padding: 0;
+  min-width: var(--layout-min-width);
   font-family: 'Pretendard', system-ui, sans-serif;
   font-weight: 400;
   background: var(--color-white);

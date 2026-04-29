@@ -47,7 +47,7 @@
   width: 100%;
   max-width: 1400px;
   margin: 0 auto;
-  padding: var(--section-y) 30px;
+  padding: var(--section-y) 10px;
   box-sizing: border-box;
 }
 
@@ -87,7 +87,7 @@
 
 @media (max-width: 768px) {
   .home-section {
-    padding: var(--section-y) 30px;
+    padding: var(--section-y) 10px;
   }
 
   .home-section__title {
