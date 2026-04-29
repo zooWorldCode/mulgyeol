@@ -62,14 +62,14 @@ export default function HomeCommunitySection() {
         <section className="home-community__notice" aria-labelledby="home-notice-title">
           <div className="home-community__notice-head">
             <h3 id="home-notice-title">공지사항</h3>
-            <Link to="/community" className="home-community__notice-more">
+            <Link to="/mypage" className="home-community__notice-more">
               전체보기
             </Link>
           </div>
           <ul className="home-community__notice-list">
             {notices.map((notice) => (
               <li key={notice.title} className="home-community__notice-item">
-                <Link to="/community">
+                <Link to="/mypage">
                   <span>{notice.title}</span>
                   <time dateTime={notice.date.replaceAll('.', '-')}>{notice.date}</time>
                 </Link>
@@ -85,7 +85,7 @@ export default function HomeCommunitySection() {
           </div>
           <div className="home-community__faq-list">
             {faqItems.map((item) => (
-              <Link key={item} to="/community" className="home-community__faq-link">
+              <Link key={item} to="/mypage" className="home-community__faq-link">
                 {item}
               </Link>
             ))}

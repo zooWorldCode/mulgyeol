@@ -16,11 +16,11 @@
 
   /* Responsive layout */
   --layout-max-width: 1280px;
-  --layout-min-width: 360px;
   --page-gutter: 24px;
   --section-y: 72px;
 
   /* PaginationBar */
+
   --pagination-nav-bg: #f6eeeb;
   --pagination-nav-border: var(--color-text);
   --pagination-nav-fg: var(--color-text);

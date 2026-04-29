@@ -11,17 +11,17 @@ export const MOBILE_MAIN_MENUS = [
   {
     label: '이벤트',
     to: '/event',
-    subItems: ['이벤트', '이벤트 현황', '기획전', '프로모션'],
+    subItems: ['이벤트 안내','기획전'],
   },
   {
     label: '브랜드',
     to: '/brand',
-    subItems: ['스토리', 'BI', '작가', '브랜드 소식'],
+    subItems: ['브랜드 스토리', '브랜드 소식'],
   },
   {
     label: '커뮤니티',
     to: '/community',
-    subItems: ['블로그', '공지사항', '고객센터'],
+    subItems: ['블로그', 'FAQ', '공지사항'],
   },
 ];
 

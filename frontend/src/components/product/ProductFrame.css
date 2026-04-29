@@ -152,8 +152,8 @@
   }
 
   .product-frame__fab {
-    right: 10px;
-    bottom: 10px;
+    right: 14px;
+    bottom: 14px;
     gap: 6px;
   }
 
@@ -175,8 +175,8 @@
 
 @media (max-width: 360px) {
   .product-frame__fab {
-    right: 8px;
-    bottom: 8px;
+    right: 12px;
+    bottom: 12px;
   }
 
   .product-frame__fab-btn {
