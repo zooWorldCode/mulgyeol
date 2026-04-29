@@ -16,6 +16,7 @@ const PORT = process.env.PORT || 5000;
 const MONGODB_URI = process.env.MONGODB_URI;
 const MONGODB_DB_NAME = process.env.MONGODB_DB_NAME || 'shop';
 const MONGODB_TIMEOUT_MS = Number(process.env.MONGODB_TIMEOUT_MS || 10000);
+let mongoConnectionPromise = null;
 
 if (!MONGODB_URI) {
   console.error(
@@ -29,6 +30,21 @@ if (!process.env.JWT_SECRET) {
   process.exit(1);
 }
 
+async function connectMongo() {
+  if (mongoose.connection.readyState === 1) {
+    return mongoose.connection;
+  }
+
+  if (!mongoConnectionPromise) {
+    mongoConnectionPromise = mongoose.connect(MONGODB_URI, {
+      dbName: MONGODB_DB_NAME,
+      serverSelectionTimeoutMS: MONGODB_TIMEOUT_MS,
+    });
+  }
+
+  return mongoConnectionPromise;
+}
+
 app.use(
   cors({
     origin: process.env.CORS_ORIGIN || process.env.FRONTEND_PUBLIC_URL || true,
@@ -36,6 +52,18 @@ app.use(
   })
 );
 app.use(express.json());
+
+app.use(async (_req, res, next) => {
+  try {
+    await connectMongo();
+    next();
+  } catch (err) {
+    console.error('MongoDB connection error:', err.message);
+    res.status(503).json({
+      message: 'Database connection failed.',
+    });
+  }
+});
 
 app.get('/api/health', (_req, res) => {
   res.json({ ok: true });
@@ -53,10 +81,7 @@ app.get('/api/products/:id', getProductById);
 
 async function start() {
   try {
-    await mongoose.connect(MONGODB_URI, {
-      dbName: MONGODB_DB_NAME,
-      serverSelectionTimeoutMS: MONGODB_TIMEOUT_MS,
-    });
+    await connectMongo();
     console.log('MongoDB connected');
     app.listen(PORT, () => {
       console.log(`Server listening on http://localhost:${PORT}`);
@@ -70,4 +95,8 @@ async function start() {
   }
 }
 
-start();
+if (!process.env.VERCEL) {
+  start();
+}
+
+export default app;
