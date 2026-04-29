@@ -38,6 +38,7 @@
 }
 
 .site-header__icon-link {
+  position: relative;
   color: inherit;
   line-height: 1;
   display: inline-flex;
@@ -46,6 +47,28 @@
   min-width: 36px;
   min-height: 36px;
   transition: transform 0.2s ease;
+}
+
+.site-header__cart-badge {
+  position: absolute;
+  top: 5px;
+  right: 1px;
+  min-width: 23px;
+  height: 23px;
+  padding: 0 5px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  background: var(--color-point);
+  color: var(--color-white);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  transform: translate(30%, -30%);
+  pointer-events: none;
 }
 
 button.site-header__icon-link {
@@ -108,7 +131,8 @@ button.site-header__icon-link {
 }
 
 .header-dropdown-panel__inner {
-  width: 100%;
+  width: min(100% - (var(--page-gutter) * 2), var(--layout-max-width));
+  margin: 0 auto;
   padding: 0;
 }
 
@@ -119,17 +143,27 @@ button.site-header__icon-link {
 }
 
 .header-dropdown-row {
+  position: relative;
   display: grid;
-  grid-template-columns: 100px 1fr;
+  grid-template-columns: 70px repeat(4, max-content) minmax(0, 1fr);
   align-items: center;
-  gap: 16px;
+  column-gap: 40px;
   min-height: 34px;
-  padding: 20px 0 20px 420px;
+  padding: 20px 0;
   border-top: 1px solid var(--shadow-bright);
 }
 
-.header-dropdown-row:hover,
-.header-dropdown-row--active {
+.header-dropdown-row::before {
+  content: '';
+  position: absolute;
+  inset: 0 calc(50% - 50vw);
+  z-index: -1;
+  background: transparent;
+  transition: background-color 0.2s ease;
+}
+
+.header-dropdown-row:hover::before,
+.header-dropdown-row--active::before {
   background: var(--color-key);
 }
 
@@ -138,11 +172,13 @@ button.site-header__icon-link {
 }
 
 .header-dropdown-row__title {
+  grid-column: 2;
   color: inherit;
   text-decoration: none;
 }
 
 .header-dropdown-row__items {
+  grid-column: 3 / -1;
   display: flex;
   flex-wrap: wrap;
   gap: 30px;
@@ -239,6 +275,13 @@ button.site-header__icon-link {
   .site-header__icon-img {
     width: 22px;
     height: 22px;
+  }
+
+  .site-header__cart-badge {
+    min-width: 16px;
+    height: 16px;
+    padding: 0 4px;
+    font-size: 10px;
   }
 }
 

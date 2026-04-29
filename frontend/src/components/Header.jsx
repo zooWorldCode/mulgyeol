@@ -1,14 +1,23 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { getCartLines } from '../cart/cartStorage.js';
 import HeaderDropdown from './HeaderDropdown.jsx';
 import MobileMenu from './MobileMenu.jsx';
 import SearchModal from './SearchModal.jsx';
 import './Header.css';
 
+function getCartCount() {
+  return getCartLines().reduce(
+    (sum, line) => sum + Math.max(1, Number(line.quantity) || 1),
+    0
+  );
+}
+
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [cartCount, setCartCount] = useState(() => getCartCount());
 
   useEffect(() => {
     if (!mobileMenuOpen && !searchOpen) return undefined;
@@ -18,6 +27,17 @@ export default function Header() {
       document.body.style.overflow = prev;
     };
   }, [mobileMenuOpen, searchOpen]);
+
+  useEffect(() => {
+    const updateCartCount = () => setCartCount(getCartCount());
+
+    window.addEventListener('shopmall-cart-updated', updateCartCount);
+    window.addEventListener('storage', updateCartCount);
+    return () => {
+      window.removeEventListener('shopmall-cart-updated', updateCartCount);
+      window.removeEventListener('storage', updateCartCount);
+    };
+  }, []);
 
   return (
     <div
@@ -61,11 +81,16 @@ export default function Header() {
               </button>
               <Link
                 to="/cart"
-                className="site-header__icon-link"
+                className="site-header__icon-link site-header__icon-link--cart"
                 title="장바구니"
                 aria-label="장바구니"
               >
                 <img src="/images/icon/cart.svg" alt="" className="site-header__icon-img" />
+                {cartCount > 0 ? (
+                  <span className="site-header__cart-badge" aria-label={`장바구니 ${cartCount}개`}>
+                    {cartCount > 99 ? '99+' : cartCount}
+                  </span>
+                ) : null}
               </Link>
               <Link
                 to="/wishlist"
