@@ -19,6 +19,27 @@ const SIDE_MENU = [
   { key: 'profile', label: '회원 정보 수정', icon: 'user' },
 ];
 
+const MOBILE_MENU_ROWS = [
+  [
+    { key: 'orders', label: '주문/배송 조회', icon: 'truck' },
+    { key: 'returns', label: '취소/반품/교환', icon: 'return' },
+  ],
+  [
+    { key: 'address', label: '배송지 관리', icon: 'pin' },
+    { key: 'coupon', label: '쿠폰', icon: 'ticket' },
+  ],
+  [
+    { key: 'point', label: '포인트', icon: 'coins' },
+    { key: 'review', label: '상품 후기', icon: 'pencil' },
+  ],
+];
+
+const MOBILE_MENU_FULL = {
+  key: 'profile',
+  label: '회원 정보 수정',
+  icon: 'user',
+};
+
 function MenuIcon({ name, size = 20 }) {
   const stroke = 'currentColor';
   const sw = 1.75;
@@ -142,6 +163,22 @@ function SummaryIcon({ name, size = 26 }) {
   }
 }
 
+function CustomerServiceCard() {
+  return (
+    <>
+      <h2 className="mypage__cs-title">고객센터</h2>
+      <p className="mypage__cs-phone">1234-5678</p>
+      <p className="mypage__cs-note">
+        운영시간 10:00~17:00
+        <br />
+        점심시간 12:00~13:00
+        <br />
+        주말 및 공휴일 휴무
+      </p>
+    </>
+  );
+}
+
 export default function MyPage() {
   const navigate = useNavigate();
   const user = getAuthUser();
@@ -196,6 +233,10 @@ export default function MyPage() {
     alert('회원탈퇴 기능은 준비 중입니다.');
   }
 
+  function handleMenuSelect(key) {
+    setActiveMenu(key);
+  }
+
   useEffect(() => {
     const refresh = () => setSummaryTick((v) => v + 1);
     window.addEventListener('shopmall-wishlist-updated', refresh);
@@ -210,11 +251,30 @@ export default function MyPage() {
     return `${n.toLocaleString('ko-KR')}원`;
   }
 
+  const authActions = (
+    <>
+      <button type="button" className="mypage__ghost-btn" onClick={handleLogout}>
+        로그아웃
+      </button>
+      <button type="button" className="mypage__ghost-btn" onClick={handleWithdraw}>
+        회원탈퇴
+      </button>
+    </>
+  );
+
   return (
     <div className="mypage">
-      <PageWideBand text="마이페이지" />
+      <div className="mypage__band">
+        <PageWideBand text="마이페이지" />
+      </div>
+
+      <header className="mypage__mobile-header">
+        <h1 className="mypage__mobile-title">마이페이지</h1>
+        <div className="mypage__actions">{authActions}</div>
+      </header>
+
       <div className="mypage__shell">
-        <aside className="mypage__sidebar">
+        <aside className="mypage__sidebar" aria-label="마이페이지 사이드바">
           <nav className="mypage__nav" aria-label="마이페이지 메뉴">
             {SIDE_MENU.map((item) => (
               <button
@@ -225,7 +285,7 @@ export default function MyPage() {
                     ? 'mypage__nav-item mypage__nav-item--active'
                     : 'mypage__nav-item'
                 }
-                onClick={() => setActiveMenu(item.key)}
+                onClick={() => handleMenuSelect(item.key)}
               >
                 <MenuIcon name={item.icon} />
                 {item.label}
@@ -233,34 +293,24 @@ export default function MyPage() {
             ))}
           </nav>
 
-          <div className="mypage__cs">
-            <h2 className="mypage__cs-title">고객센터</h2>
-            <p className="mypage__cs-phone">1234-5678</p>
-            <p className="mypage__cs-note">
-              운영시간 10:00~17:00
-              <br />
-              점심시간 12:00~13:00
-              <br />
-              주말 및 공휴일 휴무
-            </p>
+          <div className="mypage__cs mypage__cs--sidebar">
+            <CustomerServiceCard />
           </div>
         </aside>
 
         <div className="mypage__main">
           <div className="mypage__topbar">
             <p className="mypage__greeting">
-              {nickname}님, 반갑습니다.
-              <br />
-              오늘도 즐거운 하루 보내세요
+              <strong className="mypage__greeting-name">
+                {nickname}님, 반갑습니다
+                <span className="mypage__greeting-wave" aria-hidden="true">
+                  {' '}
+                  👋
+                </span>
+              </strong>
+              <span className="mypage__greeting-sub">오늘도 즐거운 하루 보내세요</span>
             </p>
-            <div className="mypage__actions">
-              <button type="button" className="mypage__ghost-btn" onClick={handleLogout}>
-                로그아웃
-              </button>
-              <button type="button" className="mypage__ghost-btn" onClick={handleWithdraw}>
-                회원탈퇴
-              </button>
-            </div>
+            <div className="mypage__actions mypage__actions--desktop">{authActions}</div>
           </div>
 
           <section className="mypage__summary" aria-label="나의 쇼핑 요약">
@@ -283,7 +333,7 @@ export default function MyPage() {
                 <SummaryIcon name="coins" />
               </div>
               <p className="mypage__summary-label">보유 포인트</p>
-              <p className="mypage__summary-value">{summary.points.toLocaleString('ko-KR')} P</p>
+              <p className="mypage__summary-value">{summary.points.toLocaleString('ko-KR')}P</p>
             </div>
             <div className="mypage__summary-cell">
               <div className="mypage__summary-icon">
@@ -294,14 +344,14 @@ export default function MyPage() {
             </div>
           </section>
 
-          <section aria-labelledby="mypage-recent-orders">
+          <section className="mypage__orders-section" aria-labelledby="mypage-recent-orders">
             <div className="mypage__section-head">
               <h2 id="mypage-recent-orders" className="mypage__section-title">
                 최근 주문 내역
               </h2>
-              <span className="mypage__section-link" aria-hidden="true">
-                주문 배송 조회 전체 보기
-              </span>
+              <button type="button" className="mypage__section-link">
+                전체 보기 →
+              </button>
             </div>
 
             <div className="mypage__orders">
@@ -309,7 +359,7 @@ export default function MyPage() {
                 <p className="mypage__orders-empty">최근 주문 내역이 없습니다.</p>
               ) : (
                 recentOrderRows.map((row) => (
-                  <div key={row.id} className="mypage__order-row">
+                  <article key={row.id} className="mypage__order-card">
                     <img
                       className="mypage__order-thumb"
                       src={row.image || '/images/icon/check.png'}
@@ -317,29 +367,68 @@ export default function MyPage() {
                       width={88}
                       height={88}
                     />
-                    <div className="mypage__order-body">
-                      <div className="mypage__order-info">
-                        <p className="mypage__order-name">{row.name}</p>
-                        <p className="mypage__order-option">
-                          {row.option || '기본 옵션'} / {row.quantity}개
-                        </p>
-                        <p className="mypage__order-id">{row.orderId}</p>
-                      </div>
-                      <div className="mypage__order-tail">
-                        <div className="mypage__order-price">
-                          <strong>{formatWon(row.price * row.quantity)}</strong>
-                        </div>
-                        <span className="mypage__order-status">{row.status}</span>
-                        <button type="button" className="mypage__order-detail">
-                          주문 상세보기
-                        </button>
-                      </div>
+                    <div className="mypage__order-info">
+                      <p className="mypage__order-name">{row.name}</p>
+                      <p className="mypage__order-option">
+                        {row.option || '기본 옵션'} / {row.quantity}개
+                      </p>
+                      <p className="mypage__order-id">{row.orderId}</p>
                     </div>
-                  </div>
+                    <div className="mypage__order-aside">
+                      <p className="mypage__order-price">
+                        <strong>{formatWon(row.price * row.quantity)}</strong>
+                      </p>
+                      <span className="mypage__order-status">{row.status}</span>
+                    </div>
+                    <button type="button" className="mypage__order-detail">
+                      상세보기
+                    </button>
+                  </article>
                 ))
               )}
             </div>
           </section>
+        </div>
+
+        <section className="mypage__menu-mobile" aria-labelledby="mypage-menu-title">
+          <h2 id="mypage-menu-title" className="mypage__menu-label">
+            메뉴
+          </h2>
+          <div className="mypage__menu-grid">
+            {MOBILE_MENU_ROWS.map((row) =>
+              row.map((item) => (
+                <button
+                  key={item.key}
+                  type="button"
+                  className={
+                    item.key === activeMenu
+                      ? 'mypage__menu-btn mypage__menu-btn--active'
+                      : 'mypage__menu-btn'
+                  }
+                  onClick={() => handleMenuSelect(item.key)}
+                >
+                  <MenuIcon name={item.icon} size={18} />
+                  <span>{item.label}</span>
+                </button>
+              ))
+            )}
+            <button
+              type="button"
+              className={
+                MOBILE_MENU_FULL.key === activeMenu
+                  ? 'mypage__menu-btn mypage__menu-btn--full mypage__menu-btn--active'
+                  : 'mypage__menu-btn mypage__menu-btn--full'
+              }
+              onClick={() => handleMenuSelect(MOBILE_MENU_FULL.key)}
+            >
+              <MenuIcon name={MOBILE_MENU_FULL.icon} size={18} />
+              <span>{MOBILE_MENU_FULL.label}</span>
+            </button>
+          </div>
+        </section>
+
+        <div className="mypage__cs mypage__cs--mobile">
+          <CustomerServiceCard />
         </div>
       </div>
     </div>
