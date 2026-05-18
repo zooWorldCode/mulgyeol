@@ -28,7 +28,7 @@ export default function CategoryTitle({ activeId, onSelect }) {
                 aria-current={active ? 'true' : undefined}
               >
                 <span className="category-title__circle">
-                  <img src={item.image} alt="" width={120} height={120} />
+                  <img src={item.image} alt="" />
                 </span>
                 <span className="category-title__label">{item.label}</span>
               </button>

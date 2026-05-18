@@ -1,11 +1,12 @@
 .category-title {
   width: 100%;
-  margin-top: 70px;
-  margin-bottom: 100px;
+  margin-top: clamp(36px, 8vw, 70px);
+  margin-bottom: clamp(48px, 10vw, 100px);
 }
 
 .category-title__inner {
-  max-width: 1280px;
+  width: 100%;
+  max-width: var(--layout-max-width);
   margin: 0 auto;
   box-sizing: border-box;
 }
@@ -15,14 +16,14 @@
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 16px 12px;
+  gap: clamp(12px, 2vw, 16px) clamp(8px, 1.5vw, 12px);
 }
 
 .category-title__item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 14px;
+  gap: clamp(8px, 1.5vw, 14px);
   padding: 0;
   border: none;
   background: var(--color-white);
@@ -33,10 +34,10 @@
 }
 
 .category-title__circle {
-  width: 220px;
-  height: 220px;
+  width: clamp(56px, 17vw, 220px);
+  height: clamp(56px, 17vw, 220px);
   border-radius: 50%;
-  padding: 40px;
+  padding: clamp(10px, 3.2vw, 40px);
   box-sizing: border-box;
   display: flex;
   align-items: center;
@@ -55,12 +56,14 @@
 .category-title__circle img {
   width: 100%;
   height: 100%;
+  max-width: 100%;
+  max-height: 100%;
   object-fit: contain;
   display: block;
 }
 
 .category-title__label {
-  font-size: var(--font-size-lg);
+  font-size: clamp(var(--font-size-sm), 2.2vw, var(--font-size-lg));
   font-weight: 500;
   text-align: center;
   line-height: 1.35;
@@ -79,18 +82,13 @@
   color: var(--color-text);
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 960px) {
   .category-title__row {
     justify-content: center;
   }
 }
 
-@media (max-width: 520px) {
-  .category-title {
-    margin-top: 36px;
-    margin-bottom: 48px;
-  }
-
+@media (max-width: 600px) {
   .category-title__row {
     flex-wrap: nowrap;
     justify-content: space-between;
@@ -100,31 +98,12 @@
   .category-title__item {
     flex: 1 1 0;
     min-width: 0;
-    gap: 8px;
-  }
-
-  .category-title__circle {
-    width: min(54px, 16vw);
-    height: min(54px, 16vw);
-    padding: min(12px, 3vw);
   }
 
   .category-title__label {
     width: 100%;
-    font-size: 11px;
+    font-size: clamp(10px, 2.8vw, var(--font-size-sm));
     line-height: 1.2;
     word-break: keep-all;
-  }
-}
-
-@media (max-width: 360px) {
-  .category-title__circle {
-    width: 48px;
-    height: 48px;
-    padding: 10px;
-  }
-
-  .category-title__label {
-    font-size: 10px;
   }
 }

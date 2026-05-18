@@ -115,7 +115,7 @@ export default function Category() {
   }
 
   return (
-    <div>
+    <div className="category-page">
       <CategoryTitle
         activeId={category}
         onSelect={(id) =>
@@ -127,17 +127,8 @@ export default function Category() {
         }
       />
 
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          flexWrap: 'wrap',
-          gap: 8,
-          marginBottom: 8,
-        }}
-      >
-        <h2 style={{ margin: 0 }}>{sectionTitle}</h2>
+      <div className="category-page__toolbar">
+        <h2 className="category-page__heading">{sectionTitle}</h2>
         <SortBar
           value={sort}
           onChange={(id) =>
@@ -150,13 +141,13 @@ export default function Category() {
         />
       </div>
 
-      <div style={{ marginBottom: 12 }}>
+      <p className="category-page__meta">
         {data.total} items
         {loading ? ' · 불러오는 중…' : null}
-      </div>
+      </p>
 
       {error ? (
-        <p role="alert" style={{ color: 'var(--color-point)' }}>
+        <p className="category-page__error" role="alert">
           {error}
         </p>
       ) : null}
