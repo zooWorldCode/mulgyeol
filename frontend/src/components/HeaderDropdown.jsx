@@ -11,7 +11,7 @@ export const HEADER_SUBMENU_GROUPS = [
   },
   {
     title: '브랜드',
-    items: ['브랜드 스토리','브랜드 소식'],
+    items: ['브랜드 스토리', '브랜드 소식'],
   },
   {
     title: '커뮤니티',
@@ -26,7 +26,7 @@ export default function HeaderDropdown({
   const titlePathMap = {
     카테고리: '/category',
     이벤트: '/event',
-    브랜드: '/brand',
+    브랜드: null,
     커뮤니티: '/community',
   };
   const categoryPathMap = {
@@ -42,8 +42,8 @@ export default function HeaderDropdown({
       기획전: '/event',
     },
     브랜드: {
-      '브랜드 스토리': '/brand',
-      '브랜드 소식': '/brand',
+      '브랜드 스토리': null,
+      '브랜드 소식': null,
     },
     커뮤니티: {
       블로그: '/blog',
@@ -57,8 +57,14 @@ export default function HeaderDropdown({
       return categoryPathMap[item] ?? '/category';
     }
 
-    return submenuPathMap[groupTitle]?.[item] ?? (titlePathMap[groupTitle] ?? '/');
+    const path = submenuPathMap[groupTitle]?.[item];
+    if (path !== undefined) {
+      return path;
+    }
+
+    return titlePathMap[groupTitle] ?? '/';
   };
+
   const activeCategory = new URLSearchParams(search).get('category');
   const categoryItemValueMap = {
     접시: 'plate',
@@ -77,10 +83,6 @@ export default function HeaderDropdown({
       return item === '이벤트 안내' && pathname.startsWith('/event');
     }
 
-    if (groupTitle === '브랜드') {
-      return item === '브랜드 스토리' && pathname.startsWith('/brand');
-    }
-
     if (groupTitle === '커뮤니티') {
       const isCommunityPath = pathname.startsWith('/community') || pathname.startsWith('/blog');
       return item === '블로그' && isCommunityPath;
@@ -94,9 +96,10 @@ export default function HeaderDropdown({
       <div className="header-dropdown-panel__inner">
         <ul className="header-dropdown-rows" aria-label="드롭다운 메뉴">
           {submenuGroups.map((group, index) => {
-            const groupPath = titlePathMap[group.title] ?? '/';
+            const groupPath = titlePathMap[group.title];
             const isGroupPathMatch =
-              pathname === groupPath || pathname.startsWith(`${groupPath}/`);
+              groupPath &&
+              (pathname === groupPath || pathname.startsWith(`${groupPath}/`));
             const isCommunityBlogPath = group.title === '커뮤니티' && pathname.startsWith('/blog');
             const isActive = isGroupPathMatch || isCommunityBlogPath;
 
@@ -109,26 +112,36 @@ export default function HeaderDropdown({
                   (isActive ? ' header-dropdown-row--active' : '')
                 }
               >
-              <Link to={groupPath} className="header-dropdown-row__title">
-                {group.title}
-              </Link>
-              <div className="header-dropdown-row__items">
-                {group.items.map((item) => (
-                  <Link
-                    key={item}
-                    to={resolveItemPath(group.title, item)}
-                    className={
+                {groupPath ? (
+                  <Link to={groupPath} className="header-dropdown-row__title">
+                    {group.title}
+                  </Link>
+                ) : (
+                  <button type="button" className="header-dropdown-row__title">
+                    {group.title}
+                  </button>
+                )}
+                <div className="header-dropdown-row__items">
+                  {group.items.map((item) => {
+                    const itemPath = resolveItemPath(group.title, item);
+                    const itemClassName =
                       'header-dropdown-row__item-btn' +
                       (isItemActive(group.title, item)
                         ? ' header-dropdown-row__item-btn--active'
-                        : '')
-                    }
-                  >
-                    {item}
-                  </Link>
-                ))}
-              </div>
-            </li>
+                        : '');
+
+                    return itemPath ? (
+                      <Link key={item} to={itemPath} className={itemClassName}>
+                        {item}
+                      </Link>
+                    ) : (
+                      <button key={item} type="button" className={itemClassName}>
+                        {item}
+                      </button>
+                    );
+                  })}
+                </div>
+              </li>
             );
           })}
         </ul>

@@ -16,7 +16,6 @@ export const MOBILE_MAIN_MENUS = [
   },
   {
     label: '브랜드',
-    to: '/brand',
     subItems: ['브랜드 스토리', '브랜드 소식'],
   },
   {
@@ -73,13 +72,23 @@ export default function MobileMenu({
         <nav className="mobile-menu__main-nav" aria-label="모바일 주 메뉴">
           {mainMenus.map((menu) => (
             <div key={menu.label} className="mobile-menu__main-item">
-              <Link
-                to={menu.to}
-                className="mobile-menu__main-link"
-                onClick={onClose}
-              >
-                {menu.label}
-              </Link>
+              {menu.to ? (
+                <Link
+                  to={menu.to}
+                  className="mobile-menu__main-link"
+                  onClick={onClose}
+                >
+                  {menu.label}
+                </Link>
+              ) : (
+                <button
+                  type="button"
+                  className="mobile-menu__main-link"
+                  onClick={onClose}
+                >
+                  {menu.label}
+                </button>
+              )}
               {menu.subItems?.length ? (
                 <div className="mobile-menu__submenu">
                   {menu.subItems.map((sub) => (

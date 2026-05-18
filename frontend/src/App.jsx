@@ -14,7 +14,6 @@ import MyPage from './pages/MyPage.jsx';
 import Wishlist from './pages/Wishlist.jsx';
 import Event from './pages/Event.jsx';
 import EventDetail from './pages/EventDetail.jsx';
-import Brand from './pages/Brand.jsx';
 import Community from './pages/Community.jsx';
 import BlogPage from './pages/BlogPage.jsx';
 import BlogPostDetail from './pages/BlogPostDetail.jsx';
@@ -37,7 +36,6 @@ export default function App() {
         <Route path="category" element={<Category />} />
         <Route path="event" element={<Event />} />
         <Route path="event/:id" element={<EventDetail />} />
-        <Route path="brand" element={<Brand />} />
         <Route path="community" element={<Community />} />
         <Route path="community/:id" element={<BlogPostDetail />} />
         <Route path="blog" element={<BlogPage />} />

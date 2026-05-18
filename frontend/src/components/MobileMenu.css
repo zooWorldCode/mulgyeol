@@ -80,6 +80,17 @@
   padding: 10px clamp(18px, 7vw, 30px);
 }
 
+button.mobile-menu__main-link {
+  display: block;
+  width: 100%;
+  border: none;
+  background: var(--color-white);
+  font: inherit;
+  font-weight: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
 .mobile-menu__submenu {
   display: grid;
   gap: clamp(10px, 4vw, 20px);

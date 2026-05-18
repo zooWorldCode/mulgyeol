@@ -61,9 +61,9 @@ export default function Header() {
               <Link to="/event" className="site-header__nav-link">
                 이벤트
               </Link>
-              <Link to="/brand" className="site-header__nav-link">
+              <button type="button" className="site-header__nav-link">
                 브랜드
-              </Link>
+              </button>
               <Link to="/community" className="site-header__nav-link">
                 커뮤니티
               </Link>
