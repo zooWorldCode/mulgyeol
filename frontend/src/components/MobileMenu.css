@@ -143,6 +143,10 @@ button.mobile-menu__icon-link {
   padding: 24px clamp(18px, 7vw, 30px) 40px;
 }
 
+.mobile-menu__auth--logged-in {
+  grid-template-columns: 1fr;
+}
+
 .mobile-menu__auth-btn {
   width: 100%;
 }

@@ -1,4 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
+import { clearAuthSession, getAuthToken } from '../auth/session.js';
 import Button from './common/Button.jsx';
 import './MobileMenu.css';
 
@@ -40,10 +41,17 @@ export default function MobileMenu({
   iconMenus = MOBILE_ICON_MENUS,
 }) {
   const navigate = useNavigate();
+  const isLoggedIn = Boolean(getAuthToken());
 
   function go(path) {
     onClose();
     navigate(path);
+  }
+
+  function handleLogout() {
+    clearAuthSession();
+    onClose();
+    navigate('/');
   }
 
   return (
@@ -109,13 +117,25 @@ export default function MobileMenu({
           )}
         </nav>
 
-        <div className="mobile-menu__auth">
-          <Button type="button" className="mobile-menu__auth-btn" onClick={() => go('/login')}>
-            로그인
-          </Button>
-          <Button type="button" className="mobile-menu__auth-btn" onClick={() => go('/signup')}>
-            회원가입
-          </Button>
+        <div
+          className={
+            'mobile-menu__auth' + (isLoggedIn ? ' mobile-menu__auth--logged-in' : '')
+          }
+        >
+          {isLoggedIn ? (
+            <Button type="button" className="mobile-menu__auth-btn" onClick={handleLogout}>
+              로그아웃
+            </Button>
+          ) : (
+            <>
+              <Button type="button" className="mobile-menu__auth-btn" onClick={() => go('/login')}>
+                로그인
+              </Button>
+              <Button type="button" className="mobile-menu__auth-btn" onClick={() => go('/signup')}>
+                회원가입
+              </Button>
+            </>
+          )}
         </div>
       </aside>
     </div>
