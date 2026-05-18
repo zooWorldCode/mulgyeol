@@ -183,9 +183,25 @@
   border: 0;
 }
 
+@media (max-width: 1300px) {
+  .search-modal__inner {
+    padding-left: var(--page-gutter);
+    padding-right: var(--page-gutter);
+  }
+
+  .search-modal__close {
+    right: var(--page-gutter);
+  }
+
+  .search-modal__popular-grid {
+    gap: 8px clamp(16px, 3vw, 40px);
+  }
+}
+
 @media (max-width: 640px) {
   .search-modal__inner {
-    padding: 24px 0 20px;
+    padding-top: 24px;
+    padding-bottom: 20px;
   }
 
   .search-modal__popular-grid {
