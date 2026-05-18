@@ -1,6 +1,6 @@
 .page-wide-band {
   box-sizing: border-box;
-  width: min(100% - (var(--page-gutter) * 2), var(--layout-max-width));
+  width: 100%;
   max-width: var(--layout-max-width);
   margin: 0 auto;
   height: 150px;
@@ -13,6 +13,22 @@
   padding: 0;
   font-size: var(--font-size-xl);
   line-height: 1;
+}
+
+@media (max-width: 960px) {
+  .page-wide-band {
+    height: 120px;
+  }
+}
+
+@media (max-width: 768px) {
+  .page-wide-band {
+    height: 104px;
+  }
+
+  .page-wide-band__text {
+    font-size: var(--font-size-lg);
+  }
 }
 
 @media (max-width: 600px) {

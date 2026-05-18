@@ -4,19 +4,21 @@
   background-color: var(--color-white);
   color: var(--color-text);
   margin: 0;
-  padding: 0;
+  padding: 0 0 var(--section-y);
   width: 100%;
+  max-width: var(--layout-max-width);
+  margin-inline: auto;
   box-sizing: border-box;
   min-height: min(720px, calc(100vh - 200px));
 }
 
 .mypage__shell {
-  width: min(100% - (var(--page-gutter) * 2), var(--layout-max-width));
-  max-width: var(--layout-max-width);
-  margin: 0 auto;
+  width: 100%;
   display: flex;
   align-items: flex-start;
   gap: 40px;
+  padding-top: clamp(24px, 4vw, 48px);
+  box-sizing: border-box;
 }
 
 .mypage__sidebar {
@@ -324,7 +326,8 @@
 @media (max-width: 960px) {
   .mypage__shell {
     flex-direction: column;
-    gap: 28px;
+    gap: var(--section-y);
+    padding-top: var(--section-y);
   }
 
   .mypage__sidebar {
@@ -334,8 +337,12 @@
 
   .mypage__nav {
     flex-direction: row;
+    flex-wrap: nowrap;
     gap: 8px;
     overflow-x: auto;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
     padding-bottom: 6px;
   }
 
@@ -350,13 +357,16 @@
   }
 
   .mypage__summary {
-    grid-template-columns: repeat(2, 1fr);
-    padding: 0;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding: 8px 0;
+    margin-bottom: var(--section-y);
+    border-radius: 18px;
   }
 
   .mypage__summary-cell {
     border-left: 1px solid var(--color-white);
     border-top: none;
+    padding: 16px 12px;
   }
 
   .mypage__summary-cell:nth-child(odd) {
@@ -365,8 +375,12 @@
 
   .mypage__summary-cell:nth-child(n + 3) {
     border-top: 1px solid var(--color-white);
-    padding-top: 16px;
-    margin-top: 4px;
+  }
+
+  .mypage__section-head {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
   }
 
   .mypage__order-body {
@@ -384,10 +398,39 @@
   }
 }
 
+@media (max-width: 768px) {
+  .mypage__topbar {
+    margin-bottom: 24px;
+  }
+
+  .mypage__greeting {
+    font-size: var(--font-size-md);
+  }
+
+  .mypage__summary {
+    margin-bottom: 28px;
+    border-radius: 16px;
+  }
+
+  .mypage__summary-value {
+    font-size: var(--font-size-md);
+  }
+
+  .mypage__section-title {
+    font-size: var(--font-size-lg);
+  }
+}
+
 @media (max-width: 600px) {
+  .mypage__shell {
+    gap: 28px;
+    padding-top: 28px;
+  }
+
   .mypage__topbar {
     flex-direction: column;
     align-items: stretch;
+    margin-bottom: 20px;
   }
 
   .mypage__actions {
@@ -396,28 +439,33 @@
 
   .mypage__ghost-btn {
     flex: 1;
+    min-width: 0;
   }
 
   .mypage__summary {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding: 4px 0;
     border-radius: 14px;
   }
 
   .mypage__summary-cell {
-    border-left: none;
-    border-top: 1px solid var(--color-white);
-    padding-top: 16px;
-    margin-top: 0;
+    padding: 14px 10px;
   }
 
-  .mypage__summary-cell:first-child {
-    border-top: none;
-    padding-top: 8px;
+  .mypage__summary-icon svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .mypage__summary-label {
+    font-size: var(--font-size-sm);
   }
 
   .mypage__order-row {
-    align-items: flex-start;
+    flex-direction: column;
+    align-items: stretch;
     gap: 14px;
+    padding: 18px 0;
   }
 
   .mypage__order-thumb {
@@ -425,7 +473,39 @@
     height: 72px;
   }
 
+  .mypage__order-body {
+    width: 100%;
+  }
+
   .mypage__order-tail {
+    flex-direction: column;
+    align-items: stretch;
     gap: 12px;
+  }
+
+  .mypage__order-detail {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+@media (max-width: 360px) {
+  .mypage__nav {
+    gap: 6px;
+  }
+
+  .mypage__nav-item {
+    padding: 10px 12px;
+    gap: 8px;
+  }
+
+  .mypage__nav-item svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .mypage__order-thumb {
+    width: 64px;
+    height: 64px;
   }
 }
