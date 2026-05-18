@@ -42,7 +42,11 @@ button.site-header__nav-link {
   border: none;
   background: var(--color-white);
   cursor: pointer;
-  font: inherit;
+  font-family: 'Pretendard', sans-serif;
+  font-weight: 700;
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
 }
 
 .site-header__icon-link {
