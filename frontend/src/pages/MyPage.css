@@ -3,8 +3,6 @@
   --mypage-line: var(--shadow-bright);
   --mypage-card-border: color-mix(in srgb, var(--color-text) 12%, var(--shadow-bright));
   width: 100%;
-  max-width: var(--layout-max-width);
-  margin-inline: auto;
   padding-bottom: var(--section-y);
   box-sizing: border-box;
   color: var(--color-text);
@@ -25,6 +23,7 @@
 }
 
 .mypage__shell {
+  width: 100%;
   display: flex;
   align-items: flex-start;
   gap: 40px;
@@ -174,6 +173,7 @@
 }
 
 .mypage__summary {
+  width: 100%;
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   background-color: var(--color-key);
@@ -181,6 +181,7 @@
   border-radius: 20px;
   padding: 22px 8px;
   margin-bottom: 36px;
+  box-sizing: border-box;
 }
 
 .mypage__summary-cell {
@@ -348,6 +349,11 @@
 
 /* ——— Mobile app layout (≤960px) ——— */
 @media (max-width: 960px) {
+  .mypage {
+    width: 100%;
+    max-width: none;
+  }
+
   .mypage__band {
     display: none;
   }
@@ -357,6 +363,7 @@
     align-items: center;
     justify-content: space-between;
     gap: 12px;
+    width: 100%;
     margin-bottom: 20px;
   }
 
@@ -375,7 +382,15 @@
   .mypage__shell {
     flex-direction: column;
     gap: 28px;
+    width: 100%;
     padding-top: 0;
+  }
+
+  .mypage__main,
+  .mypage__orders-section,
+  .mypage__menu-mobile,
+  .mypage__cs--mobile {
+    width: 100%;
   }
 
   .mypage__sidebar {
@@ -396,14 +411,16 @@
 
   .mypage__summary {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
     padding: 4px 0;
     margin-bottom: 28px;
     border-radius: 16px;
   }
 
   .mypage__summary-cell {
+    min-width: 0;
     padding: 18px 12px;
-    border-left: 1px solid color-mix(in srgb, var(--color-white) 65%, var(--color-point));
+    border-left: 1px solid var(--color-white);
   }
 
   .mypage__summary-cell:nth-child(odd) {
@@ -411,13 +428,7 @@
   }
 
   .mypage__summary-cell:nth-child(n + 3) {
-    border-top: 1px solid color-mix(in srgb, var(--color-white) 65%, var(--color-point));
-  }
-
-  .mypage__summary-label,
-  .mypage__summary-value {
-    color: var(--color-point);
-    opacity: 1;
+    border-top: 1px solid var(--color-white);
   }
 
   .mypage__orders {
@@ -439,6 +450,8 @@
     grid-template-rows: auto auto;
     gap: 10px 12px;
     align-items: start;
+    width: 100%;
+    box-sizing: border-box;
     padding: 16px;
     border: 1px solid var(--mypage-card-border);
     border-radius: 14px;
@@ -493,6 +506,7 @@
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 10px;
+    width: 100%;
   }
 
   .mypage__menu-btn {
@@ -500,12 +514,13 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
+    width: 100%;
     min-height: 52px;
     padding: 12px 10px;
     border: 1px solid var(--mypage-card-border);
     border-radius: 12px;
     background: var(--color-white);
-    color: var(--color-text);
+    color: var(--mypage-muted);
     font: inherit;
     font-size: 13px;
     font-weight: 500;
@@ -514,12 +529,22 @@
     cursor: pointer;
     transition:
       background 0.2s ease,
-      border-color 0.2s ease;
+      color 0.2s ease;
   }
 
   .mypage__menu-btn svg {
     flex-shrink: 0;
-    color: var(--mypage-muted);
+    opacity: 0.9;
+    transition: color 0.2s ease;
+  }
+
+  .mypage__menu-btn:hover {
+    color: var(--color-text);
+  }
+
+  .mypage__menu-btn:hover svg {
+    color: var(--color-text);
+    opacity: 0.9;
   }
 
   .mypage__menu-btn--full {
@@ -527,12 +552,15 @@
   }
 
   .mypage__menu-btn--active {
-    border-color: var(--color-point);
-    background: color-mix(in srgb, var(--color-key) 55%, var(--color-white));
+    border-color: transparent;
+    background-color: var(--color-key);
+    color: var(--color-text);
+    font-weight: 600;
   }
 
   .mypage__menu-btn--active svg {
     color: var(--color-point);
+    opacity: 1;
   }
 
   .mypage__cs--mobile {
